@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 2707506754435298244}
   - component: {fileID: 4488099028958162132}
   - component: {fileID: 255385203909313755}
+  - component: {fileID: -5499839299996745474}
   m_Layer: 0
   m_Name: BaseTile
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,3 +106,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-5499839299996745474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901446120494472406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bac3c2b5f8f7c4ca2dac380b9bcaf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSelected: 0
+  defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  focusColor: {r: 0.29519463, g: 1, b: 0, a: 0}
+  currentColor: {r: 0, g: 0, b: 0, a: 0}
