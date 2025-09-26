@@ -1,15 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public class MapManager : MonoBehaviour
 {
+    public static MapManager Instance;
     public GameObject tilePrefab; // マスのPrefab
     public int mapWidth;     // マップの幅
     public int mapHeight;    // マップの高さ
     private int[,] mapData;
+    // 0: 空地
+    // 1: red
+    // 2: orange
+    // 3: yellow
+    // 4: yellowgreen
+    // 5: green
 
     void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        GenerateMapData();
+        UpdateMapText();
+    }
+
+    void Start()
+    {
+        GenerateMapTile();
+    }
+
+    void GenerateMapData()
     {
         mapData = new int[mapWidth, mapHeight];
 
@@ -22,12 +49,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        GenerateMap();
-    }
-
-    void GenerateMap()
+    void GenerateMapTile()
     {
         for (int w = 0; w < mapWidth; w++)
         {
@@ -46,6 +68,43 @@ public class MapGenerator : MonoBehaviour
                 tile.name = $"Tile_{w}_{h}";
             }
         }
+    }
+
+    void UpdateMapText()
+    {
+        string resultText = "";
+        for (int h = 0; h < mapHeight; h++)
+        {
+            string rowstr = "";
+            for (int w = 0; w < mapWidth; w++)
+            {
+                rowstr = rowstr + mapData[w, h] + " ";
+            }
+            resultText = rowstr + "\n" + resultText;
+        }
+        // Debug.Log(resultText);
+    }
+
+    public void UpdateUnitOnMapData(int unitId)
+    {
+        GameObject selectedTile = TileManager.Instance.selectedTile;
+
+        if (selectedTile != null)
+        {
+            Vector3 selectedTilePosition = selectedTile.transform.position;
+            mapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
+            UpdateMapText();
+        }
+
+        // if (selectedTilePosition != gameObject.transform.position)
+        // {
+        //     Vector3 selectedTilePosition = selectedTile.transform.position;
+        //     Vector3 UnitPosition = new Vector3(selectedTilePosition.x, 0.75f, selectedTilePosition.z);
+        //     mapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
+
+        //     // TODO: TileManagerで処理したほうが良いかも
+        //     GameObject tile = Instantiate(UnitPrefab, UnitPosition, Quaternion.identity);
+        // }
     }
 }
 

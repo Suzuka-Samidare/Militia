@@ -20,16 +20,15 @@ public class ConeCursorController : MonoBehaviour
 
     void UpdatePosition()
     {
-        if (Selection.activeGameObject && Selection.activeGameObject.CompareTag("Tile"))
+        GameObject selectedTile = TileManager.Instance.selectedTile;
+        if (selectedTile != null)
         {
-            // Debug.Log("true");
             objectRenderer.enabled = true;
-            Vector3 SelectedTilePos = Selection.activeGameObject.transform.position;
+            Vector3 SelectedTilePos = selectedTile.transform.position;
             transform.position = new Vector3(SelectedTilePos.x, transform.position.y, SelectedTilePos.z);
         }
         else
         {
-            // Debug.Log("false");
             objectRenderer.enabled = false;
         }
     }
