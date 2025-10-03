@@ -9,6 +9,7 @@ public class TileManager : MonoBehaviour
 {
     public static TileManager Instance;
     public GameObject selectedTile = null;
+    private TileController _selectedTileController = null;
 
     private void Awake()
     {
@@ -45,15 +46,15 @@ public class TileManager : MonoBehaviour
         // 接触したオブジェクトが無い場合、タイル選択状態を解除
         if (Physics.Raycast(ray, out hit))
         {
-            // 接触オブジェクトがタイルだった場合、選択状態に更新
+            // 接触オブジェクトがタイルまたはユニットだった場合、選択状態に更新
             if (hit.collider.gameObject.CompareTag("Tile"))
             {
-                // Debug.Log("Ray判定あり & タイルである " + hit.collider.gameObject.name);
+                // タイルを引数にして処理
                 SetSelectedTile(hit.collider.gameObject);
             }
             else if (hit.collider.gameObject.CompareTag("Unit"))
             {
-                // Debug.Log("Ray判定あり & ユニットである " + hit.collider.gameObject.name);
+                // ユニットの親要素であるタイルを引数にして処理
                 SetSelectedTile(hit.collider.gameObject.transform.parent.gameObject);
             }
             else
@@ -78,17 +79,18 @@ public class TileManager : MonoBehaviour
     void SetSelectedTile(GameObject tile)
     {
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
-        if (selectedTile != null)
+        if (selectedTile != null && _selectedTileController != null)
         {
-            selectedTile.GetComponent<TileController>().isSelected = false;
+            _selectedTileController.isSelected = false;
         }
 
         selectedTile = tile;
+        _selectedTileController = selectedTile.GetComponent<TileController>();
 
         // 新しく選択されたマスをハイライトするなどの処理
-        if (selectedTile != null)
+        if (selectedTile != null && _selectedTileController != null)
         {
-            selectedTile.GetComponent<TileController>().isSelected = true;
+            _selectedTileController.isSelected = true;
         }
     }
 
@@ -96,19 +98,21 @@ public class TileManager : MonoBehaviour
     void ClearSelectedTile()
     {
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
-        if (selectedTile != null)
+        if (selectedTile != null && _selectedTileController != null)
         {
-            selectedTile.GetComponent<TileController>().isSelected = false;
+            _selectedTileController.isSelected = false;
         }
+
         selectedTile = null;
+        _selectedTileController = null;
     }
 
     public void SetSelectedTileOnUnit(BaseUnitData baseUnitData)
     {
         if (selectedTile == null) return;
 
-        selectedTile.GetComponent<TileController>().DestroyUnitObject();
-        selectedTile.GetComponent<TileController>().SetUnitObject(baseUnitData);
+       _selectedTileController.DestroyUnitObject();
+       _selectedTileController.SetUnitObject(baseUnitData);
     }
 
     // ======================================================

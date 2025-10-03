@@ -68,11 +68,11 @@ public class CameraMovement : MonoBehaviour
         // Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void LateUpdate()
+    void Update()
     {
         MoveCamera();
         RotateCamera();
-        ZoomCamera();
+        // ZoomCamera();
     }
 
     void RotateCamera()

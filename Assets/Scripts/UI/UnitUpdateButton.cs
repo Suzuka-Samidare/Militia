@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UnitUpdateButton : BaseButton
 {
-    // public int unitId;
     public BaseUnitData baseUnitData;
 
     void Update()
