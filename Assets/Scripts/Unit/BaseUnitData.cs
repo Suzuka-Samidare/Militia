@@ -16,10 +16,13 @@ public abstract class BaseUnitData : ScriptableObject
     [Tooltip("呼び出し所要時間")] public float callTime;
     [Tooltip("気絶済み")] public bool isFaint;
 
-    // void Update()
-    // {
-    //     CheckFaint();
-    // }
+    [Header("配置関連")]
+    [Tooltip("下部の位置")] public Vector3 initPos;
+
+    void Awake()
+    {
+        hp = maxHp;
+    }
 
     public void UpdateHp(float value)
     {

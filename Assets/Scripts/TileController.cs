@@ -53,6 +53,19 @@ public class TileController : MonoBehaviour
         Destroy(currentUnit);
     }
 
+    private IEnumerator callUnit(BaseUnitData newUnit)
+    {
+        Vector3 tilePosition = gameObject.transform.position;
+        Vector3 UnitPosition = new Vector3(tilePosition.x, newUnit.initPos.y, tilePosition.z);
+
+        yield return new WaitForSeconds(newUnit.callTime);
+
+        // ユニットの破棄
+        Destroy(currentUnit);
+
+        currentUnit = Instantiate(newUnit.unitPrefab, UnitPosition, Quaternion.identity, gameObject.transform);
+    }
+
     public void SetUnitObject(BaseUnitData newUnit)
     {
         CheckSelectedTile();
@@ -64,19 +77,6 @@ public class TileController : MonoBehaviour
         currentUnit = Instantiate(tempUnit, UnitPosition, Quaternion.identity, gameObject.transform);
 
         StartCoroutine(callUnit(newUnit));
-    }
-
-    private IEnumerator callUnit(BaseUnitData newUnit)
-    {
-        Vector3 tilePosition = gameObject.transform.position;
-        Vector3 UnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
-
-        yield return new WaitForSeconds(newUnit.callTime);
-
-        // ユニットの破棄
-        Destroy(currentUnit);
-
-        currentUnit = Instantiate(newUnit.unitPrefab, UnitPosition, Quaternion.identity, gameObject.transform);
     }
 
     // public void UpdateUnitObject(GameObject newUnit)
