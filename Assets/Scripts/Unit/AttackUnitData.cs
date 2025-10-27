@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 右クリックメニューからアセットを作成するための属性
-[CreateAssetMenu(fileName = "AttackUnitData", menuName = "ScriptableObjects/Attack Unit Data")]
 public class AttackUnitData : BaseUnitData
 {
     [Header("攻撃系ステータス")]
