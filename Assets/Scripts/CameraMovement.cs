@@ -77,19 +77,19 @@ public class CameraMovement : MonoBehaviour
 
     void RotateCamera()
     {
-        if (EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
+        if (EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(1))
         {
             isClickingOnUI = true;
         }
 
         // 左クリックが押されている場合のみ処理を行う
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
         {
             UpdateAngle();
         }
 
         // マウスの右ボタンが離された瞬間
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(1))
         {
             isClickingOnUI = false;
         }
@@ -127,25 +127,25 @@ public class CameraMovement : MonoBehaviour
     {
         // Debug.Log(EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(1));
 
-        if (EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(1))
+        if (EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(0))
         {
             isClickingOnUI = true;
         }
 
         // マウスの右ボタンが押された瞬間
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             lastMousePosition = Input.mousePosition;
         }
 
         // マウスの右ボタンが押されている状態かつ、押された瞬間のマウス位置から移動している場合
-        if (Input.GetMouseButton(1) && lastMousePosition != Input.mousePosition)
+        if (Input.GetMouseButton(0) && lastMousePosition != Input.mousePosition)
         {
             isDragging = true;
         }
 
         // マウスの右ボタンが離された瞬間
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
             isClickingOnUI = false;
