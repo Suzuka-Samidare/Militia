@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddef4d730870d7a429847e760cbb4288, type: 3}
   m_Name: GeckoUnitData
   m_EditorClassIdentifier: 
-  id: 0
+  id: 2
   unitName: 
   hp: 10
   maxHp: 10
@@ -23,6 +23,7 @@ MonoBehaviour:
   unitPrefab: {fileID: 6842458599697738422, guid: cefda5744f2acb54d8f08973a10bee1e,
     type: 3}
   initPos: {x: 0, y: 0.5, z: 0}
+  currentAnimation: 
   attack: 0
   attackEnergy: 0
   canAttackEnemyBase: 0
