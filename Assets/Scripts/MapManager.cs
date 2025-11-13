@@ -1,21 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
+    public GameObject playerMap;
+    public GameObject enemyMap;
     public GameObject tilePrefab; // マスのPrefab
     public int mapWidth;     // マップの幅
     public int mapHeight;    // マップの高さ
-    private int[,] mapData;
+    private int mapDistance = 5;
+    private int[,] playerMapData;
+    private int[,] enemyMapData;
     // 0: 空地
-    // 1: red
-    // 2: orange
-    // 3: yellow
-    // 4: yellowgreen
-    // 5: green
+    // 1: Colobus
+    // 2: Gecko
+    // 3: Herring
+    // 4: Muskrat
+    // 5: Pudu
+    // 6: Sparrow
+    // 7: Squid
+    // 8: Taipan
+    // 99: 呼び出し中
+    // -1: エラー
+
+    private TileManager _tileManager;
 
     void Awake()
     {
@@ -27,50 +40,67 @@ public class MapManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        GenerateMapData();
+        GenerateAllyMapData();
+        GenerateEnemyMapData();
         UpdateMapText();
     }
 
     void Start()
     {
-        GenerateMapTile();
+        _tileManager = TileManager.Instance;
     }
 
-    void GenerateMapData()
+    private void GenerateAllyMapData()
     {
-        mapData = new int[mapWidth, mapHeight];
+        playerMapData = new int[mapWidth, mapHeight];
 
-        for (int w = 0; w < mapWidth; w++)
+        for (int x = 0; x < mapWidth; x++)
         {
-            for (int h = 0; h < mapHeight; h++)
+            for (int z = 0; z < mapHeight; z++)
             {
-                mapData[w, h] = 0;
-            }
-        }
-    }
-
-    void GenerateMapTile()
-    {
-        for (int w = 0; w < mapWidth; w++)
-        {
-            for (int h = 0; h < mapHeight; h++)
-            {
+                // IDを空地に設定
+                playerMapData[x, z] = 0;
                 // マスの位置を計算
-                Vector3 position = new Vector3(w, 0, h);
-
+                Vector3 position = new Vector3(x, 0, z);
                 // Prefabをインスタンス化
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
-
+                TileController tileController = tile.GetComponent<TileController>();
                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
-                tile.transform.parent = this.transform;
-
+                tile.transform.SetParent(playerMap.transform);
+                tileController.xPos = x;
+                tileController.zPos = z;
                 // タイルの名前を設定 (任意)
-                tile.name = $"Tile_{w}_{h}";
+                tile.name = $"AllyTile_{x}_{z}";
             }
         }
     }
 
-    void UpdateMapText()
+    private void GenerateEnemyMapData()
+    {
+        enemyMapData = new int[mapWidth, mapHeight];
+
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int z = 0; z < mapHeight; z++)
+            {
+                // IDを空地に設定
+                enemyMapData[x, z] = 0;
+                // マスの位置を計算
+                Vector3 position = new Vector3(x, 0, z + mapHeight + mapDistance);
+                // Prefabをインスタンス化
+                GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
+                TileController tileController = tile.GetComponent<TileController>();
+                // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
+                tile.transform.SetParent(enemyMap.transform);
+                tileController.xPos = x;
+                tileController.zPos = z;
+                // タイルの名前を設定 (任意)
+                tile.name = $"EnemyTile_{x}_{z}";
+            }
+        }
+    }
+
+    private void UpdateMapText()
     {
         string resultText = "";
         for (int h = 0; h < mapHeight; h++)
@@ -78,66 +108,32 @@ public class MapManager : MonoBehaviour
             string rowstr = "";
             for (int w = 0; w < mapWidth; w++)
             {
-                rowstr = rowstr + mapData[w, h] + " ";
+                rowstr = rowstr + playerMapData[w, h] + " ";
             }
             resultText = rowstr + "\n" + resultText;
         }
-        // Debug.Log(resultText);
+        Debug.Log(resultText);
     }
 
-    public void UpdateUnitOnMapData(int unitId)
+    public int GetSelectedTileId()
     {
-        GameObject selectedTile = TileManager.Instance.selectedTile;
+        GameObject selectedTile = _tileManager.selectedTile;
 
-        if (selectedTile != null)
-        {
-            Vector3 selectedTilePosition = selectedTile.transform.position;
-            mapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
-            UpdateMapText();
-        }
+        if (selectedTile == null) return -1;
 
-        // if (selectedTilePosition != gameObject.transform.position)
-        // {
-        //     Vector3 selectedTilePosition = selectedTile.transform.position;
-        //     Vector3 UnitPosition = new Vector3(selectedTilePosition.x, 0.75f, selectedTilePosition.z);
-        //     mapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
+        Vector3 selectedTilePosition = selectedTile.transform.position;
+        return playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z];
+    }
 
-        //     // TODO: TileManagerで処理したほうが良いかも
-        //     GameObject tile = Instantiate(UnitPrefab, UnitPosition, Quaternion.identity);
-        // }
+    public void UpdateSelectedTileOnUnitId(int unitId)
+    {
+        GameObject selectedTile = _tileManager.selectedTile;
+
+        if (selectedTile == null) throw new NullReferenceException("selectedTile is NULL");
+
+        Vector3 selectedTilePosition = selectedTile.transform.position;
+        playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
+
+        UpdateMapText();
     }
 }
-
-// public class MapGenerator : MonoBehaviour
-// {
-//     public GameObject tilePrefab; // マスのPrefab
-//     public int mapWidth;     // マップの幅
-//     public int mapHeight;    // マップの高さ
-//     private float tileSize = 1.0f; // マスのサイズ（Prefabのスケールに合わせる）
-
-//     void Start()
-//     {
-//         GenerateMap();
-//     }
-
-//     void GenerateMap()
-//     {
-//         for (int x = 0; x < mapWidth; x++)
-//         {
-//             for (int z = 0; z < mapHeight; z++)
-//             {
-//                 // マスの位置を計算
-//                 Vector3 position = new Vector3(x * tileSize, 0, z * tileSize);
-
-//                 // Prefabをインスタンス化
-//                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
-
-//                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
-//                 tile.transform.parent = this.transform;
-
-//                 // タイルの名前を設定 (任意)
-//                 tile.name = $"Tile_{x}_{z}";
-//             }
-//         }
-//     }
-// }

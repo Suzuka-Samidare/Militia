@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnitUpdateButton : BaseButton
 {
-    public BaseUnitData baseUnitData;
+    public BaseUnitData unitData;
 
     void Update()
     {
@@ -13,8 +13,7 @@ public class UnitUpdateButton : BaseButton
 
     public void Onclick()
     {
-        MapManager.Instance.UpdateUnitOnMapData(baseUnitData.id);
-        TileManager.Instance.SetSelectedTileOnUnit(baseUnitData);
+        TileManager.Instance.SetSelectedTileOnUnit(unitData);
     }
 
     private void CheckButtonInteractable()
