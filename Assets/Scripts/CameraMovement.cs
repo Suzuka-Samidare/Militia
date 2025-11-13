@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,6 +8,7 @@ using UnityEngine.EventSystems;
 public class CameraMovement : MonoBehaviour
 {
     public static CameraMovement Instance;
+    private Camera cam;
     public float dragSpeed = 0.1f; // ドラッグの感度
 
     [Header("状態設定")]
@@ -31,10 +33,15 @@ public class CameraMovement : MonoBehaviour
     [Header("距離設定")]
     public float distance = 5f; // カメラとターゲットの距離
     public float distanceSmoothSpeed = 10f; // 距離の滑らかさ
-    private float focusPointDistance; // 目標とするカメラ距離
+    public float focusPointDistance; // 目標とするカメラ距離
 
     void Awake()
     {
+        cam = GetComponent<Camera>();
+
+        if (cam == null) Debug.Log("カメラコンポーネントの取得失敗");
+        if (!cam.orthographic) Debug.Log("カメラがOrthographicモードではありません。");
+
         if (Instance == null)
         {
             Instance = this;
@@ -72,7 +79,7 @@ public class CameraMovement : MonoBehaviour
     {
         MoveCamera();
         RotateCamera();
-        // ZoomCamera();
+        ZoomCamera();
     }
 
     void RotateCamera()
@@ -103,6 +110,8 @@ public class CameraMovement : MonoBehaviour
 
     void UpdateAngle()
     {
+        Debug.Log("UpdateAngle");
+
         // マウスの移動量を取得
         currentAngleX += Input.GetAxis("Mouse X") * rotationSpeed;
         currentAngleY -= Input.GetAxis("Mouse Y") * rotationSpeed; // Y軸は反転させる
@@ -189,13 +198,10 @@ public class CameraMovement : MonoBehaviour
 
     void ZoomCamera()
     {
-        // カメラの距離を滑らかに調整
-        distance = Mathf.Lerp(distance, focusPointDistance, Time.deltaTime * distanceSmoothSpeed);
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            float clampedSize = Mathf.Clamp(cam.orthographicSize + Input.mouseScrollDelta.y / 10, 2.0f, 3.0f);
+            cam.orthographicSize = clampedSize;
+        }
     }
-
-    // カメラの距離を変更する関数 (必要であれば外部から呼び出す)
-    // public void SetDistance(float newDistance)
-    // {
-    //     focusPointDistance = newDistance;
-    // }
 }
