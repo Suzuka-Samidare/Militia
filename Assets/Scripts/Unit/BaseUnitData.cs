@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseUnitData : ScriptableObject
+// 右クリックメニューからアセットを作成するための属性
+[CreateAssetMenu(fileName = "BaseUnitData", menuName = "ScriptableObjects/BaseUnitData")]
+public class BaseUnitData : ScriptableObject
 {
     [Header("共通ステータス")]
     [Tooltip("ID")] public int id;
