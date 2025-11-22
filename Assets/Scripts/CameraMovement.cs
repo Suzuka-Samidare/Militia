@@ -33,14 +33,20 @@ public class CameraMovement : MonoBehaviour
     [Header("距離設定")]
     public float distance = 5f; // カメラとターゲットの距離
     public float distanceSmoothSpeed = 10f; // 距離の滑らかさ
-    public float focusPointDistance; // 目標とするカメラ距離
 
     void Awake()
     {
         cam = GetComponent<Camera>();
 
-        if (cam == null) Debug.Log("カメラコンポーネントの取得失敗");
-        if (!cam.orthographic) Debug.Log("カメラがOrthographicモードではありません。");
+        if (cam == null)
+        {
+            Debug.Log("カメラコンポーネントの取得失敗");
+        }
+
+        if (!cam.orthographic)
+        {
+            Debug.Log("カメラがOrthographicモードではありません。");
+        }
 
         if (Instance == null)
         {
@@ -52,27 +58,13 @@ public class CameraMovement : MonoBehaviour
         }
         
         // ターゲットが設定されていない場合は、カメラの親オブジェクトをターゲットとする
-        if (focusPoint == null)
+        if (focusPoint == null) 
         {
             focusPoint = transform.parent;
         }
 
-        // 初期距離を設定
-        focusPointDistance = distance;
-
-        // // 初期角度を設定
+        // 初期角度を設定
         UpdateAngle();
-
-        // Vector3 angles = transform.eulerAngles;
-        // currentAngleX = angles.y;
-        // currentAngleY = angles.x;
-
-        // 初期距離を設定
-        // focusPointDistance = distance;
-
-        // // マウスカーソルを非表示にし、ロックする
-        // Cursor.visible = false;
-        // Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -124,7 +116,7 @@ public class CameraMovement : MonoBehaviour
 
         // ターゲットからの相対位置を計算
         Vector3 targetPosition = focusPoint.position;
-        Vector3 negDistance = new Vector3(0f, 0f, -focusPointDistance);
+        Vector3 negDistance = new Vector3(0f, 0f, -distance);
         Vector3 position = rotation * negDistance + targetPosition;
 
         // カメラの位置と回転を設定
