@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MapId = MapManager.MapId;
 
 // 右クリックメニューからアセットを作成するための属性
 [CreateAssetMenu(fileName = "BaseUnitData", menuName = "ScriptableObjects/BaseUnitData")]
 public class BaseUnitData : ScriptableObject
 {
     [Header("共通ステータス")]
-    [Tooltip("ID")] public int id;
+    [Tooltip("ID")] public MapId id;
     [Tooltip("ユニット名")] public string unitName;
     [Tooltip("耐久値")] public float hp;
     [Tooltip("最大耐久値")] public float maxHp;

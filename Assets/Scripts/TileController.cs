@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using MapId = MapManager.MapId;
 
 public class TileController : MonoBehaviour
 {
@@ -69,7 +70,7 @@ public class TileController : MonoBehaviour
         Vector3 UnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
 
         // 呼び出し中の仮オブジェクト配置
-        MapManager.Instance.UpdateSelectedTileOnUnitId(99);
+        MapManager.Instance.UpdateSelectedTileOnUnitId(MapId.Calling);
         currentUnit = Instantiate(tempUnit, UnitPosition, Quaternion.identity, gameObject.transform);
 
         StartCoroutine(callUnit(newUnit));
