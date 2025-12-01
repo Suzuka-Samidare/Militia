@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a98c87e507a0f4e973df4069350d74, type: 3}
   m_Name: SparrowUnitData
   m_EditorClassIdentifier: 
-  id: 6
+  id: 7
   unitName: 
   hp: 0
   maxHp: 0

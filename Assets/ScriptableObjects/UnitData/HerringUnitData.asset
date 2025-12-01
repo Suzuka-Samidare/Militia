@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 173ffdb9e83172e4b91e22e0e0f8f92e, type: 3}
   m_Name: HerringUnitData
   m_EditorClassIdentifier: 
-  id: 3
+  id: 4
   unitName: 
   hp: 0
   maxHp: 0
@@ -23,7 +23,6 @@ MonoBehaviour:
   unitPrefab: {fileID: 1342889782683910774, guid: 4aa01f1d5c72d4e47a8c44e612a6b6fc,
     type: 3}
   initPos: {x: 0, y: 0.5, z: 0}
-  currentAnimation: 
   attack: 0
   attackEnergy: 0
   canAttackEnemyBase: 0

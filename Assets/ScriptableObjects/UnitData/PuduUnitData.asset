@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd444519deadf6547b58011adb954908, type: 3}
   m_Name: PuduUnitData
   m_EditorClassIdentifier: 
-  id: 5
+  id: 6
   unitName: 
   hp: 0
   maxHp: 0

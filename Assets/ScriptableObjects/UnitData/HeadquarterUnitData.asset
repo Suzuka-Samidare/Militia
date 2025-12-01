@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a2093625515ea4686a465d59b415bd, type: 3}
   m_Name: HeadquarterUnitData
   m_EditorClassIdentifier: 
-  id: 0
-  unitName: 
+  id: 1
+  unitName: Headquarter
   hp: 0
   maxHp: 0
   isCalling: 0

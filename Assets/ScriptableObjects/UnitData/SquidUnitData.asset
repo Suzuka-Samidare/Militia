@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632e5d0c851067b4ca8c004271027091, type: 3}
   m_Name: SquidUnitData
   m_EditorClassIdentifier: 
-  id: 7
+  id: 8
   unitName: 
   hp: 0
   maxHp: 0

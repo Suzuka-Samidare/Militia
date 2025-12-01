@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95dd249892b2b0f4791abfdd73d8f4d6, type: 3}
   m_Name: TaipanUnitData
   m_EditorClassIdentifier: 
-  id: 8
+  id: 9
   unitName: 
   hp: 0
   maxHp: 0
