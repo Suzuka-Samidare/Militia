@@ -20,5 +20,6 @@ MonoBehaviour:
   callCost: 0
   callTime: 0
   isFaint: 0
-  unitPrefab: {fileID: 0}
-  initPos: {x: 0, y: 0, z: 0}
+  unitPrefab: {fileID: 8235858513348264544, guid: f8b2cae151feb0d4bbd48194c429bb96,
+    type: 3}
+  initPos: {x: 0, y: 0.5, z: 0}
