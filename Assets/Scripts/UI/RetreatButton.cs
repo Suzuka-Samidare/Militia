@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MapId = MapManager.MapId;
 
 public class RetreatButton : BaseButton
 {
@@ -18,9 +19,9 @@ public class RetreatButton : BaseButton
         CheckButtonInteractable();
     }
     
-    void Onclick()
+    public void Onclick()
     {
-        MapManager.Instance.UpdateSelectedTileOnUnitId(0);
+        MapManager.Instance.UpdateSelectedTileOnUnitId(MapId.Empty);
         TileManager.Instance.ClearSelectedTileOnUnit();
     }
 
