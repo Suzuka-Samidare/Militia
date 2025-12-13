@@ -16,6 +16,14 @@ public class MapManager : MonoBehaviour
     private int mapDistance = 5;
     private MapId[,] playerMapData;
     private MapId[,] enemyMapData;
+    private bool isUpdateRequired = false;
+
+    [SerializeField] private int _allyHqCount;
+    [Tooltip("本部残数")] public int AllyHqCount
+    {
+        get { return _allyHqCount; }
+        set { _allyHqCount = Mathf.Clamp(value, 0, 3); }
+    }
 
     public enum MapId
     {
@@ -53,6 +61,13 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         _tileManager = TileManager.Instance;
+    }
+
+    void Update()
+    {
+        if (!isUpdateRequired) return;
+
+        SetPlayerHeadquartersCount();
     }
 
     private void GenerateAllyMapData()
@@ -138,7 +153,7 @@ public class MapManager : MonoBehaviour
             string rowstr = "";
             for (int w = 0; w < mapWidth; w++)
             {
-                rowstr = rowstr + playerMapData[w, h] + " ";
+                rowstr = rowstr + (int)playerMapData[w, h] + " ";
             }
             resultText = rowstr + "\n" + resultText;
         }
@@ -164,19 +179,36 @@ public class MapManager : MonoBehaviour
         Vector3 selectedTilePosition = selectedTile.transform.position;
         playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
 
+        isUpdateRequired = true;
+
         UpdateMapText();
     }
 
-    // public void GetPlayerHeadquartersCount()
+    private void SetPlayerHeadquartersCount()
+    {
+        int count = 0;
+        for (int h = 0; h < mapHeight; h++)
+        {
+            for (int w = 0; w < mapWidth; w++)
+            {
+                if (playerMapData[w, h] == MapId.Headquarter) count++;
+            }
+        }
+
+        AllyHqCount = count;
+    }
+
+    // public int GetPlayerHeadquartersCount()
     // {
+    //     int count = 0;
     //     for (int h = 0; h < mapHeight; h++)
     //     {
-    //         string rowstr = "";
     //         for (int w = 0; w < mapWidth; w++)
     //         {
-    //             if (playerMapData[w, h])
-    //             rowstr = rowstr + playerMapData[w, h] + " ";
+    //             if (playerMapData[w, h] == MapId.Headquarter) count++;
     //         }
     //     }
+
+    //     return count;
     // }
 }

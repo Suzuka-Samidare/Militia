@@ -19,13 +19,13 @@ public class DialogController : MonoBehaviour
     // 外部から処理を受け取るためのデリゲート
     private Action onConfirmAction;
     private Action onCancelAction;
-    public static DialogController instance;
+    public static DialogController Instance;
 
     void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
