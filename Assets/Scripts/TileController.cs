@@ -51,13 +51,15 @@ public class TileController : MonoBehaviour
 
     private IEnumerator callUnit(BaseUnitData newUnit)
     {
-        Vector3 tilePosition = gameObject.transform.position;
-        Vector3 UnitPosition = new Vector3(tilePosition.x, newUnit.initPos.y, tilePosition.z);
-
         yield return new WaitForSeconds(newUnit.callTime);
 
-        Destroy(currentUnit);
+        if (currentUnit != null)
+        {
+            Destroy(currentUnit);
+        }
 
+        Vector3 tilePosition = gameObject.transform.position;
+        Vector3 UnitPosition = new Vector3(tilePosition.x, newUnit.initPos.y, tilePosition.z);
         MapManager.Instance.UpdateSelectedTileOnUnitId(newUnit.id);
         currentUnit = Instantiate(newUnit.unitPrefab, UnitPosition, Quaternion.identity, gameObject.transform);
     }
@@ -66,13 +68,16 @@ public class TileController : MonoBehaviour
     {
         CheckSelectedTile();
 
-        Vector3 tilePosition = gameObject.transform.position;
-        Vector3 UnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
+        // 呼び出し時間がある場合は仮オブジェクト配置
+        if (newUnit.callTime > 0)
+        {
+            Vector3 tilePosition = gameObject.transform.position;
+            Vector3 UnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
+            MapManager.Instance.UpdateSelectedTileOnUnitId(MapId.Calling);
+            currentUnit = Instantiate(tempUnit, UnitPosition, Quaternion.identity, gameObject.transform);
+        }
 
-        // 呼び出し中の仮オブジェクト配置
-        MapManager.Instance.UpdateSelectedTileOnUnitId(MapId.Calling);
-        currentUnit = Instantiate(tempUnit, UnitPosition, Quaternion.identity, gameObject.transform);
-
+        // 呼び出し開始
         StartCoroutine(callUnit(newUnit));
     }
 
