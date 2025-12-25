@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class MapManager : MonoBehaviour
 {
@@ -16,8 +17,6 @@ public class MapManager : MonoBehaviour
     private int mapDistance = 5;
     private MapId[,] playerMapData;
     private MapId[,] enemyMapData;
-    private bool isUpdateRequired = false;
-
     [SerializeField] private int _allyHqCount;
     [Tooltip("本部残数")] public int AllyHqCount
     {
@@ -61,13 +60,6 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         _tileManager = TileManager.Instance;
-    }
-
-    void Update()
-    {
-        if (!isUpdateRequired) return;
-
-        SetPlayerHeadquartersCount();
     }
 
     private void GenerateAllyMapData()
@@ -179,26 +171,29 @@ public class MapManager : MonoBehaviour
         Vector3 selectedTilePosition = selectedTile.transform.position;
         playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
 
-        isUpdateRequired = true;
-
         UpdateMapText();
     }
 
-    private void SetPlayerHeadquartersCount()
+    // TODO: 上記の UpdateSelectedTileOnUnitId の役割になるようにしたい
+    public async Task UpdateTileAsync(MapId unitId)
     {
-        int count = 0;
-        for (int h = 0; h < mapHeight; h++)
-        {
-            for (int w = 0; w < mapWidth; w++)
-            {
-                if (playerMapData[w, h] == MapId.Headquarter) count++;
-            }
-        }
+        // --- API通信ありの場合のイメージ ---
+        // var response = await MyApiService.PostTileUpdate(x, y, id);
+        // if (!response.IsSuccess) throw new Exception("API Error");
+        await Task.Delay(500); // 現時点では擬似的な通信待機（1秒）
 
-        AllyHqCount = count;
+        GameObject selectedTile = _tileManager.selectedTile;
+
+        if (selectedTile == null) throw new NullReferenceException("selectedTile is NULL");
+        
+        Vector3 selectedTilePosition = selectedTile.transform.position;
+        playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
+
+        // サーバー側でのID検証などをシミュレート
+        // if (Enum.IsDefined(typeof(MapId), unitId)) throw new ArgumentException("無効なタイルIDです");
     }
 
-    // public int GetPlayerHeadquartersCount()
+    // public async Task SetPlayerHeadquartersCount()
     // {
     //     int count = 0;
     //     for (int h = 0; h < mapHeight; h++)
@@ -209,6 +204,20 @@ public class MapManager : MonoBehaviour
     //         }
     //     }
 
-    //     return count;
+    //     AllyHqCount = count;
     // }
+
+    public int GetPlayerHeadquartersCount()
+    {
+        int count = 0;
+        for (int h = 0; h < mapHeight; h++)
+        {
+            for (int w = 0; w < mapWidth; w++)
+            {
+                if (playerMapData[w, h] == MapId.Headquarter) count++;
+            }
+        }
+
+        return count;
+    }
 }

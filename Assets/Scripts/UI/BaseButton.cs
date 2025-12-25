@@ -11,21 +11,4 @@ public class BaseButton : MonoBehaviour
     {
         button = gameObject.GetComponent<Button>();
     }
-
-    // void Update()
-    // {
-    //     CheckButtonInteractable();
-    // }
-
-    // private void CheckButtonInteractable()
-    // {
-    //     if (TileManager.Instance.selectedTile != null)
-    //     {
-    //         button.interactable = true;
-    //     }
-    //     else
-    //     {
-    //         button.interactable = false;
-    //     }
-    // }
 }

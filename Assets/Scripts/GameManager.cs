@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Overlays;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static GameManager Instance;
     public enum Phase
     {
         INIT,
@@ -14,15 +15,23 @@ public class GameManager : MonoBehaviour
         GAMEOVER,
     };
     public Phase phase;
-    public Boolean isInputDisabled;
+    public Boolean isLoading;
 
     private MapManager _mapManager;
     private DialogController _dialogController;
 
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         phase = Phase.INIT;
-        isInputDisabled = false;
     }
 
     void Start()
@@ -41,14 +50,15 @@ public class GameManager : MonoBehaviour
             {
                 _dialogController.Open(
                     isConfirm: true,
-                    message: "Are You Okey?",
+                    message: "Setup OK?",
                     onConfirm: () =>
                     {
                         Debug.Log("CONFIRM!!");
+                        ChangePhase(Phase.PREPARATION);
                     },
                     onCancel: () =>
                     {
-                        Debug.Log("CANCEL!!");
+                        _dialogController.Close();
                     }
                 ); 
             }
