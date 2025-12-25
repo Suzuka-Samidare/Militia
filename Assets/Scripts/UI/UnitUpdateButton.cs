@@ -60,7 +60,7 @@ public class UnitUpdateButton : BaseButton
     // ボタンの有効化制御
     private void CheckButtonInteractable()
     {
-        if (!GameManager.Instance.isMainViewDisabled && TileManager.Instance.selectedTile != null)
+        if (GameManager.Instance.isMainViewEnabled && TileManager.Instance.selectedTile != null)
         {
             button.interactable = true;
         }

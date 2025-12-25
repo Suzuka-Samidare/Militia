@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     };
     public Phase phase;
     public Boolean isLoading;
+    public Boolean isMainViewEnabled = true;
 
     private MapManager _mapManager;
     private DialogController _dialogController;
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
         {
             if (_mapManager.AllyHqCount == 2)
             {
+                isMainViewEnabled = false;
                 _dialogController.Open(
                     isConfirm: true,
                     message: "Setup OK?",
