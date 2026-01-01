@@ -162,17 +162,17 @@ public class MapManager : MonoBehaviour
         return playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z];
     }
 
-    public void UpdateSelectedTileOnUnitId(MapId unitId)
-    {
-        GameObject selectedTile = _tileManager.selectedTile;
+    // public void UpdateSelectedTileOnUnitId(MapId unitId)
+    // {
+    //     GameObject selectedTile = _tileManager.selectedTile;
 
-        if (selectedTile == null) throw new NullReferenceException("selectedTile is NULL");
+    //     if (selectedTile == null) throw new NullReferenceException("selectedTile is NULL");
 
-        Vector3 selectedTilePosition = selectedTile.transform.position;
-        playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
+    //     Vector3 selectedTilePosition = selectedTile.transform.position;
+    //     playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
 
-        UpdateMapText();
-    }
+    //     UpdateMapText();
+    // }
 
     // TODO: 上記の UpdateSelectedTileOnUnitId の役割になるようにしたい
     public async Task UpdateTileAsync(MapId unitId)
@@ -180,7 +180,9 @@ public class MapManager : MonoBehaviour
         // --- API通信ありの場合のイメージ ---
         // var response = await MyApiService.PostTileUpdate(x, y, id);
         // if (!response.IsSuccess) throw new Exception("API Error");
+        Debug.Log("UpdateTileAsync Delay開始");
         await Task.Delay(500); // 現時点では擬似的な通信待機（1秒）
+        Debug.Log("UpdateTileAsync Delay完了");
 
         GameObject selectedTile = _tileManager.selectedTile;
 

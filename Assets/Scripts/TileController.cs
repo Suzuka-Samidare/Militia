@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using MapId = MapManager.MapId;
 
 public class TileController : MonoBehaviour
 {
@@ -49,9 +44,9 @@ public class TileController : MonoBehaviour
         }
     }
 
-    private IEnumerator callUnit(BaseUnitData newUnit)
+    public void SetUnitObject(BaseUnitData newUnit)
     {
-        yield return new WaitForSeconds(newUnit.callTime);
+        CheckSelectedTile();
 
         if (currentUnit != null)
         {
@@ -60,25 +55,20 @@ public class TileController : MonoBehaviour
 
         Vector3 tilePosition = gameObject.transform.position;
         Vector3 UnitPosition = new Vector3(tilePosition.x, newUnit.initPos.y, tilePosition.z);
-        MapManager.Instance.UpdateSelectedTileOnUnitId(newUnit.id);
         currentUnit = Instantiate(newUnit.unitPrefab, UnitPosition, Quaternion.identity, gameObject.transform);
+
+        Debug.Log("本オブジェクト配置完了");
     }
 
-    public void SetUnitObject(BaseUnitData newUnit)
+    public void SetTempUnitObject()
     {
         CheckSelectedTile();
 
-        // 呼び出し時間がある場合は仮オブジェクト配置
-        if (newUnit.callTime > 0)
-        {
-            Vector3 tilePosition = gameObject.transform.position;
-            Vector3 UnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
-            MapManager.Instance.UpdateSelectedTileOnUnitId(MapId.Calling);
-            currentUnit = Instantiate(tempUnit, UnitPosition, Quaternion.identity, gameObject.transform);
-        }
+        Vector3 tilePosition = gameObject.transform.position;
+        Vector3 TempUnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
+        currentUnit = Instantiate(tempUnit, TempUnitPosition, Quaternion.identity, gameObject.transform);
 
-        // 呼び出し開始
-        StartCoroutine(callUnit(newUnit));
+        Debug.Log("仮オブジェクト配置完了");
     }
 
     public void DestroyUnitObject()

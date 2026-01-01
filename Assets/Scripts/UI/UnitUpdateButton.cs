@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro.EditorUtilities;
 using UnityEngine;
 
@@ -24,15 +25,11 @@ public class UnitUpdateButton : BaseButton
 
         try
         {
-            LoadingOverlay.Instance.Open();
-            GameManager.Instance.isLoading = true;
             Debug.Log($"タイル更新開始");
+            GameManager.Instance.isLoading = true;
 
-            // 1. 更新処理の実行 (将来のAPI通信を考慮)
-            await MapManager.Instance.UpdateTileAsync(unitData.id);
-
-            // 2. Unity側のビジュアル更新 (ここは必ずメインスレッドで動く)
-            TileManager.Instance.SetSelectedTileOnUnit(unitData);
+            // Unity側の更新 (ここは必ずメインスレッドで動く)
+            await TileManager.Instance.SetSelectedTileOnUnit(unitData);
 
             // 3. 本部設置の場合は、設置数をカウント
             if (unitData.id == MapManager.MapId.Headquarter)
@@ -52,7 +49,7 @@ public class UnitUpdateButton : BaseButton
         {
             // 3. JSのfinallyと同じ：成否に関わらず必ず状態を戻す
             GameManager.Instance.isLoading = false;
-            LoadingOverlay.Instance.Close();
+            // LoadingOverlay.Instance.Close();
             Debug.Log("タイル更新処理終了（後片付け完了）");
         }
     }

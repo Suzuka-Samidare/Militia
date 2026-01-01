@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using MapId = MapManager.MapId;
 
 public class TileManager : MonoBehaviour
 {
@@ -98,11 +96,24 @@ public class TileManager : MonoBehaviour
         _selectedTileController = null;
     }
 
-    public void SetSelectedTileOnUnit(BaseUnitData newUnit)
+    public async Task SetSelectedTileOnUnit(BaseUnitData newUnit)
     {
         if (selectedTile == null) return;
 
         _selectedTileController.DestroyUnitObject();
+        // _selectedTileController.SetUnitObject(newUnit);
+
+        // 呼び出し時間がある場合は仮オブジェクト配置
+        if (newUnit.callTime > 0)
+        {
+            await MapManager.Instance.UpdateTileAsync(MapId.Calling);
+            _selectedTileController.SetTempUnitObject();
+        }
+
+        // 呼び出し開始
+        await Task.Delay((int)newUnit.callTime * 1000);
+
+        await MapManager.Instance.UpdateTileAsync(newUnit.id);
         _selectedTileController.SetUnitObject(newUnit);
     }
     
