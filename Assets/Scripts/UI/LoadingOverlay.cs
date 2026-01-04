@@ -19,18 +19,4 @@ public class LoadingOverlay : VisibilityController
 
         gameObject.SetActive(false);
     }
-
-    void Update()
-    {
-        if (GameManager.Instance.isLoading)
-        {
-            Debug.Log("AAAAAAA");
-            Open();
-        }
-        else
-        {
-            Debug.Log("BBBBBBB");
-            Close();
-        }
-    }
 }

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     private MapManager _mapManager;
     private DialogController _dialogController;
+    private LoadingOverlay _loadingOverlay;
 
     void Awake()
     {
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     {
         _mapManager = MapManager.Instance;
         _dialogController = DialogController.Instance;
+        _loadingOverlay = LoadingOverlay.Instance;
 
         if (_dialogController == null) Debug.Log("ダイアログインスタンスの取得失敗");
     }
@@ -65,10 +67,24 @@ public class GameManager : MonoBehaviour
                 ); 
             }
         }
+
+        UpdateLoadingOverlay();
     }
 
     void ChangePhase(Phase nextPhase)
     {
         phase = nextPhase;
+    }
+
+    private void UpdateLoadingOverlay()
+    {
+        if (isLoading)
+        {
+            _loadingOverlay.Open();
+        }
+        else
+        {
+            _loadingOverlay.Close();
+        }
     }
 }
