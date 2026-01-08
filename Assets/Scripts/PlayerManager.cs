@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -18,8 +19,10 @@ public class PlayerManager : MonoBehaviour
         get { return _animalPoint; }
         set { _animalPoint = Mathf.Clamp(value, 0, 999); }
     }
-    [Tooltip("アニマルポイント回復値")] public float regenAnimalPoint;
-    [Tooltip("アニマルポイント回復速度")] public float regenAnimalPointSpeed;
+    [SerializeField, Tooltip("アニマルポイント回復値")]
+    private float apRegenValue = 10.0f;
+    [SerializeField, Tooltip("アニマルポイント回復速度")]
+    private float apRegenRate = 2.0f;
 
     [Header("エネルギー関連")]
     [Tooltip("所持エネルギー")] private float _energy;
@@ -29,49 +32,80 @@ public class PlayerManager : MonoBehaviour
         get { return _energy; }
         set { _energy = Mathf.Clamp(value, 0, 999); }
     }
-    [Tooltip("エネルギー回復値")] public float regenEnergy;
-    [Tooltip("エネルギー回復速度")] public float regenEnergySpeed;
 
-    void Start()
+    [SerializeField, Tooltip("エネルギー回復値")]
+    private float energyRegenValue = 4.0f;
+
+    [SerializeField, Tooltip("エネルギー回復速度")]
+    private float energyRegenRate = 2.0f;
+
+    [Header("コルーチン参照用")]
+    private IEnumerator _increaseEnergy;
+    private IEnumerator _increaseAnimalPoint;
+
+    void Awake()
     {
-        StartCoroutine(IncreaseEnergy());
-        StartCoroutine(IncreaseAnimalPoint());
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+
+        _increaseAnimalPoint = IncreaseStatus(apRegenRate, apRegenValue, AddAnimalPoint);
+        _increaseEnergy = IncreaseStatus(energyRegenRate, energyRegenValue, AddEnergy);
     }
+
     void Update()
     {
         UpdateAnimalPointText();
         UpdateEnergyText();
     }
 
-    public void useAnimalPoint(float value)
+    public void AddAnimalPoint(float value)
     {
         animalPoint += value;
     }
 
-    public void useEnergy(float value)
+    public void AddEnergy(float value)
     {
         energy += value;
     }
 
-    private IEnumerator IncreaseEnergy()
+    public void UseAnimalPoint(float value)
     {
-        while (true) // 無限ループ
-        {
-            // 2秒インターバル
-            yield return new WaitForSeconds(regenEnergySpeed);
-            // エネルギーを付与
-            energy += regenEnergy;
-        }
+        animalPoint -= value;
     }
 
-    private IEnumerator IncreaseAnimalPoint()
+    public void UseEnergy(float value)
     {
-        while (true) // 無限ループ
+        energy -= value;
+    }
+
+    public void StartRegen()
+    {
+        if (_increaseAnimalPoint == null || _increaseEnergy == null)
         {
-            // 2秒インターバル
-            yield return new WaitForSeconds(regenAnimalPointSpeed);
-            // フレンドポイントを付与
-            animalPoint += regenAnimalPoint;
+            throw new Exception("AP/Energy regeneration process is missing.");
+        }
+
+        StartCoroutine(_increaseAnimalPoint);
+        StartCoroutine(_increaseEnergy);
+    }
+
+    public void StopRegen()
+    {
+        if (_increaseAnimalPoint == null || _increaseEnergy == null)
+        {
+            throw new Exception("AP/Energy regeneration process is missing.");
+        }
+
+        StopCoroutine(_increaseAnimalPoint);
+        StopCoroutine(_increaseEnergy);
+    }
+
+    private IEnumerator IncreaseStatus(float interval, float value, Action<float> addAction)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(interval);
+            addAction(value);
         }
     }
 
