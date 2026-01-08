@@ -5,21 +5,13 @@ using TMPro;
 
 public class InfomationController : MonoBehaviour
 {
-    public static InfomationController instance;
-    public TextMeshProUGUI messageText; // メッセージテキスト
+    public static InfomationController Instance;
+    public TextMeshProUGUI messageText;
     
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        gameObject.SetActive(false);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     public void Open(string message)
@@ -31,5 +23,11 @@ public class InfomationController : MonoBehaviour
     public void Close()
     {
         gameObject.SetActive(false);
+        messageText.text = "";
+    }
+
+    public void UpdateMessage(string message)
+    {
+        messageText.text = message;
     }
 }
