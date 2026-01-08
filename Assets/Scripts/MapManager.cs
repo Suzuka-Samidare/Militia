@@ -17,11 +17,16 @@ public class MapManager : MonoBehaviour
     private int mapDistance = 5;
     private MapId[,] playerMapData;
     private MapId[,] enemyMapData;
-    [SerializeField] private int _allyHqCount;
-    [Tooltip("本部残数")] public int AllyHqCount
+
+    [Tooltip("最大本部設置数")]
+    public int maxHqCount = 2;
+
+    [SerializeField, Tooltip("本部残数")]
+    private int _allyHqCount;
+    public int AllyHqCount
     {
         get { return _allyHqCount; }
-        set { _allyHqCount = Mathf.Clamp(value, 0, 3); }
+        set { _allyHqCount = Mathf.Clamp(value, 0, maxHqCount); }
     }
 
     public enum MapId

@@ -291,7 +291,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 329.0863, y: 40.22}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &19042169
 MonoBehaviour:
@@ -313,9 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Infomation Message
-
-'
+  m_text: Info
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2414,7 +2412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &595355815
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4230,7 +4228,7 @@ GameObject:
   - component: {fileID: 997239080}
   - component: {fileID: 997239079}
   - component: {fileID: 997239078}
-  - component: {fileID: 997239077}
+  - component: {fileID: 997239081}
   m_Layer: 5
   m_Name: HeadquartersButton(Init)
   m_TagString: Untagged
@@ -4258,20 +4256,6 @@ RectTransform:
   m_AnchoredPosition: {x: -67.389305, y: 269.8201}
   m_SizeDelta: {x: 135, y: 135}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &997239077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997239075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1941d0311ba6fb043b9819440631edaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 0}
-  unitData: {fileID: 11400000, guid: c1aff985dc4254249bc22a96b3739609, type: 2}
 --- !u!114 &997239078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4316,8 +4300,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 997239077}
-        m_TargetAssemblyTypeName: UnitUpdateButton, Assembly-CSharp
+      - m_Target: {fileID: 997239081}
+        m_TargetAssemblyTypeName: HeadquarterUpdateButton, Assembly-CSharp
         m_MethodName: Onclick
         m_Mode: 1
         m_Arguments:
@@ -4366,6 +4350,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997239075}
   m_CullTransparentMesh: 1
+--- !u!114 &997239081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997239075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6892d5f2cc658164c9526cc8979f4955, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  unitData: {fileID: 11400000, guid: c1aff985dc4254249bc22a96b3739609, type: 2}
 --- !u!1 &1007197977
 GameObject:
   m_ObjectHideFlags: 0
@@ -5396,7 +5394,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1376151481
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5432,6 +5430,7 @@ GameObject:
   - component: {fileID: 1437298012}
   - component: {fileID: 1437298011}
   - component: {fileID: 1437298010}
+  - component: {fileID: 1437298015}
   m_Layer: 5
   m_Name: Infomation
   m_TagString: Untagged
@@ -5456,9 +5455,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0.000061035156, y: -81.379974}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1437298010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5491,10 +5490,10 @@ MonoBehaviour:
     m_Bottom: 20
   m_ChildAlignment: 4
   m_Spacing: 20
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -5550,6 +5549,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1437298008}
   m_CullTransparentMesh: 1
+--- !u!114 &1437298015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437298008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: 500
+  m_MinHeight: -1
+  m_PreferredWidth: 800
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &1443891209
 GameObject:
   m_ObjectHideFlags: 0
@@ -5989,6 +6008,7 @@ MonoBehaviour:
     type: 3}
   mapWidth: 10
   mapHeight: 10
+  maxHqCount: 2
   _allyHqCount: 0
 --- !u!1 &1580047836
 GameObject:
@@ -7127,10 +7147,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fpText: {fileID: 977325441}
   energyText: {fileID: 237367904}
-  regenAnimalPoint: 10
-  regenAnimalPointSpeed: 2
-  regenEnergy: 3
-  regenEnergySpeed: 2
+  apRegenValue: 0
+  apRegenRate: 0
+  energyRegenValue: 0
+  energyRegenRate: 0
 --- !u!4 &1790418067
 Transform:
   m_ObjectHideFlags: 0

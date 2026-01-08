@@ -1,12 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 using UnityEditor.Overlays;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    [Header("フェーズ管理")]
+    public Phase phase = Phase.INIT;
     public enum Phase
     {
         INIT,
@@ -14,13 +18,17 @@ public class GameManager : MonoBehaviour
         BATTLE,
         GAMEOVER,
     };
-    public Phase phase;
+
+    [Header("操作管理")]
+    [Tooltip("ローディング状態")]
     public Boolean isLoading;
+    [Tooltip("メインビュー操作可否")]
     public Boolean isMainViewEnabled = true;
 
     private MapManager _mapManager;
     private DialogController _dialogController;
     private LoadingOverlay _loadingOverlay;
+    private InfomationController _infomationController;
 
     void Awake()
     {
@@ -32,8 +40,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        phase = Phase.INIT;
     }
 
     void Start()
@@ -41,15 +47,16 @@ public class GameManager : MonoBehaviour
         _mapManager = MapManager.Instance;
         _dialogController = DialogController.Instance;
         _loadingOverlay = LoadingOverlay.Instance;
+        _infomationController = InfomationController.Instance;
 
-        if (_dialogController == null) Debug.Log("ダイアログインスタンスの取得失敗");
+        _infomationController.Open("Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units.");
     }
 
     void Update()
     {
         if (phase == Phase.INIT)
         {
-            if (_mapManager.AllyHqCount == 2)
+            if (_mapManager.AllyHqCount == _mapManager.maxHqCount)
             {
                 isMainViewEnabled = false;
                 _dialogController.Open(
@@ -57,8 +64,8 @@ public class GameManager : MonoBehaviour
                     message: "Setup OK?",
                     onConfirm: () =>
                     {
-                        Debug.Log("CONFIRM!!");
                         ChangePhase(Phase.PREPARATION);
+                        PlayerManager.Instance.StartRegen();
                     },
                     onCancel: () =>
                     {
