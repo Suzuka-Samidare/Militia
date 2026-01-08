@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TMPro.EditorUtilities;
 using UnityEngine;
 
-public class UnitUpdateButton : BaseButton
+public class HeadquarterUpdateButton : BaseButton
 {
     public BaseUnitData unitData;
 
@@ -30,8 +30,14 @@ public class UnitUpdateButton : BaseButton
 
             // Unity側の更新 (ここは必ずメインスレッドで動く)
             await TileManager.Instance.SetSelectedTileOnUnit(unitData);
+
+            MapManager.Instance.AllyHqCount++;
             
             Debug.Log("タイル更新成功");
+
+            InfomationController.Instance.UpdateMessage(
+                "Please place the remaining " + (MapManager.Instance.maxHqCount - MapManager.Instance.AllyHqCount) + " headquarters units."
+            );
         }
         catch (Exception ex)
         {
