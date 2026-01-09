@@ -84,7 +84,7 @@ public class TileManager : MonoBehaviour
     }
 
     // 選択中のマスを解除する
-    void ClearSelectedTile()
+    public void ClearSelectedTile()
     {
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
         if (selectedTile != null && _selectedTileController != null)
@@ -116,11 +116,17 @@ public class TileManager : MonoBehaviour
         await MapManager.Instance.UpdateTileAsync(newUnit.id);
         _selectedTileController.SetUnitObject(newUnit);
     }
-    
+
+    // 選択中のマス上にあるユニットを消す
     public void ClearSelectedTileOnUnit()
     {
         if (selectedTile == null || _selectedTileController == null) return;
 
         _selectedTileController.DestroyUnitObject();
     }
+
+    // public void DestroyAllTileOnUnitObject()
+    // {
+        
+    // }
 }

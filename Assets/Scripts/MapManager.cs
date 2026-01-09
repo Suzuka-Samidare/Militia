@@ -42,12 +42,13 @@ public class MapManager : MonoBehaviour
     public int maxHqCount = 2;
 
     [SerializeField, Tooltip("本部残数")]
-    private int _allyHqCount;
-    public int AllyHqCount
-    {
-        get { return _allyHqCount; }
-        set { _allyHqCount = Mathf.Clamp(value, 0, maxHqCount); }
-    }
+    public int AllyHqCount;
+    // private int _allyHqCount;
+    // public int AllyHqCount
+    // {
+    //     get { return _allyHqCount; }
+    //     set { _allyHqCount = Mathf.Clamp(value, 0, maxHqCount); }
+    // }
 
     private TileManager _tileManager;
 
@@ -228,6 +229,10 @@ public class MapManager : MonoBehaviour
                 if (playerMapData[w, h] == MapId.Headquarter) count++;
             }
         }
+
+        if (count > maxHqCount) throw new Exception("Headquarters unit limit exceeded.");
+        
+        AllyHqCount = count;
 
         return count;
     }

@@ -44,9 +44,23 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (phase == Phase.INIT)
+        switch(phase)
         {
-            CheckInitPhase();
+            case Phase.INIT:
+                // Debug.Log("Phase: INIT");
+                CheckInitPhase();
+                break;
+            case Phase.PREPARATION:
+                // Debug.Log("Phase: PREPARATION");
+                break;
+            case Phase.BATTLE:
+                // Debug.Log("Phase: BATTLE");
+                break;
+            case Phase.GAMEOVER:
+                // Debug.Log("Phase: GAMEOVER");
+                break;
+            default:
+                throw new Exception("Phase: ERROR");
         }
 
         UpdateLoadingOverlay();
@@ -62,7 +76,7 @@ public class GameManager : MonoBehaviour
 
     private void CheckInitPhase()
     {
-        if (_mapManager.AllyHqCount == _mapManager.maxHqCount)
+        if (_dialogController.gameObject.activeSelf == false && _mapManager.AllyHqCount == _mapManager.maxHqCount)
         {
             isMainViewEnabled = false;
             _dialogController.Open(
@@ -78,7 +92,6 @@ public class GameManager : MonoBehaviour
                     // ===========================
                     // TODO: 本部設置のリセット
                     // ===========================
-                    _dialogController.Close();
                 }
             ); 
         }
