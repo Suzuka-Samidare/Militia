@@ -8,12 +8,13 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
 
+    [Header("オブジェクト関連")]
     public TextMeshProUGUI fpText;
     public TextMeshProUGUI energyText;
 
     [Header("アニマルポイント関連")]
-    [Tooltip("所持アニマルポイント")] private float _animalPoint;
-    [Tooltip("所持アニマルポイント")]
+    [SerializeField, Tooltip("所持アニマルポイント")]
+    private float _animalPoint;
     public float animalPoint
     {
         get { return _animalPoint; }
@@ -25,17 +26,15 @@ public class PlayerManager : MonoBehaviour
     private float apRegenRate = 2.0f;
 
     [Header("エネルギー関連")]
-    [Tooltip("所持エネルギー")] private float _energy;
-    [Tooltip("所持エネルギー")]
+    [SerializeField, Tooltip("所持エネルギー")]
+    private float _energy;
     public float energy
     {
         get { return _energy; }
         set { _energy = Mathf.Clamp(value, 0, 999); }
     }
-
     [SerializeField, Tooltip("エネルギー回復値")]
     private float energyRegenValue = 4.0f;
-
     [SerializeField, Tooltip("エネルギー回復速度")]
     private float energyRegenRate = 2.0f;
 

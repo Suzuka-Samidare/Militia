@@ -21,9 +21,9 @@ public class GameManager : MonoBehaviour
 
     [Header("操作管理")]
     [Tooltip("ローディング状態")]
-    public Boolean isLoading;
+    public bool isLoading;
     [Tooltip("メインビュー操作可否")]
-    public Boolean isMainViewEnabled = true;
+    public bool isMainViewEnabled = true;
 
     private MapManager _mapManager;
     private DialogController _dialogController;
@@ -32,23 +32,13 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     void Start()
     {
-        _mapManager = MapManager.Instance;
-        _dialogController = DialogController.Instance;
-        _loadingOverlay = LoadingOverlay.Instance;
-        _infomationController = InfomationController.Instance;
-
+        ResolveDependencies();
         _infomationController.Open("Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units.");
     }
 
@@ -56,29 +46,45 @@ public class GameManager : MonoBehaviour
     {
         if (phase == Phase.INIT)
         {
-            if (_mapManager.AllyHqCount == _mapManager.maxHqCount)
-            {
-                isMainViewEnabled = false;
-                _dialogController.Open(
-                    isConfirm: true,
-                    message: "Setup OK?",
-                    onConfirm: () =>
-                    {
-                        ChangePhase(Phase.PREPARATION);
-                        PlayerManager.Instance.StartRegen();
-                    },
-                    onCancel: () =>
-                    {
-                        _dialogController.Close();
-                    }
-                ); 
-            }
+            CheckInitPhase();
         }
 
         UpdateLoadingOverlay();
     }
 
-    void ChangePhase(Phase nextPhase)
+    private void ResolveDependencies()
+    {
+        _mapManager = MapManager.Instance;
+        _dialogController = DialogController.Instance;
+        _loadingOverlay = LoadingOverlay.Instance;
+        _infomationController = InfomationController.Instance;
+    }
+
+    private void CheckInitPhase()
+    {
+        if (_mapManager.AllyHqCount == _mapManager.maxHqCount)
+        {
+            isMainViewEnabled = false;
+            _dialogController.Open(
+                isConfirm: true,
+                message: "Setup OK?",
+                onConfirm: () =>
+                {
+                    ChangePhase(Phase.PREPARATION);
+                    PlayerManager.Instance.StartRegen();
+                },
+                onCancel: () =>
+                {
+                    // ===========================
+                    // TODO: 本部設置のリセット
+                    // ===========================
+                    _dialogController.Close();
+                }
+            ); 
+        }
+    }
+
+    private void ChangePhase(Phase nextPhase)
     {
         phase = nextPhase;
     }

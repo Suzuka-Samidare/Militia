@@ -9,26 +9,18 @@ using System.Threading.Tasks;
 public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
+
+    [Header("オブジェクト関連")]
     public GameObject playerMap;
     public GameObject enemyMap;
     public GameObject tilePrefab; // マスのPrefab
+
+    [Header("マップ関連")]
     public int mapWidth;     // マップの幅
     public int mapHeight;    // マップの高さ
     private int mapDistance = 5;
     private MapId[,] playerMapData;
     private MapId[,] enemyMapData;
-
-    [Tooltip("最大本部設置数")]
-    public int maxHqCount = 2;
-
-    [SerializeField, Tooltip("本部残数")]
-    private int _allyHqCount;
-    public int AllyHqCount
-    {
-        get { return _allyHqCount; }
-        set { _allyHqCount = Mathf.Clamp(value, 0, maxHqCount); }
-    }
-
     public enum MapId
     {
         Empty = 0,
@@ -43,6 +35,18 @@ public class MapManager : MonoBehaviour
         Taipan = 9,
         Calling = 99,
         Error = -1
+    }
+
+    [Header("本部関連")]
+    [Tooltip("本部最大設置数")]
+    public int maxHqCount = 2;
+
+    [SerializeField, Tooltip("本部残数")]
+    private int _allyHqCount;
+    public int AllyHqCount
+    {
+        get { return _allyHqCount; }
+        set { _allyHqCount = Mathf.Clamp(value, 0, maxHqCount); }
     }
 
     private TileManager _tileManager;
