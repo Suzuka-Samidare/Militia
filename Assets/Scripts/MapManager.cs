@@ -19,8 +19,8 @@ public class MapManager : MonoBehaviour
     public int mapWidth;     // マップの幅
     public int mapHeight;    // マップの高さ
     private int mapDistance = 5;
-    private MapId[,] playerMapData;
-    private MapId[,] enemyMapData;
+    private TileController[,] playerMapData;
+    private TileController[,] enemyMapData;
     public enum MapId
     {
         Empty = 0,
@@ -38,17 +38,8 @@ public class MapManager : MonoBehaviour
     }
 
     [Header("本部関連")]
-    [Tooltip("本部最大設置数")]
-    public int maxHqCount = 2;
-
-    [SerializeField, Tooltip("本部残数")]
-    public int AllyHqCount;
-    // private int _allyHqCount;
-    // public int AllyHqCount
-    // {
-    //     get { return _allyHqCount; }
-    //     set { _allyHqCount = Mathf.Clamp(value, 0, maxHqCount); }
-    // }
+    [Tooltip("本部最大設置数")] public int maxHqCount = 2;
+    [Tooltip("本部残数"), SerializeField] public int AllyHqCount;
 
     private TileManager _tileManager;
 
@@ -64,7 +55,6 @@ public class MapManager : MonoBehaviour
         }
         GenerateAllyMapData();
         GenerateEnemyMapData();
-        UpdateMapText();
     }
 
     void Start()
@@ -74,102 +64,101 @@ public class MapManager : MonoBehaviour
 
     private void GenerateAllyMapData()
     {
-        playerMapData = new MapId[mapWidth, mapHeight];
+        playerMapData = new TileController[mapWidth, mapHeight];
 
         for (int x = 0; x < mapWidth; x++)
         {
             for (int z = 0; z < mapHeight; z++)
             {
-                // IDを空地に設定
-                playerMapData[x, z] = 0;
                 // マスの位置を計算
                 Vector3 position = new Vector3(x, 0, z);
                 // Prefabをインスタンス化
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
-                TileController tileController = tile.GetComponent<TileController>();
                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
                 tile.transform.SetParent(playerMap.transform);
-                tileController.xPos = x;
-                tileController.zPos = z;
-                // タイルの名前を設定 (任意)
                 tile.name = $"AllyTile_{x}_{z}";
+                // 各フィールド値の更新
+                TileController tileController = tile.GetComponent<TileController>();
+                tileController.globalPos = position;
+                tileController.gridPosX = x;
+                tileController.gridPosZ = z;
+                // クラスをマップデータとして格納
+                playerMapData[x, z] = tileController;
             }
         }
     }
 
-    // private void GenerateAllyMapData()
-    // {
-    //     playerMapData = new MapId[mapWidth, mapHeight];
-
-    //     for (int x = 0; x < mapWidth; x++)
-    //     {
-    //         for (int z = 0; z < mapHeight; z++)
-    //         {
-    //             // IDを空地に設定
-    //             playerMapData[x, z] = MapId.Empty;
-    //             // マスの位置を計算
-    //             Vector3 position = new Vector3(x, 0, z);
-    //             // Prefabをインスタンス化
-    //             GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
-    //             TileController tileController = tile.GetComponent<TileController>();
-    //             // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
-    //             tile.transform.SetParent(playerMap.transform);
-    //             tileController.xPos = x;
-    //             tileController.zPos = z;
-    //             // タイルの名前を設定 (任意)
-    //             tile.name = $"AllyTile_{x}_{z}";
-    //         }
-    //     }
-    // }
-
     private void GenerateEnemyMapData()
     {
-        enemyMapData = new MapId[mapWidth, mapHeight];
+        enemyMapData = new TileController[mapWidth, mapHeight];
 
         for (int x = 0; x < mapWidth; x++)
         {
             for (int z = 0; z < mapHeight; z++)
             {
-                // IDを空地に設定
-                enemyMapData[x, z] = 0;
                 // マスの位置を計算
                 Vector3 position = new Vector3(x, 0, z + mapHeight + mapDistance);
                 // Prefabをインスタンス化
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
-                TileController tileController = tile.GetComponent<TileController>();
                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
                 tile.transform.SetParent(enemyMap.transform);
-                tileController.xPos = x;
-                tileController.zPos = z;
-                // タイルの名前を設定 (任意)
                 tile.name = $"EnemyTile_{x}_{z}";
+                // 各フィールド値の更新
+                TileController tileController = tile.GetComponent<TileController>();
+                tileController.globalPos = position;
+                tileController.gridPosX = x;
+                tileController.gridPosZ = z;
+                 // クラスをマップデータとして格納
+                enemyMapData[x, z] = tileController;
             }
         }
     }
 
-    private void UpdateMapText()
+    // private void UpdateMapText()
+    // {
+    //     string resultText = "";
+    //     for (int z = 0; z < mapHeight; z++)
+    //     {
+    //         string rowstr = "";
+    //         for (int x = 0; x < mapWidth; x++)
+    //         {
+    //             MapId id;
+    //             GameObject currentUnit =  playerMapData[x, z].currentUnit;
+    //             if (currentUnit != null)
+    //             {
+    //                 id = currentUnit.GetComponent<BaseUnitData>().id;
+    //             }
+    //             else
+    //             {
+    //                 id = MapId.Empty;
+    //             }
+    //             rowstr = rowstr + (int)id + " ";
+    //         }
+    //         resultText = rowstr + "\n" + resultText;
+    //     }
+    //     Debug.Log(resultText);
+    // }
+
+    public int GetPlayerHeadquartersCount()
     {
-        string resultText = "";
-        for (int h = 0; h < mapHeight; h++)
+        int count = 0;
+        for (int z = 0; z < mapHeight; z++)
         {
-            string rowstr = "";
-            for (int w = 0; w < mapWidth; w++)
+            for (int x = 0; x < mapWidth; x++)
             {
-                rowstr = rowstr + (int)playerMapData[w, h] + " ";
+                UnitController unitController = playerMapData[x, z].unitController;
+                if (unitController)
+                {
+                    if (unitController.profile.id == MapId.Headquarter) count++;
+                }
             }
-            resultText = rowstr + "\n" + resultText;
         }
-        Debug.Log(resultText);
-    }
 
-    public MapId GetSelectedTileId()
-    {
-        GameObject selectedTile = _tileManager.selectedTile;
+        if (count > maxHqCount) throw new Exception("Headquarters unit limit exceeded.");
+        
+        AllyHqCount = count;
 
-        if (selectedTile == null) return MapId.Error;
-
-        Vector3 selectedTilePosition = selectedTile.transform.position;
-        return playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z];
+        return count;
     }
 
     // public void UpdateSelectedTileOnUnitId(MapId unitId)
@@ -185,55 +174,24 @@ public class MapManager : MonoBehaviour
     // }
 
     // TODO: 上記の UpdateSelectedTileOnUnitId の役割になるようにしたい
-    public async Task UpdateTileAsync(MapId unitId)
-    {
-        // --- API通信ありの場合のイメージ ---
-        // var response = await MyApiService.PostTileUpdate(x, y, id);
-        // if (!response.IsSuccess) throw new Exception("API Error");
-        Debug.Log("UpdateTileAsync Delay開始");
-        await Task.Delay(500); // 現時点では擬似的な通信待機（1秒）
-        Debug.Log("UpdateTileAsync Delay完了");
-
-        GameObject selectedTile = _tileManager.selectedTile;
-
-        if (selectedTile == null) throw new NullReferenceException("selectedTile is NULL");
-        
-        Vector3 selectedTilePosition = selectedTile.transform.position;
-        playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
-
-        // サーバー側でのID検証などをシミュレート
-        // if (Enum.IsDefined(typeof(MapId), unitId)) throw new ArgumentException("無効なタイルIDです");
-    }
-
-    // public async Task SetPlayerHeadquartersCount()
+    // public async Task UpdateTileAsync(MapId unitId)
     // {
-    //     int count = 0;
-    //     for (int h = 0; h < mapHeight; h++)
-    //     {
-    //         for (int w = 0; w < mapWidth; w++)
-    //         {
-    //             if (playerMapData[w, h] == MapId.Headquarter) count++;
-    //         }
-    //     }
+    //     // --- API通信ありの場合のイメージ ---
+    //     // var response = await MyApiService.PostTileUpdate(x, y, id);
+    //     // if (!response.IsSuccess) throw new Exception("API Error");
+    //     Debug.Log("UpdateTileAsync Delay開始");
+    //     await Task.Delay(500); // 現時点では擬似的な通信待機（1秒）
+    //     Debug.Log("UpdateTileAsync Delay完了");
 
-    //     AllyHqCount = count;
+    //     GameObject selectedTile = _tileManager.selectedTile;
+
+    //     if (selectedTile == null) throw new NullReferenceException("selectedTile is NULL");
+        
+    //     Vector3 selectedTilePosition = selectedTile.transform.position;
+    //     playerMapData[(int)selectedTilePosition.x, (int)selectedTilePosition.z] = unitId;
+
+    //     // サーバー側でのID検証などをシミュレート
+    //     // if (Enum.IsDefined(typeof(MapId), unitId)) throw new ArgumentException("無効なタイルIDです");
     // }
 
-    public int GetPlayerHeadquartersCount()
-    {
-        int count = 0;
-        for (int h = 0; h < mapHeight; h++)
-        {
-            for (int w = 0; w < mapWidth; w++)
-            {
-                if (playerMapData[w, h] == MapId.Headquarter) count++;
-            }
-        }
-
-        if (count > maxHqCount) throw new Exception("Headquarters unit limit exceeded.");
-        
-        AllyHqCount = count;
-
-        return count;
-    }
 }

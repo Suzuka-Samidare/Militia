@@ -1,24 +1,43 @@
 using System;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TileController : MonoBehaviour
 {
-    [Header("Tile Status")]
-    public Boolean isSelected;
-    public int xPos;
-    public int zPos;
-    public GameObject currentUnit;
+    [Header("タイルステータス")]
+    public bool isSelected;
 
-    [Header("Unit")]
-    public GameObject tempUnit;
+    [Header("タイル情報")]
+    [Tooltip("ワールド座標")]
+    public Vector3 globalPos;
+    [Tooltip("グリッド座標X")]
+    public int gridPosX;
+    [Tooltip("グリッド座標Z")]
+    public int gridPosZ;
 
-    [Header("Focus Visual")]
+    [Header("ユニット情報")]
+    [Tooltip("ユニットオブジェクト")]
+    public GameObject unitObject;
+    [Tooltip("ユニットコントローラ")]
+    public UnitController unitController => unitObject ? unitObject.GetComponent<UnitController>() : null;
+    [Tooltip("ユニットコントローラ")]
+    public CallingUnitController calllingUnitController => unitObject ? unitObject.GetComponent<CallingUnitController>() : null;
+
+    [Tooltip("ユニットの有無")]
+    public bool isExistUnit => unitObject && unitController;
+
+
+    [Header("フォーカスビジュアル関連")]
     private Renderer objectRenderer;
     public Color defaultColor;
     public Color focusColor;
     public Color currentColor;
     private float startTime;
-    private Boolean isFadingToReverse;
+    private bool isFadingToReverse;
+
+    [Header("Asset")]
+    public GameObject tempUnit;
 
     void Awake()
     {
@@ -32,49 +51,47 @@ public class TileController : MonoBehaviour
         UpdateFocusVisual();
     }
 
-    private void CheckSelectedTile()
+    public void SetUnitObject(BaseUnitData unitData)
     {
-        Vector3 tilePosition = gameObject.transform.position;
-        Vector3 selectedTilePosition = TileManager.Instance.selectedTile.transform.position;
+        if (unitObject != null) return;
 
-        if (selectedTilePosition != tilePosition)
-        {
-            Debug.LogError("選択状態のタイルと位置データが一致しません。");
-            return;
-        }
-    }
-
-    public void SetUnitObject(BaseUnitData newUnit)
-    {
-        CheckSelectedTile();
-
-        if (currentUnit != null)
-        {
-            Destroy(currentUnit);
-        }
-
-        Vector3 tilePosition = gameObject.transform.position;
-        Vector3 UnitPosition = new Vector3(tilePosition.x, newUnit.initPos.y, tilePosition.z);
-        currentUnit = Instantiate(newUnit.unitPrefab, UnitPosition, Quaternion.identity, gameObject.transform);
-
-        Debug.Log("本オブジェクト配置完了");
-    }
-
-    public void SetTempUnitObject()
-    {
-        CheckSelectedTile();
-
+        // 呼び出し中の仮ユニットの作成
         Vector3 tilePosition = gameObject.transform.position;
         Vector3 TempUnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
-        currentUnit = Instantiate(tempUnit, TempUnitPosition, Quaternion.identity, gameObject.transform);
+        unitObject = Instantiate(tempUnit, TempUnitPosition, Quaternion.identity, gameObject.transform);
 
-        Debug.Log("仮オブジェクト配置完了");
+        // 呼び出し完了時の処理
+        Action onCompleteCallback = async () =>
+        {
+            // 仮ユニットの除去
+            Destroy(unitObject);
+            while (unitObject != null) {
+                await Task.Yield();
+            }
+            // 本命ユニットの作成
+            Vector3 tilePosition = gameObject.transform.position;
+            Vector3 UnitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
+            unitObject = Instantiate(unitData.prefab, UnitPosition, Quaternion.identity, gameObject.transform);
+            unitController.Initialize(unitData.profile);
+        };
+        // 仮ユニットの初期化処理
+        calllingUnitController.Initialize(unitData.callingProfile, onCompleteCallback);
     }
+
+    // public void SetUnitObject(BaseUnitData unitData)
+    // {
+    //     if (unitObject != null) return;
+
+    //     Vector3 tilePosition = gameObject.transform.position;
+    //     Vector3 UnitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
+    //     unitObject = Instantiate(unitData.prefab, UnitPosition, Quaternion.identity, gameObject.transform);
+
+    //     // Debug.Log("本オブジェクト配置完了");
+    // }
 
     public void DestroyUnitObject()
     {
-        CheckSelectedTile();
-        Destroy(currentUnit);
+        Destroy(unitObject);
     }
 
     private void UpdateFocusVisual()

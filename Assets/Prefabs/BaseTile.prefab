@@ -119,9 +119,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSelected: 0
-  currentUnit: {fileID: 0}
-  tempUnit: {fileID: 7977106843427714197, guid: f62d4831da787274cba79bba3a15b301,
-    type: 3}
+  globalPos: {x: 0, y: 0, z: 0}
+  gridPosX: 0
+  gridPosZ: 0
+  unitObject: {fileID: 0}
   defaultColor: {r: 0, g: 0, b: 0, a: 0}
   focusColor: {r: 0.30049562, g: 1, b: 0, a: 1}
   currentColor: {r: 0, g: 0, b: 0, a: 0}
+  tempUnit: {fileID: 7977106843427714197, guid: f62d4831da787274cba79bba3a15b301,
+    type: 3}

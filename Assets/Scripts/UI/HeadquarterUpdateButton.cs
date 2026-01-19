@@ -35,41 +35,48 @@ public class HeadquarterUpdateButton : BaseButton
         _tileManager = TileManager.Instance;
     }
 
-    public async void OnTileUpdateRequested()
+    private void OnTileUpdateRequested()
     {
-        if (_gameManager.isLoading) return;
-
-        try
-        {
-            Debug.Log($"タイル更新開始");
-            _gameManager.isLoading = true;
-
-            // Unity側の更新 (ここは必ずメインスレッドで動く)
-            await _tileManager.SetSelectedTileOnUnit(unitData);
-
-            // _mapManager.AllyHqCount++;
-            _mapManager.GetPlayerHeadquartersCount();
-            
-            Debug.Log("タイル更新成功");
-
-            InfomationController.Instance.UpdateMessage(
-                "Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units."
-            );
-        }
-        catch (Exception ex)
-        {
-            // 通信エラーやタイムアウトのハンドリング
-            Debug.LogError($"タイル更新失敗: {ex.Message}");
-            // 必要に応じてユーザーに通知（ダイアログ表示など）
-        }
-        finally
-        {
-            // 3. JSのfinallyと同じ：成否に関わらず必ず状態を戻す
-            _gameManager.isLoading = false;
-            // LoadingOverlay.Instance.Close();
-            Debug.Log("タイル更新処理終了（後片付け完了）");
-        }
+        _tileManager.SetSelectedTileOnUnit(unitData);
+        _mapManager.GetPlayerHeadquartersCount();
+        Debug.Log("OnTileUpdateRequested");
     }
+
+    // public async void OnTileUpdateRequested()
+    // {
+    //     if (_gameManager.isLoading) return;
+
+    //     try
+    //     {
+    //         Debug.Log($"タイル更新開始");
+    //         _gameManager.isLoading = true;
+
+    //         // Unity側の更新 (ここは必ずメインスレッドで動く)
+    //         await _tileManager.SetSelectedTileOnUnit(unitData);
+
+    //         // _mapManager.AllyHqCount++;
+    //         _mapManager.GetPlayerHeadquartersCount();
+            
+    //         Debug.Log("タイル更新成功");
+
+    //         InfomationController.Instance.UpdateMessage(
+    //             "Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units."
+    //         );
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         // 通信エラーやタイムアウトのハンドリング
+    //         Debug.LogError($"タイル更新失敗: {ex.Message}");
+    //         // 必要に応じてユーザーに通知（ダイアログ表示など）
+    //     }
+    //     finally
+    //     {
+    //         // 3. JSのfinallyと同じ：成否に関わらず必ず状態を戻す
+    //         _gameManager.isLoading = false;
+    //         // LoadingOverlay.Instance.Close();
+    //         Debug.Log("タイル更新処理終了（後片付け完了）");
+    //     }
+    // }
 
     // ボタンの有効化制御
     private void CheckButtonInteractable()

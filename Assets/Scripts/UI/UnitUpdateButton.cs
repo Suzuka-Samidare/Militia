@@ -19,7 +19,7 @@ public class UnitUpdateButton : BaseButton
         OnTileUpdateRequested();
     }
 
-    public async void OnTileUpdateRequested()
+    public void OnTileUpdateRequested()
     {
         if (GameManager.Instance.isLoading) return;
 
@@ -29,7 +29,7 @@ public class UnitUpdateButton : BaseButton
             GameManager.Instance.isLoading = true;
 
             // Unity側の更新 (ここは必ずメインスレッドで動く)
-            await TileManager.Instance.SetSelectedTileOnUnit(unitData);
+            TileManager.Instance.SetSelectedTileOnUnit(unitData);
             
             Debug.Log("タイル更新成功");
         }

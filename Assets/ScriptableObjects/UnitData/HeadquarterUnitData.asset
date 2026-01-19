@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a2093625515ea4686a465d59b415bd, type: 3}
   m_Name: HeadquarterUnitData
   m_EditorClassIdentifier: 
-  id: 1
-  unitName: Headquarter
-  hp: 0
-  maxHp: 0
-  isCalling: 0
-  callCost: 0
-  callTime: 0
-  isFaint: 0
-  unitPrefab: {fileID: 8235858513348264544, guid: f8b2cae151feb0d4bbd48194c429bb96,
-    type: 3}
+  profile:
+    id: 1
+    unitName: HQ
+    maxHp: 200
+  callingProfile:
+    id: 99
+    unitName: Working
+    maxHp: 10
+    callCost: 0
+    callTime: 3
+  prefab: {fileID: 8235858513348264544, guid: f8b2cae151feb0d4bbd48194c429bb96, type: 3}
   initPos: {x: 0, y: 0.5, z: 0}

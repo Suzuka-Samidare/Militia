@@ -5564,7 +5564,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: 500
   m_MinHeight: -1
-  m_PreferredWidth: 800
+  m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -6009,7 +6009,7 @@ MonoBehaviour:
   mapWidth: 10
   mapHeight: 10
   maxHqCount: 2
-  _allyHqCount: 0
+  AllyHqCount: 0
 --- !u!1 &1580047836
 GameObject:
   m_ObjectHideFlags: 0
@@ -7147,10 +7147,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fpText: {fileID: 977325441}
   energyText: {fileID: 237367904}
-  apRegenValue: 0
-  apRegenRate: 0
-  energyRegenValue: 0
-  energyRegenRate: 0
+  _animalPoint: 0
+  apRegenValue: 10
+  apRegenRate: 2
+  _energy: 0
+  energyRegenValue: 4
+  energyRegenRate: 2
 --- !u!4 &1790418067
 Transform:
   m_ObjectHideFlags: 0
@@ -7566,6 +7568,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2009165470}
   m_CullTransparentMesh: 1
+--- !u!1 &2058754608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2058754610}
+  - component: {fileID: 2058754609}
+  m_Layer: 0
+  m_Name: ApiService
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2058754609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058754608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e73b5b108c5c35848a4e812e6df45d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2058754610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058754608}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 601.67487, y: 362.63324, z: -3.3063278}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2074698641
 GameObject:
   m_ObjectHideFlags: 0
@@ -7666,6 +7712,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedTile: {fileID: 0}
+  _selectedTileController: {fileID: 0}
 --- !u!1 &2103718873
 GameObject:
   m_ObjectHideFlags: 0
@@ -8111,6 +8158,7 @@ SceneRoots:
   - {fileID: 1790418067}
   - {fileID: 791128556}
   - {fileID: 2084827200}
+  - {fileID: 2058754610}
   - {fileID: 1772001978}
   - {fileID: 1332672683}
   - {fileID: 2115267844}

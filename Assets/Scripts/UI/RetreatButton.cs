@@ -6,12 +6,11 @@ using MapId = MapManager.MapId;
 
 public class RetreatButton : BaseButton
 {
-    private MapManager _mapManager;
+    // private MapManager _mapManager;
     private TileManager _tileManager;
 
     void Start()
     {
-        _mapManager = MapManager.Instance;
         _tileManager = TileManager.Instance;
     }
 
@@ -25,15 +24,13 @@ public class RetreatButton : BaseButton
         OnTileDeleteRequested();
     }
 
-    private async void OnTileDeleteRequested()
+    private void OnTileDeleteRequested()
     {
         try
         {
             LoadingOverlay.Instance.Open();
             GameManager.Instance.isLoading = true;
             Debug.Log($"タイル更新開始");
-
-            await MapManager.Instance.UpdateTileAsync(MapId.Empty);
 
             TileManager.Instance.ClearSelectedTileOnUnit();
 
@@ -58,8 +55,8 @@ public class RetreatButton : BaseButton
     {
         if (GameManager.Instance.isMainViewEnabled
             || _tileManager.selectedTile == null
-            || _mapManager.GetSelectedTileId() == MapId.Empty
-            || _mapManager.GetSelectedTileId() == MapId.Headquarter)
+            || _tileManager.GetSelectedTileMapId() == MapId.Empty
+            || _tileManager.GetSelectedTileMapId() == MapId.Headquarter)
         {
             button.interactable = false;
         }

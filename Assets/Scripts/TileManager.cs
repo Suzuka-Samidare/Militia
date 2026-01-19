@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,10 +7,16 @@ using MapId = MapManager.MapId;
 public class TileManager : MonoBehaviour
 {
     public static TileManager Instance;
-    public GameObject selectedTile = null;
-    private TileController _selectedTileController = null;
 
-    private void Awake()
+    [Header("選択済みタイル関連")]
+    [Tooltip("タイルオブジェクト")]
+    public GameObject selectedTile = null;
+    [Tooltip("タイルコントローラ"), SerializeField]
+    private TileController _selectedTileController => selectedTile ? selectedTile.GetComponent<TileController>() : null;
+    [Tooltip("アクセス可否"), SerializeField]
+    private bool _canAccessSelectedTileController => selectedTile != null && _selectedTileController != null;
+
+    void Awake()
     {
         if (Instance == null)
         {
@@ -64,20 +71,31 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    // 選択中のマスを設定するメソッド
-    void SetSelectedTile(GameObject tile)
+    // private void CheckSelectedTile()
+    // {
+    //     Vector3 tilePosition = gameObject.transform.position;
+    //     Vector3 selectedTilePosition = TileManager.Instance.selectedTile.transform.position;
+
+    //     if (selectedTilePosition != tilePosition)
+    //     {
+    //         Debug.LogError("選択状態のタイルと位置データが一致しません。");
+    //         return;
+    //     }
+    // }
+
+    // タイルを選択状態に設定する
+    private void SetSelectedTile(GameObject tile)
     {
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
-        if (selectedTile != null && _selectedTileController != null)
+        if (_canAccessSelectedTileController)
         {
             _selectedTileController.isSelected = false;
         }
 
         selectedTile = tile;
-        _selectedTileController = selectedTile.GetComponent<TileController>();
 
         // 新しく選択されたマスをハイライトするなどの処理
-        if (selectedTile != null && _selectedTileController != null)
+        if (_canAccessSelectedTileController)
         {
             _selectedTileController.isSelected = true;
         }
@@ -87,40 +105,27 @@ public class TileManager : MonoBehaviour
     public void ClearSelectedTile()
     {
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
-        if (selectedTile != null && _selectedTileController != null)
+        if (_canAccessSelectedTileController)
         {
             _selectedTileController.isSelected = false;
         }
 
         selectedTile = null;
-        _selectedTileController = null;
     }
 
-    public async Task SetSelectedTileOnUnit(BaseUnitData newUnit)
+    public void SetSelectedTileOnUnit(BaseUnitData unitData)
     {
-        if (selectedTile == null) return;
-
-        _selectedTileController.DestroyUnitObject();
-        // _selectedTileController.SetUnitObject(newUnit);
-
-        // 呼び出し時間がある場合は仮オブジェクト配置
-        if (newUnit.callTime > 0)
-        {
-            await MapManager.Instance.UpdateTileAsync(MapId.Calling);
-            _selectedTileController.SetTempUnitObject();
-        }
-
-        // 呼び出し開始
-        await Task.Delay((int)newUnit.callTime * 1000);
-
-        await MapManager.Instance.UpdateTileAsync(newUnit.id);
-        _selectedTileController.SetUnitObject(newUnit);
+        _selectedTileController.SetUnitObject(unitData);
     }
 
     // 選択中のマス上にあるユニットを消す
     public void ClearSelectedTileOnUnit()
     {
-        if (selectedTile == null || _selectedTileController == null) return;
+        if (!_selectedTileController.isExistUnit)
+        {
+            Debug.Log("削除するユニットが存在しません");
+            return;
+        }
 
         _selectedTileController.DestroyUnitObject();
     }
@@ -129,4 +134,17 @@ public class TileManager : MonoBehaviour
     // {
         
     // }
+
+    // 選択中のマス上にあるユニットのマップIDを取得
+    public MapId GetSelectedTileMapId()
+    {
+        if (_selectedTileController.unitObject != null)
+        {
+            return _selectedTileController.unitController.profile.id;
+        }
+        else
+        {
+            return MapId.Empty;
+        }
+    }
 }

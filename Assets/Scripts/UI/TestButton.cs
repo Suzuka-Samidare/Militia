@@ -16,26 +16,6 @@ public class TestButton : MonoBehaviour
     public void Onclick()
     {
         Debug.Log("TestButton");
-        Debug.Log(_mapManager.AllyHqCount);
-
-        // if (_dialogController)
-        // {
-        //     _dialogController.Open(
-        //         isConfirm: true,
-        //         message: "TESTEST",
-        //         onConfirm: () =>
-        //         {
-        //             Debug.Log("CONFIRM!!");
-        //         },
-        //         onCancel: () =>
-        //         {
-        //             Debug.Log("CANCEL!!");
-        //         }
-        //     );   
-        // }
-        // else
-        // {
-        //     Debug.Log(_dialogController);
-        // }
+        TileManager.Instance.ClearSelectedTileOnUnit();
     }
 }
