@@ -10,7 +10,6 @@ public class HeadquarterUpdateButton : BaseButton
     public BaseUnitData unitData;
 
     private GameManager _gameManager;
-    private MapManager _mapManager;
     private TileManager _tileManager;
 
     void Start()
@@ -25,22 +24,34 @@ public class HeadquarterUpdateButton : BaseButton
 
     public void Onclick()
     {
-        OnTileUpdateRequested();
+        _tileManager.SpawnUnitOnSelectedTile(unitData);
     }
 
     private void ResolveDependencies()
     {
         _gameManager = GameManager.Instance;
-        _mapManager = MapManager.Instance;
         _tileManager = TileManager.Instance;
     }
 
-    private void OnTileUpdateRequested()
+    // ボタンの有効化制御
+    private void CheckButtonInteractable()
     {
-        _tileManager.SetSelectedTileOnUnit(unitData);
-        _mapManager.GetPlayerHeadquartersCount();
-        Debug.Log("OnTileUpdateRequested");
+        if (_gameManager.isMainViewEnabled && _tileManager.selectedTile != null)
+        {
+            button.interactable = true;
+        }
+        else
+        {
+            button.interactable = false;
+        }
     }
+
+    // private void OnTileUpdateRequested()
+    // {
+    //     Debug.Log("OnTileUpdateRequested");
+    //     _tileManager.SpawnUnitOnSelectedTile(unitData);
+    //     // _mapManager.GetPlayerHeadquartersCount();
+    // }
 
     // public async void OnTileUpdateRequested()
     // {
@@ -77,17 +88,4 @@ public class HeadquarterUpdateButton : BaseButton
     //         Debug.Log("タイル更新処理終了（後片付け完了）");
     //     }
     // }
-
-    // ボタンの有効化制御
-    private void CheckButtonInteractable()
-    {
-        if (_gameManager.isMainViewEnabled && _tileManager.selectedTile != null)
-        {
-            button.interactable = true;
-        }
-        else
-        {
-            button.interactable = false;
-        }
-    }
 }

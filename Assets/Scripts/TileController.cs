@@ -25,7 +25,7 @@ public class TileController : MonoBehaviour
     public CallingUnitController calllingUnitController => unitObject ? unitObject.GetComponent<CallingUnitController>() : null;
 
     [Tooltip("ユニットの有無")]
-    public bool isExistUnit => unitObject && unitController;
+    public bool isExistUnit => unitObject;
 
 
     [Header("フォーカスビジュアル関連")]
@@ -39,6 +39,8 @@ public class TileController : MonoBehaviour
     [Header("Asset")]
     public GameObject tempUnit;
 
+    private MapManager _mapManager;
+
     void Awake()
     {
         objectRenderer = GetComponent<Renderer>();
@@ -46,12 +48,22 @@ public class TileController : MonoBehaviour
         startTime = Time.time;
     }
 
+    void Start()
+    {
+        ResolveDependencies();
+    }
+
     void Update()
     {
         UpdateFocusVisual();
     }
 
-    public void SetUnitObject(BaseUnitData unitData)
+    private void ResolveDependencies()
+    {
+        _mapManager = MapManager.Instance;
+    }
+
+    public void SpawnUnitDelayed(BaseUnitData unitData)
     {
         if (unitObject != null) return;
 
@@ -59,6 +71,8 @@ public class TileController : MonoBehaviour
         Vector3 tilePosition = gameObject.transform.position;
         Vector3 TempUnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
         unitObject = Instantiate(tempUnit, TempUnitPosition, Quaternion.identity, gameObject.transform);
+        // マップデータの更新を促す
+        _mapManager.isDirty = true;
 
         // 呼び出し完了時の処理
         Action onCompleteCallback = async () =>
@@ -69,25 +83,26 @@ public class TileController : MonoBehaviour
                 await Task.Yield();
             }
             // 本命ユニットの作成
-            Vector3 tilePosition = gameObject.transform.position;
-            Vector3 UnitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
-            unitObject = Instantiate(unitData.prefab, UnitPosition, Quaternion.identity, gameObject.transform);
-            unitController.Initialize(unitData.profile);
+            SpawnUnit(unitData);
         };
         // 仮ユニットの初期化処理
         calllingUnitController.Initialize(unitData.callingProfile, onCompleteCallback);
     }
 
-    // public void SetUnitObject(BaseUnitData unitData)
-    // {
-    //     if (unitObject != null) return;
+    public void SpawnUnit(BaseUnitData unitData)
+    {
+        if (unitObject != null) return;
 
-    //     Vector3 tilePosition = gameObject.transform.position;
-    //     Vector3 UnitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
-    //     unitObject = Instantiate(unitData.prefab, UnitPosition, Quaternion.identity, gameObject.transform);
+        Vector3 tilePosition = gameObject.transform.position;
+        Vector3 UnitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
+        unitObject = Instantiate(unitData.prefab, UnitPosition, Quaternion.identity, gameObject.transform);
+        unitController.Initialize(unitData.profile);
 
-    //     // Debug.Log("本オブジェクト配置完了");
-    // }
+        // マップデータの更新を促す
+        _mapManager.isDirty = true;
+
+        Debug.Log("本オブジェクト配置完了");
+    }
 
     public void DestroyUnitObject()
     {

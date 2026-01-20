@@ -113,9 +113,19 @@ public class TileManager : MonoBehaviour
         selectedTile = null;
     }
 
-    public void SetSelectedTileOnUnit(BaseUnitData unitData)
+    public void SpawnUnitOnSelectedTile(BaseUnitData unitData)
     {
-        _selectedTileController.SetUnitObject(unitData);
+        if (unitData.callingProfile.callTime > 0)
+        {
+            Debug.Log("SpawnUnitOnSelectedUnit: 待ち時間ありのユニットです。");
+            _selectedTileController.SpawnUnitDelayed(unitData);
+        }
+        else
+        {
+            Debug.Log("SpawnUnitOnSelectedUnit: 待ち時間なしのユニットです。");
+            _selectedTileController.SpawnUnit(unitData);
+        }
+
     }
 
     // 選択中のマス上にあるユニットを消す

@@ -4228,7 +4228,7 @@ GameObject:
   - component: {fileID: 997239080}
   - component: {fileID: 997239079}
   - component: {fileID: 997239078}
-  - component: {fileID: 997239081}
+  - component: {fileID: 997239082}
   m_Layer: 5
   m_Name: HeadquartersButton(Init)
   m_TagString: Untagged
@@ -4300,8 +4300,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 997239081}
-        m_TargetAssemblyTypeName: HeadquarterUpdateButton, Assembly-CSharp
+      - m_Target: {fileID: 997239082}
+        m_TargetAssemblyTypeName: UnitUpdateButton, Assembly-CSharp
         m_MethodName: Onclick
         m_Mode: 1
         m_Arguments:
@@ -4350,7 +4350,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997239075}
   m_CullTransparentMesh: 1
---- !u!114 &997239081
+--- !u!114 &997239082
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4359,7 +4359,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 997239075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6892d5f2cc658164c9526cc8979f4955, type: 3}
+  m_Script: {fileID: 11500000, guid: 1941d0311ba6fb043b9819440631edaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 0}
@@ -6008,6 +6008,7 @@ MonoBehaviour:
     type: 3}
   mapWidth: 10
   mapHeight: 10
+  isDirty: 0
   maxHqCount: 2
   AllyHqCount: 0
 --- !u!1 &1580047836
@@ -7712,7 +7713,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedTile: {fileID: 0}
-  _selectedTileController: {fileID: 0}
 --- !u!1 &2103718873
 GameObject:
   m_ObjectHideFlags: 0

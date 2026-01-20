@@ -21,6 +21,7 @@ public class MapManager : MonoBehaviour
     private int mapDistance = 5;
     private TileController[,] playerMapData;
     private TileController[,] enemyMapData;
+    public bool isDirty;
     public enum MapId
     {
         Empty = 0,
@@ -60,6 +61,14 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         _tileManager = TileManager.Instance;
+    }
+
+    void Update()
+    {
+        if (isDirty)
+        {
+            UpdateData();
+        }
     }
 
     private void GenerateAllyMapData()
@@ -114,6 +123,12 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    private void UpdateData()
+    {
+        GetPlayerHeadquartersCount();
+        isDirty = false;
+    }
+
     // private void UpdateMapText()
     // {
     //     string resultText = "";
@@ -139,7 +154,7 @@ public class MapManager : MonoBehaviour
     //     Debug.Log(resultText);
     // }
 
-    public int GetPlayerHeadquartersCount()
+    public void GetPlayerHeadquartersCount()
     {
         int count = 0;
         for (int z = 0; z < mapHeight; z++)
@@ -157,8 +172,6 @@ public class MapManager : MonoBehaviour
         if (count > maxHqCount) throw new Exception("Headquarters unit limit exceeded.");
         
         AllyHqCount = count;
-
-        return count;
     }
 
     // public void UpdateSelectedTileOnUnitId(MapId unitId)
