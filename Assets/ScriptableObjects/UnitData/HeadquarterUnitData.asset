@@ -21,6 +21,6 @@ MonoBehaviour:
     unitName: Working
     maxHp: 10
     callCost: 0
-    callTime: 3
+    callTime: 0
   prefab: {fileID: 8235858513348264544, guid: f8b2cae151feb0d4bbd48194c429bb96, type: 3}
   initPos: {x: 0, y: 0.5, z: 0}
