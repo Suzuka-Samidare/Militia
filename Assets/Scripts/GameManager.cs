@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     [Header("操作管理")]
     [Tooltip("ローディング状態")]
     public bool isLoading;
-    [Tooltip("メインビュー操作可否")]
-    public bool isMainViewEnabled = true;
+    // [Tooltip("メインビュー操作可否")]
+    // public bool isMainViewEnabled = true;
 
     private MapManager _mapManager;
     private DialogController _dialogController;
@@ -39,32 +39,31 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ResolveDependencies();
+        _mapManager.OnHqCountChanged += ValidateAndShowDialog;
         _infomationController.Open("Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units.");
     }
 
     void Update()
     {
-        switch(phase)
-        {
-            case Phase.INIT:
-                // Debug.Log("Phase: INIT");
-                CheckInitPhase();
-                break;
-            case Phase.PREPARATION:
-                // Debug.Log("Phase: PREPARATION");
-                break;
-            case Phase.BATTLE:
-                // Debug.Log("Phase: BATTLE");
-                break;
-            case Phase.GAMEOVER:
-                // Debug.Log("Phase: GAMEOVER");
-                break;
-            default:
-                throw new Exception("Phase: ERROR");
-        }
-
         UpdateLoadingOverlay();
     }
+    // switch(phase)
+    // {
+    //     case Phase.INIT:
+    //         // Debug.Log("Phase: INIT");
+    //         break;
+    //     case Phase.PREPARATION:
+    //         // Debug.Log("Phase: PREPARATION");
+    //         break;
+    //     case Phase.BATTLE:
+    //         // Debug.Log("Phase: BATTLE");
+    //         break;
+    //     case Phase.GAMEOVER:
+    //         // Debug.Log("Phase: GAMEOVER");
+    //         break;
+    //     default:
+    //         throw new Exception("Phase: ERROR");
+    // }
 
     private void ResolveDependencies()
     {
@@ -74,26 +73,54 @@ public class GameManager : MonoBehaviour
         _infomationController = InfomationController.Instance;
     }
 
-    private void CheckInitPhase()
+    private void ValidateAndShowDialog(int allyHqCount)
     {
-        if (_dialogController.gameObject.activeSelf == false && _mapManager.AllyHqCount == _mapManager.maxHqCount)
+        if (allyHqCount < _mapManager.maxHqCount)
         {
-            isMainViewEnabled = false;
+            bool isActiveInfo = _infomationController.gameObject.activeSelf;
+            string message = "Please place the remaining " + (_mapManager.maxHqCount - allyHqCount) + " headquarters units.";
+            if (isActiveInfo)
+            {
+                _infomationController.UpdateMessage(message);
+            }
+            else
+            {
+                _infomationController.Open(message);
+            }
+        }
+
+        if (allyHqCount == _mapManager.maxHqCount)
+        {
+            _infomationController.Close();
             _dialogController.Open(
                 isConfirm: true,
                 message: "Setup OK?",
                 onConfirm: () =>
                 {
+                    _mapManager.OnHqCountChanged -= ValidateAndShowDialog;
                     ChangePhase(Phase.PREPARATION);
                     PlayerManager.Instance.StartRegen();
                 },
                 onCancel: () =>
                 {
-                    // ===========================
-                    // TODO: 本部設置のリセット
-                    // ===========================
+                    DestroyAllUnit();
                 }
             ); 
+        }
+    }
+
+    // TODO: MapManagerに置くべきか検討する
+    private void DestroyAllUnit()
+    {
+        for (int x = 0; x < _mapManager.mapWidth; x++)
+        {
+            for (int z = 0; z < _mapManager.mapHeight; z++)
+            {
+                if (_mapManager.playerMapData[x, z].unitObject)
+                {
+                    _mapManager.playerMapData[x, z].DestroyUnit();
+                }
+            }
         }
     }
 

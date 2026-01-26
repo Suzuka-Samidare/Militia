@@ -12,9 +12,9 @@ public class TileManager : MonoBehaviour
     [Tooltip("タイルオブジェクト")]
     public GameObject selectedTile = null;
     [Tooltip("タイルコントローラ"), SerializeField]
-    private TileController _selectedTileController => selectedTile ? selectedTile.GetComponent<TileController>() : null;
+    public TileController selectedTileController => selectedTile ? selectedTile.GetComponent<TileController>() : null;
     [Tooltip("アクセス可否"), SerializeField]
-    private bool _canAccessSelectedTileController => selectedTile != null && _selectedTileController != null;
+    private bool _canAccessSelectedTileController => selectedTile != null && selectedTileController != null;
 
     void Awake()
     {
@@ -89,7 +89,7 @@ public class TileManager : MonoBehaviour
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
         if (_canAccessSelectedTileController)
         {
-            _selectedTileController.isSelected = false;
+            selectedTileController.isSelected = false;
         }
 
         selectedTile = tile;
@@ -97,7 +97,7 @@ public class TileManager : MonoBehaviour
         // 新しく選択されたマスをハイライトするなどの処理
         if (_canAccessSelectedTileController)
         {
-            _selectedTileController.isSelected = true;
+            selectedTileController.isSelected = true;
         }
     }
 
@@ -107,7 +107,7 @@ public class TileManager : MonoBehaviour
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
         if (_canAccessSelectedTileController)
         {
-            _selectedTileController.isSelected = false;
+            selectedTileController.isSelected = false;
         }
 
         selectedTile = null;
@@ -118,12 +118,12 @@ public class TileManager : MonoBehaviour
         if (unitData.callingProfile.callTime > 0)
         {
             Debug.Log("SpawnUnitOnSelectedUnit: 待ち時間ありのユニットです。");
-            _selectedTileController.SpawnUnitDelayed(unitData);
+            selectedTileController.SpawnUnitDelayed(unitData);
         }
         else
         {
             Debug.Log("SpawnUnitOnSelectedUnit: 待ち時間なしのユニットです。");
-            _selectedTileController.SpawnUnit(unitData);
+            selectedTileController.SpawnUnit(unitData);
         }
 
     }
@@ -131,13 +131,13 @@ public class TileManager : MonoBehaviour
     // 選択中のマス上にあるユニットを消す
     public void ClearSelectedTileOnUnit()
     {
-        if (!_selectedTileController.isExistUnit)
+        if (!selectedTileController.isExistUnit)
         {
             Debug.Log("削除するユニットが存在しません");
             return;
         }
 
-        _selectedTileController.DestroyUnitObject();
+        selectedTileController.DestroyUnit();
     }
 
     // public void DestroyAllTileOnUnitObject()
@@ -148,9 +148,9 @@ public class TileManager : MonoBehaviour
     // 選択中のマス上にあるユニットのマップIDを取得
     public MapId GetSelectedTileMapId()
     {
-        if (_selectedTileController.unitObject != null)
+        if (selectedTileController.unitObject != null)
         {
-            return _selectedTileController.unitController.profile.id;
+            return selectedTileController.unitMapId;
         }
         else
         {

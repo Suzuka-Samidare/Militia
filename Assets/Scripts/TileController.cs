@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using MapId = MapManager.MapId;
 
 public class TileController : MonoBehaviour
 {
@@ -21,8 +22,14 @@ public class TileController : MonoBehaviour
     public GameObject unitObject;
     [Tooltip("ユニットコントローラ")]
     public UnitController unitController => unitObject ? unitObject.GetComponent<UnitController>() : null;
-    [Tooltip("ユニットコントローラ")]
+    [Tooltip("ユニットコントローラ（呼出中）")]
     public CallingUnitController calllingUnitController => unitObject ? unitObject.GetComponent<CallingUnitController>() : null;
+
+    [Tooltip("マップ情報")]
+    public MapId unitMapId =>
+        unitController ? unitController.profile.id :
+        calllingUnitController ? calllingUnitController.profile.id :
+        MapId.Empty;
 
     [Tooltip("ユニットの有無")]
     public bool isExistUnit => unitObject;
@@ -104,9 +111,14 @@ public class TileController : MonoBehaviour
         Debug.Log("本オブジェクト配置完了");
     }
 
-    public void DestroyUnitObject()
+    public async void DestroyUnit()
     {
         Destroy(unitObject);
+        while (unitObject != null) {
+            await Task.Yield();
+        }
+        // マップデータの更新を促す
+        _mapManager.isDirty = true;
     }
 
     private void UpdateFocusVisual()

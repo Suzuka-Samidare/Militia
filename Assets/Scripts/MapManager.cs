@@ -19,8 +19,8 @@ public class MapManager : MonoBehaviour
     public int mapWidth;     // マップの幅
     public int mapHeight;    // マップの高さ
     private int mapDistance = 5;
-    private TileController[,] playerMapData;
-    private TileController[,] enemyMapData;
+    public TileController[,] playerMapData;
+    public TileController[,] enemyMapData;
     public bool isDirty;
     public enum MapId
     {
@@ -41,6 +41,8 @@ public class MapManager : MonoBehaviour
     [Header("本部関連")]
     [Tooltip("本部最大設置数")] public int maxHqCount = 2;
     [Tooltip("本部残数"), SerializeField] public int AllyHqCount;
+
+    public Action<int> OnHqCountChanged;
 
     private TileManager _tileManager;
 
@@ -67,7 +69,7 @@ public class MapManager : MonoBehaviour
     {
         if (isDirty)
         {
-            UpdateData();
+            UpdateMapData();
         }
     }
 
@@ -123,10 +125,13 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    private void UpdateData()
+    private void UpdateMapData()
     {
         GetPlayerHeadquartersCount();
         isDirty = false;
+
+        // INITフェーズのみ実行
+        OnHqCountChanged?.Invoke(AllyHqCount);
     }
 
     // private void UpdateMapText()

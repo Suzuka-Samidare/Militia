@@ -9,7 +9,7 @@ public class UnitUpdateButton : BaseButton
 {
     public BaseUnitData unitData;
 
-    private GameManager _gameManager;
+    private DialogController _dialogController;
     private TileManager _tileManager;
 
     void Start()
@@ -29,20 +29,22 @@ public class UnitUpdateButton : BaseButton
 
     private void ResolveDependencies()
     {
-        _gameManager = GameManager.Instance;
+        _dialogController = DialogController.Instance;
         _tileManager = TileManager.Instance;
     }
     
     // ボタンの有効化制御
     private void CheckButtonInteractable()
     {
-        if (_gameManager.isMainViewEnabled && _tileManager.selectedTile != null)
+        if (_dialogController.gameObject.activeSelf ||
+            _tileManager.selectedTile == null ||
+            _tileManager.selectedTileController.unitMapId != MapManager.MapId.Empty)
         {
-            button.interactable = true;
+            button.interactable = false;
         }
         else
         {
-            button.interactable = false;
+            button.interactable = true;
         }
     }
 
