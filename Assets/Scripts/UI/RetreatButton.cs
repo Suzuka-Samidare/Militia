@@ -53,8 +53,7 @@ public class RetreatButton : BaseButton
 
     private void CheckButtonInteractable()
     {
-        if (GameManager.Instance.isMainViewEnabled
-            || _tileManager.selectedTile == null
+        if (_tileManager.selectedTile == null
             || _tileManager.GetSelectedTileMapId() == MapId.Empty
             || _tileManager.GetSelectedTileMapId() == MapId.Headquarter)
         {

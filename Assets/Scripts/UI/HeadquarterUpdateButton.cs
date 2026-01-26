@@ -36,7 +36,7 @@ public class HeadquarterUpdateButton : BaseButton
     // ボタンの有効化制御
     private void CheckButtonInteractable()
     {
-        if (_gameManager.isMainViewEnabled && _tileManager.selectedTile != null)
+        if (_tileManager.selectedTile != null)
         {
             button.interactable = true;
         }
