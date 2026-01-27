@@ -38,7 +38,7 @@ public class UnitUpdateButton : BaseButton
     {
         if (_dialogController.gameObject.activeSelf ||
             _tileManager.selectedTile == null ||
-            _tileManager.selectedTileController.unitMapId != MapManager.MapId.Empty)
+            _tileManager.selectedTileController.unitObject)
         {
             button.interactable = false;
         }
