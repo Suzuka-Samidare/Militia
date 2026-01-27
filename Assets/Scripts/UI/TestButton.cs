@@ -6,6 +6,6 @@ public class TestButton : MonoBehaviour
 {
     public void Onclick()
     {
-        Debug.Log(MapManager.Instance.AllyHqCount);
+        GameManager.Instance.IsLoading = !GameManager.Instance.IsLoading;
     }
 }

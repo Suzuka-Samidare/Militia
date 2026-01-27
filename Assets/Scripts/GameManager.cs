@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
     [Header("フェーズ管理")]
-    public Phase phase = Phase.INIT;
+    public Phase currentPhase = Phase.INIT;
     public enum Phase
     {
         INIT,
@@ -21,13 +21,13 @@ public class GameManager : MonoBehaviour
 
     [Header("操作管理")]
     [Tooltip("ローディング状態")]
-    public bool isLoading;
+    public bool IsLoading;
     // [Tooltip("メインビュー操作可否")]
     // public bool isMainViewEnabled = true;
 
     private MapManager _mapManager;
+    private UIManager _uiManager;
     private DialogController _dialogController;
-    private LoadingOverlay _loadingOverlay;
     private InfomationController _infomationController;
 
     void Awake()
@@ -38,15 +38,16 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // 依存関係処理
         ResolveDependencies();
+        // INITフェーズ時に条件満たした際に実行する処理の登録
         _mapManager.OnHqCountChanged += ValidateAndShowDialog;
+        // インフォメーションの表示
         _infomationController.Open("Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units.");
+        // メニューの初期化
+        _uiManager.SwitchMenu(currentPhase);
     }
 
-    void Update()
-    {
-        UpdateLoadingOverlay();
-    }
     // switch(phase)
     // {
     //     case Phase.INIT:
@@ -68,8 +69,8 @@ public class GameManager : MonoBehaviour
     private void ResolveDependencies()
     {
         _mapManager = MapManager.Instance;
+        _uiManager = UIManager.Instance;
         _dialogController = DialogController.Instance;
-        _loadingOverlay = LoadingOverlay.Instance;
         _infomationController = InfomationController.Instance;
     }
 
@@ -124,20 +125,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ChangePhase(Phase nextPhase)
+    private void ChangePhase(Phase phase)
     {
-        phase = nextPhase;
-    }
-
-    private void UpdateLoadingOverlay()
-    {
-        if (isLoading)
-        {
-            _loadingOverlay.Open();
-        }
-        else
-        {
-            _loadingOverlay.Close();
-        }
+        currentPhase = phase;
+        _uiManager.SwitchMenu(phase);
     }
 }

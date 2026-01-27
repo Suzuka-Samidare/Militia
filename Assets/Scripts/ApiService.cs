@@ -28,7 +28,7 @@ public class ApiService : MonoBehaviour
 
     public async Task PostHoge()
     {
-        _gameManager.isLoading = true;
+        _gameManager.IsLoading = true;
 
         try
         {
@@ -42,7 +42,7 @@ public class ApiService : MonoBehaviour
         }
         finally
         {
-            _gameManager.isLoading = false;
+            _gameManager.IsLoading = false;
         }
     }
 }

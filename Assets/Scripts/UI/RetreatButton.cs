@@ -28,8 +28,7 @@ public class RetreatButton : BaseButton
     {
         try
         {
-            LoadingOverlay.Instance.Open();
-            GameManager.Instance.isLoading = true;
+            GameManager.Instance.IsLoading = true;
             Debug.Log($"タイル更新開始");
 
             TileManager.Instance.ClearSelectedTileOnUnit();
@@ -45,8 +44,7 @@ public class RetreatButton : BaseButton
         finally
         {
             // 3. JSのfinallyと同じ：成否に関わらず必ず状態を戻す
-            GameManager.Instance.isLoading = false;
-            LoadingOverlay.Instance.Close();
+            GameManager.Instance.IsLoading = false;
             Debug.Log("タイル更新処理終了（後片付け完了）");
         }
     }

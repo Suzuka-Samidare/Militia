@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoadingOverlay : VisibilityController
+public class LoadingOverlay : MonoBehaviour
 {
-    public static LoadingOverlay Instance;
+    public static LoadingOverlay Instance { get; private set; }
 
-    void Awake()
+    [SerializeField] private VisibilityController _loadingOverlay;
+
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -16,7 +18,8 @@ public class LoadingOverlay : VisibilityController
         {
             Destroy(gameObject);
         }
-
-        gameObject.SetActive(false);
     }
+
+    public void Show() => _loadingOverlay.Show();
+    public void Hide() => _loadingOverlay.Hide();
 }
