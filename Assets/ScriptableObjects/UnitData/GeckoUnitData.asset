@@ -22,7 +22,7 @@ MonoBehaviour:
     maxHp: 0
     callCost: 0
     callTime: 3
-  prefab: {fileID: 0}
+  prefab: {fileID: 6842458599697738422, guid: cefda5744f2acb54d8f08973a10bee1e, type: 3}
   initPos: {x: 0, y: 0.5, z: 0}
   attack: 0
   attackEnergy: 0
