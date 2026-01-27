@@ -48,16 +48,18 @@ public class TileManager : MonoBehaviour
         // 接触したオブジェクトが無い場合、タイル選択状態を解除
         if (Physics.Raycast(ray, out hit))
         {
+            GameObject hitObject = hit.collider.gameObject;
+
             // 接触オブジェクトがタイルまたはユニットだった場合、選択状態に更新
-            if (hit.collider.gameObject.CompareTag("Tile"))
+            if (hitObject.CompareTag("Tile"))
             {
                 // タイルを引数にして処理
-                SetSelectedTile(hit.collider.gameObject);
+                SetSelectedTile(hitObject);
             }
-            else if (hit.collider.gameObject.CompareTag("Unit"))
+            else if (hitObject.CompareTag("Unit"))
             {
                 // ユニットの親要素であるタイルを引数にして処理
-                SetSelectedTile(hit.collider.gameObject.transform.parent.gameObject);
+                SetSelectedTile(hitObject.transform.parent.gameObject);
             }
             else
             {
