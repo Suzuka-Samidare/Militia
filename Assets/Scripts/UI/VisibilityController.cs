@@ -9,10 +9,6 @@ private CanvasGroup _canvasGroup;
     void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
-    }
-
-    void Start()
-    {
         Hide();
     }
 
