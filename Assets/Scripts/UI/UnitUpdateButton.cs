@@ -36,7 +36,7 @@ public class UnitUpdateButton : BaseButton
     // ボタンの有効化制御
     private void CheckButtonInteractable()
     {
-        if (_dialogController.gameObject.activeSelf ||
+        if (_dialogController.IsOpen ||
             _tileManager.selectedTile == null ||
             _tileManager.selectedTileController.unitObject)
         {

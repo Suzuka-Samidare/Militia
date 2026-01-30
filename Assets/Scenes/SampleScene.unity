@@ -4653,6 +4653,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1225274903}
   - component: {fileID: 1225274904}
+  - component: {fileID: 1225274906}
+  - component: {fileID: 1225274905}
   m_Layer: 5
   m_Name: InfomationArea
   m_TagString: Untagged
@@ -4688,6 +4690,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1225274902}
   m_CullTransparentMesh: 1
+--- !u!225 &1225274905
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225274902}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1225274906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225274902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3b38ca3e8e7e74fa7fe51e20bca95f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1245234472
 GameObject:
   m_ObjectHideFlags: 0
@@ -4700,6 +4726,8 @@ GameObject:
   - component: {fileID: 1245234476}
   - component: {fileID: 1245234475}
   - component: {fileID: 1245234474}
+  - component: {fileID: 1245234478}
+  - component: {fileID: 1245234477}
   m_Layer: 5
   m_Name: Dialog
   m_TagString: Untagged
@@ -4780,6 +4808,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245234472}
   m_CullTransparentMesh: 1
+--- !u!114 &1245234477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245234472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3b38ca3e8e7e74fa7fe51e20bca95f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!225 &1245234478
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1245234472}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1252536472
 GameObject:
   m_ObjectHideFlags: 0
@@ -5436,7 +5488,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1376151481
 RectTransform:
   m_ObjectHideFlags: 0

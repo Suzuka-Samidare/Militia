@@ -3,13 +3,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CanvasGroup))]
+[RequireComponent(typeof(VisibilityController))]
 public class DialogController : MonoBehaviour
 {
-    public enum DialogType
-    {
-        Alert,    // OKボタンのみ
-        Confirm   // OKボタンとキャンセルボタン
-    }
+    public static DialogController Instance { get; private set; }
+
+    public bool IsOpen => _visibility.IsVisible;
 
     // UIコンポーネントへの参照（Inspectorで設定）
     public TextMeshProUGUI messageText; // メッセージテキスト
@@ -19,9 +19,10 @@ public class DialogController : MonoBehaviour
     // 外部から処理を受け取るためのデリゲート
     private Action onConfirmAction;
     private Action onCancelAction;
-    public static DialogController Instance;
 
-    void Awake()
+    private VisibilityController _visibility;
+
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -31,8 +32,16 @@ public class DialogController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
 
-        gameObject.SetActive(false);
+    private void Start()
+    {
+        ResolveDependencies();
+    }
+
+    private void ResolveDependencies()
+    {
+        _visibility = GetComponent<VisibilityController>();
     }
 
     // 外部からデータを渡してダイアログを開くためのメインメソッド
@@ -60,7 +69,12 @@ public class DialogController : MonoBehaviour
         cancelButton.onClick.AddListener(OnCancelButtonClicked);
 
         // ダイアログの表示
-        gameObject.SetActive(true);
+        _visibility.Show();
+    }
+
+    public void Close()
+    {
+        _visibility.Hide();
     }
     
     // ボタンクリック時の処理（変更なし）
@@ -74,10 +88,5 @@ public class DialogController : MonoBehaviour
     {
         onCancelAction?.Invoke(); 
         Close();
-    }
-    
-    public void Close()
-    {
-        gameObject.SetActive(false);
     }
 }

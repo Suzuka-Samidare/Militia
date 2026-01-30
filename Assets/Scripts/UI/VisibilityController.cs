@@ -6,6 +6,8 @@ public class VisibilityController : MonoBehaviour
 {
 private CanvasGroup _canvasGroup;
 
+    public bool IsVisible => _canvasGroup.alpha == 1f && _canvasGroup.interactable && _canvasGroup.blocksRaycasts;
+
     void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
