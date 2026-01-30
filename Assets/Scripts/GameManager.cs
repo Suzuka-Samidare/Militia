@@ -22,9 +22,14 @@ public class GameManager : MonoBehaviour
     [Header("操作管理")]
     [Tooltip("ローディング状態")]
     public bool IsLoading;
+    
     // [Tooltip("メインビュー操作可否")]
     // public bool isMainViewEnabled = true;
 
+    // 準備フェーズ共通メッセージ
+    private string initMessage => "Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units.";
+
+    // 依存関係
     private MapManager _mapManager;
     private UIManager _uiManager;
     private DialogController _dialogController;
@@ -43,28 +48,10 @@ public class GameManager : MonoBehaviour
         // INITフェーズ時に条件満たした際に実行する処理の登録
         _mapManager.OnHqCountChanged += ValidateAndShowDialog;
         // インフォメーションの表示
-        _infomationController.Open("Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units.");
+        _infomationController.Open(initMessage);
         // メニューの初期化
         _uiManager.SwitchMenu(currentPhase);
     }
-
-    // switch(phase)
-    // {
-    //     case Phase.INIT:
-    //         // Debug.Log("Phase: INIT");
-    //         break;
-    //     case Phase.PREPARATION:
-    //         // Debug.Log("Phase: PREPARATION");
-    //         break;
-    //     case Phase.BATTLE:
-    //         // Debug.Log("Phase: BATTLE");
-    //         break;
-    //     case Phase.GAMEOVER:
-    //         // Debug.Log("Phase: GAMEOVER");
-    //         break;
-    //     default:
-    //         throw new Exception("Phase: ERROR");
-    // }
 
     private void ResolveDependencies()
     {
@@ -79,14 +66,13 @@ public class GameManager : MonoBehaviour
         if (allyHqCount < _mapManager.maxHqCount)
         {
             bool isActiveInfo = _infomationController.gameObject.activeSelf;
-            string message = "Please place the remaining " + (_mapManager.maxHqCount - allyHqCount) + " headquarters units.";
             if (isActiveInfo)
             {
-                _infomationController.UpdateMessage(message);
+                _infomationController.UpdateMessage(initMessage);
             }
             else
             {
-                _infomationController.Open(message);
+                _infomationController.Open(initMessage);
             }
         }
 
@@ -105,6 +91,7 @@ public class GameManager : MonoBehaviour
                 onCancel: () =>
                 {
                     DestroyAllUnit();
+                    _infomationController.Open(initMessage);
                 }
             ); 
         }

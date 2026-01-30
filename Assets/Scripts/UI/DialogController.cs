@@ -32,15 +32,7 @@ public class DialogController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    private void Start()
-    {
-        ResolveDependencies();
-    }
-
-    private void ResolveDependencies()
-    {
         _visibility = GetComponent<VisibilityController>();
     }
 
