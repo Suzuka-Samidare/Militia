@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   profile:
     id: 0
-    unitName: 
-    maxHp: 0
+    unitName: Gecko
+    maxHp: 50
   callingProfile:
     id: 0
-    unitName: 
-    maxHp: 0
+    unitName: Gecko
+    maxHp: 10
     callCost: 0
     callTime: 3
   prefab: {fileID: 6842458599697738422, guid: cefda5744f2acb54d8f08973a10bee1e, type: 3}

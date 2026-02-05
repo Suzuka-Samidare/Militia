@@ -9,7 +9,7 @@ public struct UnitProfile
 {
     [Tooltip("ID")] public MapId id;
     [Tooltip("ユニット名")] public string unitName;
-    [Tooltip("最大耐久値")] public int maxHp;
+    [Tooltip("最大耐久値")] public float maxHp;
 }
 
 [Serializable]
@@ -17,7 +17,7 @@ public struct CallingProfile
 {
     [Tooltip("ID")] public MapId id;
     [Tooltip("ユニット名")] public string unitName;
-    [Tooltip("最大耐久値")] public int maxHp;
+    [Tooltip("最大耐久値")] public float maxHp;
     [Tooltip("呼び出しコスト")] public int callCost;
     [Tooltip("呼び出し所要時間（秒）")] public float callTime;
 }
