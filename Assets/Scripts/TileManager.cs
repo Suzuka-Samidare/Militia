@@ -28,50 +28,50 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (Input.GetMouseButtonUp(0) && !CameraMovement.Instance.isDragging)
-        {
-            CheckMouseDown();
-        }
-    }
+    // void Update()
+    // {
+    //     if (Input.GetMouseButtonUp(0) && !CameraMovement.Instance.isDragging)
+    //     {
+    //         CheckMouseDown();
+    //     }
+    // }
 
-    void CheckMouseDown()
-    {
-        // UI要素を選択またはフォーカスしている場合は処理を進行しない
-        if (EventSystem.current.IsPointerOverGameObject()) return;
+    // void CheckMouseDown()
+    // {
+    //     // UI要素を選択またはフォーカスしている場合は処理を進行しない
+    //     if (EventSystem.current.IsPointerOverGameObject()) return;
 
-        // Raycastでゲームオブジェクト接触判定
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+    //     // Raycastでゲームオブジェクト接触判定
+    //     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //     RaycastHit hit;
 
-        // 接触したオブジェクトが無い場合、タイル選択状態を解除
-        if (Physics.Raycast(ray, out hit))
-        {
-            GameObject hitObject = hit.collider.gameObject;
+    //     // 接触したオブジェクトが無い場合、タイル選択状態を解除
+    //     if (Physics.Raycast(ray, out hit))
+    //     {
+    //         GameObject hitObject = hit.collider.gameObject;
 
-            // 接触オブジェクトがタイルまたはユニットだった場合、選択状態に更新
-            if (hitObject.CompareTag("Tile"))
-            {
-                // タイルを引数にして処理
-                SetSelectedTile(hitObject);
-            }
-            else if (hitObject.CompareTag("Unit"))
-            {
-                // ユニットの親要素であるタイルを引数にして処理
-                SetSelectedTile(hitObject.transform.parent.gameObject);
-            }
-            else
-            {
-                // Debug.Log("Ray判定あり & タイルではない");
-            }
-        }
-        else
-        {
-            // Debug.Log("Ray判定なし");
-            ClearSelectedTile();
-        }
-    }
+    //         // 接触オブジェクトがタイルまたはユニットだった場合、選択状態に更新
+    //         if (hitObject.CompareTag("Tile"))
+    //         {
+    //             // タイルを引数にして処理
+    //             SetSelectedTile(hitObject);
+    //         }
+    //         else if (hitObject.CompareTag("Unit"))
+    //         {
+    //             // ユニットの親要素であるタイルを引数にして処理
+    //             SetSelectedTile(hitObject.transform.parent.gameObject);
+    //         }
+    //         else
+    //         {
+    //             // Debug.Log("Ray判定あり & タイルではない");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // Debug.Log("Ray判定なし");
+    //         ClearSelectedTile();
+    //     }
+    // }
 
     // private void CheckSelectedTile()
     // {
@@ -86,7 +86,7 @@ public class TileManager : MonoBehaviour
     // }
 
     // タイルを選択状態に設定する
-    private void SetSelectedTile(GameObject tile)
+    public void SetSelectedTile(GameObject tile)
     {
         // 以前に選択されていたマスがあれば、ハイライトを解除するなどの処理
         if (_canAccessSelectedTileController)
@@ -157,6 +157,32 @@ public class TileManager : MonoBehaviour
         else
         {
             return MapId.Empty;
+        }
+    }
+
+    public void GetSelectedTileUnitDetail()
+    {
+        if (selectedTileController.unitController)
+        {
+            UnitDetailController.Instance.Open(
+                selectedTileController.unitController.profile.unitName,
+                selectedTileController.unitController.profile.maxHp,
+                selectedTileController.unitController.hp,
+                false
+            );
+        }
+        else if (selectedTileController.calllingUnitController)
+        {
+            UnitDetailController.Instance.Open(
+                selectedTileController.calllingUnitController.profile.unitName,
+                selectedTileController.calllingUnitController.profile.maxHp,
+                selectedTileController.calllingUnitController.hp,
+                true
+            );
+        }
+        else
+        {
+            UnitDetailController.Instance.Close();
         }
     }
 }
