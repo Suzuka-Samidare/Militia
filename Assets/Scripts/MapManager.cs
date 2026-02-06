@@ -75,54 +75,54 @@ public class MapManager : MonoBehaviour
 
     private void GenerateAllyMapData()
     {
-        playerMapData = new TileController[mapWidth, mapHeight];
+        playerMapData = new TileController[mapHeight, mapWidth];
 
-        for (int x = 0; x < mapWidth; x++)
+        for (int y = 0; y < mapHeight; y++)
         {
-            for (int z = 0; z < mapHeight; z++)
+            for (int x = 0; x < mapWidth; x++)
             {
-                // マスの位置を計算
-                Vector3 position = new Vector3(x, 0, z);
+                // グローバル座標の定義
+                Vector3 position = new Vector3(x, 0, y);
                 // Prefabをインスタンス化
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
                 tile.transform.SetParent(playerMap.transform);
-                tile.name = $"AllyTile_{x}_{z}";
+                tile.name = $"AllyTile_{y}_{x}";
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
                 tileController.globalPos = position;
                 tileController.gridPosX = x;
-                tileController.gridPosZ = z;
+                tileController.gridPosY = y;
                 tileController.SetOwner(TileController.TileOwner.Ally);
                 // クラスをマップデータとして格納
-                playerMapData[x, z] = tileController;
+                playerMapData[y, x] = tileController;
             }
         }
     }
 
     private void GenerateEnemyMapData()
     {
-        enemyMapData = new TileController[mapWidth, mapHeight];
+        enemyMapData = new TileController[mapHeight, mapWidth];
 
-        for (int x = 0; x < mapWidth; x++)
+        for (int y = 0; y < mapHeight; y++)
         {
-            for (int z = 0; z < mapHeight; z++)
+            for (int x = 0; x < mapWidth; x++)
             {
                 // マスの位置を計算
-                Vector3 position = new Vector3(x, 0, z + mapHeight + mapDistance);
+                Vector3 position = new Vector3(mapWidth - 1 - x, 0, mapHeight * 2 + mapDistance - y);
                 // Prefabをインスタンス化
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
                 tile.transform.SetParent(enemyMap.transform);
-                tile.name = $"EnemyTile_{x}_{z}";
+                tile.name = $"EnemyTile_{y}_{x}";
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
                 tileController.globalPos = position;
                 tileController.gridPosX = x;
-                tileController.gridPosZ = z;
+                tileController.gridPosY = y;
                 tileController.SetOwner(TileController.TileOwner.Enemy);
                  // クラスをマップデータとして格納
-                enemyMapData[x, z] = tileController;
+                enemyMapData[y, x] = tileController;
             }
         }
     }
