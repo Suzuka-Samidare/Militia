@@ -93,6 +93,7 @@ public class MapManager : MonoBehaviour
                 tileController.globalPos = position;
                 tileController.gridPosX = x;
                 tileController.gridPosZ = z;
+                tileController.SetOwner(TileController.TileOwner.Ally);
                 // クラスをマップデータとして格納
                 playerMapData[x, z] = tileController;
             }
@@ -119,6 +120,7 @@ public class MapManager : MonoBehaviour
                 tileController.globalPos = position;
                 tileController.gridPosX = x;
                 tileController.gridPosZ = z;
+                tileController.SetOwner(TileController.TileOwner.Enemy);
                  // クラスをマップデータとして格納
                 enemyMapData[x, z] = tileController;
             }

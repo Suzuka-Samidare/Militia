@@ -6,10 +6,23 @@ using MapId = MapManager.MapId;
 
 public class TileController : MonoBehaviour
 {
-    [Header("タイルステータス")]
-    public bool isSelected;
+    public enum TileOwner { Ally, Enemy }
+    
+    [Header("視認タイマー関連")]
+    [Tooltip("視認時間"), SerializeField]
+    private float revealDuration = 5.0f;
+    private float _timer = 5.0f;
 
-    [Header("タイル情報")]
+
+    [Header("タイルステータス")]
+    [Tooltip("選択状態の有無")]
+    public bool isSelected;
+    [Tooltip("敵から視認可能か"), SerializeField]
+    private bool isRevealed = false;
+    [Tooltip("タイルの陣地種別"), SerializeField]
+    private TileOwner owner;
+
+    [Header("タイル座標情報")]
     [Tooltip("ワールド座標")]
     public Vector3 globalPos;
     [Tooltip("グリッド座標X")]
@@ -24,24 +37,23 @@ public class TileController : MonoBehaviour
     public UnitController unitController => unitObject ? unitObject.GetComponent<UnitController>() : null;
     [Tooltip("ユニットコントローラ（呼出中）")]
     public CallingUnitController calllingUnitController => unitObject ? unitObject.GetComponent<CallingUnitController>() : null;
-
-    [Tooltip("マップ情報")]
+    [Tooltip("ユニットの有無")]
+    public bool isExistUnit => unitObject;
+    [Tooltip("マップID")]
     public MapId unitMapId =>
         unitController ? unitController.profile.id :
         calllingUnitController ? calllingUnitController.profile.id :
         MapId.Empty;
+    
 
-    [Tooltip("ユニットの有無")]
-    public bool isExistUnit => unitObject;
-
-
-    [Header("フォーカスビジュアル関連")]
-    private Renderer objectRenderer;
+    [Header("ビジュアル関連")]
     public Color defaultColor;
     public Color focusColor;
-    public Color currentColor;
-    private float startTime;
-    private bool isFadingToReverse;
+    public Color invisibleColor;
+    [SerializeField] private Color currentColor;
+    private Renderer objectRenderer;
+    [SerializeField] private float blinkStartTime;
+    [SerializeField] private bool isFadingToReverse;
 
     [Header("Asset")]
     public GameObject tempUnit;
@@ -52,7 +64,7 @@ public class TileController : MonoBehaviour
     {
         objectRenderer = GetComponent<Renderer>();
         defaultColor = objectRenderer.material.color;
-        startTime = Time.time;
+        blinkStartTime = Time.time;
     }
 
     void Start()
@@ -62,12 +74,44 @@ public class TileController : MonoBehaviour
 
     void Update()
     {
-        UpdateFocusVisual();
+        UpdateTileVisual();
+        UpdateRevealTimer();
     }
 
     private void ResolveDependencies()
     {
         _mapManager = MapManager.Instance;
+    }
+
+    public void SetOwner(TileOwner owner)
+    {
+        this.owner = owner;
+    }
+
+    public void Reveal()
+    {
+        // すでに true の場合でも、タイマーを初期値（最大値）にリセットする
+        isRevealed = true;
+        _timer = revealDuration;
+        
+        Debug.Log($"{gameObject.name} が表示されました。タイマーリセット。");
+    }
+
+    private void UpdateRevealTimer()
+    {
+        // 表示中でない、または一時停止中なら何もしない
+        if (!isRevealed) return;
+
+        // タイマーを減らす
+        _timer -= Time.deltaTime;
+
+        // 0になったら非表示に戻す
+        if (_timer <= 0)
+        {
+            isRevealed = false;
+            _timer = 0;
+            Debug.Log($"{gameObject.name} が隠れました。");
+        }
     }
 
     public void SpawnUnitDelayed(BaseUnitData unitData)
@@ -121,11 +165,15 @@ public class TileController : MonoBehaviour
         _mapManager.isDirty = true;
     }
 
-    private void UpdateFocusVisual()
+    private void UpdateTileVisual()
     {
         if (isSelected)
         {
             Blink();
+        }
+        else if (owner == TileOwner.Enemy && !isRevealed)
+        {
+            objectRenderer.material.color = invisibleColor;
         }
         else
         {
@@ -136,7 +184,7 @@ public class TileController : MonoBehaviour
     private void Blink()
     {
         float duration = 1.0f;
-        float elapsedTime = (Time.time - startTime) / duration;
+        float elapsedTime = (Time.time - blinkStartTime) / duration;
 
         // LERPを使ってカラーを補間
         if (!isFadingToReverse)
@@ -157,7 +205,7 @@ public class TileController : MonoBehaviour
             // 次にフェードする方向を切り替える
             isFadingToReverse = !isFadingToReverse;
             // 新しいフェードの開始時間をリセット
-            startTime = Time.time;
+            blinkStartTime = Time.time;
         }
     }
 }

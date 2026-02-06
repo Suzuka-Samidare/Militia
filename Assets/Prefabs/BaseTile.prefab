@@ -118,13 +118,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51bac3c2b5f8f7c4ca2dac380b9bcaf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  revealDuration: 5
   isSelected: 0
+  isRevealed: 0
+  owner: 0
   globalPos: {x: 0, y: 0, z: 0}
   gridPosX: 0
   gridPosZ: 0
   unitObject: {fileID: 0}
-  defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  defaultColor: {r: 0, g: 0, b: 0, a: 1}
   focusColor: {r: 0.30049562, g: 1, b: 0, a: 1}
+  invisibleColor: {r: 1, g: 1, b: 1, a: 0}
   currentColor: {r: 0, g: 0, b: 0, a: 0}
+  blinkStartTime: 0
+  isFadingToReverse: 0
   tempUnit: {fileID: 7977106843427714197, guid: f62d4831da787274cba79bba3a15b301,
     type: 3}
