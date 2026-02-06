@@ -1,26 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class TestButton : MonoBehaviour
 {
-    public void Onclick()
+    public BaseUnitData unitData;
+
+    private MapManager _mapManager;
+
+    void Start()
     {
-        TestFunc();
+        _mapManager = MapManager.Instance;
     }
 
-    private void TestFunc()
+    public void Onclick()
     {
-        // TileController tileController = TileManager.Instance.selectedTileController;
-        TileController tileController = MapManager.Instance.enemyMapData[0,0];
-
-        if (tileController)
-        {
-            tileController.Reveal();
-        }
-        else
-        {
-            Debug.Log("タイルが選択されていません");
-        }
+        _mapManager.RevealManhattanRange(4, 3, 3, (y, x) => {
+            _mapManager.playerMapData[y, x].SpawnUnitDelayed(unitData);
+        });
     }
 }

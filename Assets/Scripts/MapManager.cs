@@ -136,6 +136,31 @@ public class MapManager : MonoBehaviour
         OnHqCountChanged?.Invoke(AllyHqCount);
     }
 
+    public void RevealManhattanRange(int centerY, int centerX, int range, Action<int, int> action)
+    {
+        int startY = Mathf.Max(0, centerY - range);
+        int endY = Mathf.Min(mapHeight - 1, centerY + range);
+
+        for (int y = startY; y <= endY; y++)
+        {
+            // Y軸方向の距離を計算
+            int distY = Mathf.Abs(y - centerY);
+
+            // 残りの移動可能距離（range - distY）がX軸に割ける最大幅になる
+            int xRemaining = range - distY;
+
+            // X軸のループ範囲を計算
+            int startX = Mathf.Max(0, centerX - xRemaining);
+            int endX = Mathf.Min(mapWidth - 1, centerX + xRemaining);
+
+            for (int x = startX; x <= endX; x++)
+            {
+                // 座標を引数として設定して外部からDoSomething
+                action(y, x);
+            }
+        }
+    }
+
     // private void UpdateMapText()
     // {
     //     string resultText = "";
