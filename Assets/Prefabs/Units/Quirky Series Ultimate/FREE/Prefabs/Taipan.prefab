@@ -478,7 +478,7 @@ GameObject:
   - component: {fileID: 8999338503545881367}
   - component: {fileID: 3961114142717461643}
   - component: {fileID: 3701583169001772672}
-  - component: {fileID: 6351442234514812984}
+  - component: {fileID: 312511416396184448}
   m_Layer: 0
   m_Name: Taipan
   m_TagString: Untagged
@@ -558,7 +558,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6351442234514812984
+--- !u!114 &312511416396184448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -567,17 +567,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4807929556901506227}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88a4fe2ee3193364991a0b9542994a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: d2117726ca5f76341ad20d5b32151b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 9
-  unitName: Taipan
+  profile:
+    id: 0
+    unitName: 
+    maxHp: 0
+  _uuid: 
   hp: 0
-  maxHp: 0
-  minHp: 0
-  isCalling: 0
-  callCost: 0
-  callTime: 0
   isFaint: 0
 --- !u!1 &5062559287153234616
 GameObject:

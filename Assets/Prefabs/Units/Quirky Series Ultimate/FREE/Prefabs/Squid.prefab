@@ -699,7 +699,7 @@ GameObject:
   - component: {fileID: 8648425310868573238}
   - component: {fileID: 4105349500978914225}
   - component: {fileID: 8033698545883803558}
-  - component: {fileID: 5479377764476516138}
+  - component: {fileID: -560386582057373909}
   m_Layer: 0
   m_Name: Squid
   m_TagString: Untagged
@@ -779,7 +779,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5479377764476516138
+--- !u!114 &-560386582057373909
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -788,17 +788,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7511180232019162148}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88a4fe2ee3193364991a0b9542994a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: d2117726ca5f76341ad20d5b32151b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 8
-  unitName: Squid
+  profile:
+    id: 0
+    unitName: 
+    maxHp: 0
+  _uuid: 
   hp: 0
-  maxHp: 0
-  minHp: 0
-  isCalling: 0
-  callCost: 0
-  callTime: 0
   isFaint: 0
 --- !u!1 &7535825155527325181
 GameObject:

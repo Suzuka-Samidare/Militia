@@ -391,7 +391,7 @@ GameObject:
   - component: {fileID: 7979196013395532419}
   - component: {fileID: 6338841574263709632}
   - component: {fileID: 8187451374493336663}
-  - component: {fileID: 1795756501802074149}
+  - component: {fileID: -8291800254945720627}
   m_Layer: 0
   m_Name: Gecko
   m_TagString: Untagged
@@ -471,7 +471,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1795756501802074149
+--- !u!114 &-8291800254945720627
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -480,17 +480,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6842458599697738422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88a4fe2ee3193364991a0b9542994a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: d2117726ca5f76341ad20d5b32151b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3
-  unitName: Gecko
+  profile:
+    id: 0
+    unitName: 
+    maxHp: 0
+  _uuid: 
   hp: 0
-  maxHp: 0
-  minHp: 0
-  isCalling: 0
-  callCost: 0
-  callTime: 0
   isFaint: 0
 --- !u!1 &7657876676996022963
 GameObject:
