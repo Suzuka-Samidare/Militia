@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MapId = MapManager.MapId;
 
@@ -12,27 +10,31 @@ public struct UnitProfile
     [Tooltip("最大耐久値")] public float maxHp;
 }
 
-[Serializable]
-public struct CallingProfile
-{
-    [Tooltip("ID")] public MapId id;
-    [Tooltip("ユニット名")] public string unitName;
-    [Tooltip("最大耐久値")] public float maxHp;
-    [Tooltip("呼び出しコスト")] public int callCost;
-    [Tooltip("呼び出し所要時間（秒）")] public float callTime;
-}
-
 // 右クリックメニューからアセットを作成するための属性
 [CreateAssetMenu(fileName = "BaseUnitData", menuName = "ScriptableObjects/BaseUnitData")]
 public class BaseUnitData : ScriptableObject
 {
-    [Header("共通ステータス")]
-    public UnitProfile profile;
+    [Header("本体ユニット関連")]
+    [Tooltip("ステータス")] public UnitProfile profile;
+    [Tooltip("3Dオブジェクト")] public GameObject prefab;
 
-    [Header("呼び出し中のステータス")]
-    public CallingProfile callingProfile;
+    [Header("呼び出しユニット関連")]
+    [Tooltip("ステータス")]
+    public UnitProfile callingProfile = new UnitProfile
+    {
+        id = MapId.Calling,
+        unitName = "",
+        maxHp = 10.0f,
+    };
+    [Tooltip("呼び出しコスト")] public int callCost;
+    [Tooltip("呼び出し所要時間（秒）")] public float callTime;
+    [Tooltip("3Dオブジェクト")] public GameObject callingPrefab;
 
     [Header("外見設定")]
-    [Tooltip("ゲームオブジェクト")] public GameObject prefab;
     [Tooltip("下部の位置")] public Vector3 initPos;
+
+    private void OnValidate()
+    {
+        callingProfile.unitName = profile.unitName;
+    }
 }

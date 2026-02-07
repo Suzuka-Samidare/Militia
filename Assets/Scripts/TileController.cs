@@ -13,7 +13,6 @@ public class TileController : MonoBehaviour
     private float revealDuration = 5.0f;
     private float _timer = 5.0f;
 
-
     [Header("タイルステータス")]
     [Tooltip("選択状態の有無")]
     public bool isSelected;
@@ -31,19 +30,26 @@ public class TileController : MonoBehaviour
     public int gridPosY;
 
     [Header("ユニット情報")]
-    [Tooltip("ユニットオブジェクト")]
-    public GameObject unitObject;
-    [Tooltip("ユニットコントローラ")]
-    public UnitController unitController => unitObject ? unitObject.GetComponent<UnitController>() : null;
-    [Tooltip("ユニットコントローラ（呼出中）")]
-    public CallingUnitController calllingUnitController => unitObject ? unitObject.GetComponent<CallingUnitController>() : null;
+    [Tooltip("ユニットオブジェクト"), SerializeField]
+    private GameObject _unitObject;
+    public GameObject unitObject
+    {
+        get => _unitObject;
+        set
+        {
+            if (_unitObject == value) return;
+            _unitObject = value;
+            RefreshComponents();
+        }
+    }
+    [field: SerializeField]
+    public UnitStats unitStats { get; private set; }
+    [field: SerializeField]
+    public CallingUnitController callingUnitController { get; private set; }
     [Tooltip("ユニットの有無")]
     public bool isExistUnit => unitObject;
     [Tooltip("マップID")]
-    public MapId unitMapId =>
-        unitController ? unitController.profile.id :
-        calllingUnitController ? calllingUnitController.profile.id :
-        MapId.Empty;
+    public MapId unitMapId => unitStats ? unitStats.profile.id : MapId.Empty;
     
 
     [Header("ビジュアル関連")]
@@ -54,9 +60,6 @@ public class TileController : MonoBehaviour
     private Renderer objectRenderer;
     [SerializeField] private float blinkStartTime;
     [SerializeField] private bool isFadingToReverse;
-
-    [Header("Asset")]
-    public GameObject tempUnit;
 
     private MapManager _mapManager;
 
@@ -81,6 +84,20 @@ public class TileController : MonoBehaviour
     private void ResolveDependencies()
     {
         _mapManager = MapManager.Instance;
+    }
+
+    private void RefreshComponents()
+    {
+        if (_unitObject != null)
+        {
+            unitStats = _unitObject.GetComponent<UnitStats>();
+            callingUnitController = _unitObject.GetComponent<CallingUnitController>();
+        }
+        else
+        {
+            unitStats = null;
+            callingUnitController = null;
+        }
     }
 
     public void SetOwner(TileOwner owner)
@@ -121,7 +138,7 @@ public class TileController : MonoBehaviour
         // 呼び出し中の仮ユニットの作成
         Vector3 tilePosition = gameObject.transform.position;
         Vector3 TempUnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
-        unitObject = Instantiate(tempUnit, TempUnitPosition, Quaternion.identity, gameObject.transform);
+        unitObject = Instantiate(unitData.callingPrefab, TempUnitPosition, Quaternion.identity, gameObject.transform);
         // マップデータの更新を促す
         _mapManager.isDirty = true;
 
@@ -137,7 +154,8 @@ public class TileController : MonoBehaviour
             SpawnUnit(unitData);
         };
         // 仮ユニットの初期化処理
-        calllingUnitController.Initialize(unitData.callingProfile, onCompleteCallback);
+        unitStats.Initialize(unitData.callingProfile);
+        callingUnitController.StartTimer(unitData.callTime, onCompleteCallback);
     }
 
     public void SpawnUnit(BaseUnitData unitData)
@@ -147,7 +165,7 @@ public class TileController : MonoBehaviour
         Vector3 tilePosition = gameObject.transform.position;
         Vector3 UnitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
         unitObject = Instantiate(unitData.prefab, UnitPosition, Quaternion.identity, gameObject.transform);
-        unitController.Initialize(unitData.profile);
+        unitStats.Initialize(unitData.profile);
 
         // マップデータの更新を促す
         _mapManager.isDirty = true;

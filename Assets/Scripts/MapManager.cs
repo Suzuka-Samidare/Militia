@@ -193,10 +193,10 @@ public class MapManager : MonoBehaviour
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                UnitController unitController = playerMapData[x, z].unitController;
-                if (unitController)
+                UnitStats unitStats = playerMapData[x, z].unitStats;
+                if (unitStats)
                 {
-                    if (unitController.profile.id == MapId.Headquarter) count++;
+                    if (unitStats.profile.id == MapId.Headquarter) count++;
                 }
             }
         }

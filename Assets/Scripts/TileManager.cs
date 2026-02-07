@@ -117,7 +117,7 @@ public class TileManager : MonoBehaviour
 
     public void SpawnUnitOnSelectedTile(BaseUnitData unitData)
     {
-        if (unitData.callingProfile.callTime > 0)
+        if (unitData.callTime > 0)
         {
             Debug.Log("SpawnUnitOnSelectedUnit: 待ち時間ありのユニットです。");
             selectedTileController.SpawnUnitDelayed(unitData);
@@ -162,22 +162,13 @@ public class TileManager : MonoBehaviour
 
     public void GetSelectedTileUnitDetail()
     {
-        if (selectedTileController.unitController)
+        if (selectedTileController.unitStats)
         {
             UnitDetailController.Instance.Open(
-                selectedTileController.unitController.profile.unitName,
-                selectedTileController.unitController.profile.maxHp,
-                selectedTileController.unitController.hp,
-                false
-            );
-        }
-        else if (selectedTileController.calllingUnitController)
-        {
-            UnitDetailController.Instance.Open(
-                selectedTileController.calllingUnitController.profile.unitName,
-                selectedTileController.calllingUnitController.profile.maxHp,
-                selectedTileController.calllingUnitController.hp,
-                true
+                selectedTileController.unitStats.profile.unitName,
+                selectedTileController.unitStats.profile.maxHp,
+                selectedTileController.unitStats.hp,
+                selectedTileController.unitMapId == MapId.Calling
             );
         }
         else
