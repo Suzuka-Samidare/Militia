@@ -29,7 +29,7 @@ public class CallingUnitController : MonoBehaviour
     {
         _timer.OnTimerComplete += () =>
         {
-            Debug.Log("アラーム");
+            // Debug.Log("アラーム");
             onCompleteCallback?.Invoke();
         };
         _timer.Start(callTime);

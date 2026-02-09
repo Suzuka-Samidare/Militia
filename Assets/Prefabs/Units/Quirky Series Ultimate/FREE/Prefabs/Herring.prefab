@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8589824587025583950}
   m_Layer: 0
   m_Name: Herring
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,11 +103,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2117726ca5f76341ad20d5b32151b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uuid: 
   profile:
     id: 0
     unitName: 
     maxHp: 0
-  _uuid: 
   hp: 0
   isFaint: 0
 --- !u!1 &1915371716169189145

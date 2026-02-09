@@ -102,7 +102,7 @@ public class CameraMovement : MonoBehaviour
 
     void UpdateAngle()
     {
-        Debug.Log("UpdateAngle");
+        // Debug.Log("UpdateAngle");
 
         // マウスの移動量を取得
         currentAngleX += Input.GetAxis("Mouse X") * rotationSpeed;
