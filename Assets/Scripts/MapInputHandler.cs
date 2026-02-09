@@ -38,8 +38,9 @@ public class MapInputHandler : MonoBehaviour
             if (hitObject.CompareTag("Tile"))
             {
                 _tileManager.SetSelectedTile(hitObject);
-                if (hit.collider.GetComponentInChildren<UnitAnimation>()) {
-                    hit.collider.GetComponentInChildren<UnitAnimation>().PlayOnce("Clicked");
+                UnitAnimation unitAnimation = hit.collider.GetComponentInChildren<UnitAnimation>();
+                if (unitAnimation) {
+                    unitAnimation.PlayOnce(AnimationName.Clicked);
                 }
             }
 
