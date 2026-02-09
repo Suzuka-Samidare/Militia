@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public readonly struct AnimationName
+[Serializable]
+public struct AnimationName
 {
     // 中身の文字列
-    private readonly string _value;
+    [SerializeField]
+    private string m_value;
 
     // コンストラクタをprivateにして、勝手な文字列作成を禁止する
-    private AnimationName(string value) => _value = value;
+    private AnimationName(string value) => m_value = value;
 
     // 型から文字列への暗黙的な変換（これがあるとstringとしてそのまま使える！）
-    public static implicit operator string(AnimationName path) => path._value ?? "";
+    public static implicit operator string(AnimationName path) => path.m_value ?? "";
 
     public static readonly AnimationName Attack = new AnimationName("Attack");
     public static readonly AnimationName Bounce = new AnimationName("Bounce");
@@ -32,6 +33,28 @@ public readonly struct AnimationName
     public static readonly AnimationName Swim = new AnimationName("Swim");
     public static readonly AnimationName Walk = new AnimationName("Walk");
 
+    // ★ インスペクターのプルダウンに出したい文字列リスト
+    public static readonly string[] GetOptions = {
+        "Attack",
+        "Bounce",
+        "Clicked",
+        "Death",
+        "Eat",
+        "Fear",
+        "Fly",
+        "Hit",
+        "Idle_A",
+        "Idle_B",
+        "Idle_C",
+        "Jump",
+        "Roll",
+        "Run",
+        "Sit",
+        "Spin/Splash",
+        "Swim",
+        "Walk",
+    };
+
     // EqualsとかToStringもオーバーライド
-    public override string ToString() => _value;
+    public override string ToString() => m_value;
 }

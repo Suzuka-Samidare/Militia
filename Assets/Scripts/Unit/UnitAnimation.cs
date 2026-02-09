@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class UnitAnimation : MonoBehaviour
 {
+    public AnimationName currentAnimation;
+
     // private bool isAnimating = false;
     public bool isBusyAnimating = false;
     public bool isPause = false;
