@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 6338841574263709632}
   - component: {fileID: 8187451374493336663}
   - component: {fileID: -8291800254945720627}
-  - component: {fileID: 3449964212600877289}
+  - component: {fileID: 4378704298799609285}
   m_Layer: 0
   m_Name: Gecko
   m_TagString: Unit
@@ -491,7 +491,7 @@ MonoBehaviour:
     maxHp: 0
   hp: 0
   isFaint: 0
---- !u!114 &3449964212600877289
+--- !u!114 &4378704298799609285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6842458599697738422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88a4fe2ee3193364991a0b9542994a2d, type: 3}
+  m_Script: {fileID: 11500000, guid: 180db269c8b50424aa0f1cb05e437877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7657876676996022963

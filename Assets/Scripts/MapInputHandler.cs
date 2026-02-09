@@ -34,17 +34,22 @@ public class MapInputHandler : MonoBehaviour
         {
             GameObject hitObject = hit.collider.gameObject;
 
-            // 接触オブジェクトがタイルまたはユニットだった場合、選択状態に更新
+            // 接触対象がタイルの場合
             if (hitObject.CompareTag("Tile"))
             {
-                // タイルを引数にして処理
                 _tileManager.SetSelectedTile(hitObject);
+                if (hit.collider.GetComponentInChildren<UnitAnimation>()) {
+                    hit.collider.GetComponentInChildren<UnitAnimation>().PlayOnce("Clicked");
+                }
             }
+
+            // 接触対象がユニットの場合
             if (hitObject.CompareTag("Unit"))
             {
-                // ユニットの親要素であるタイルを引数にして処理
                 _tileManager.SetSelectedTile(hitObject.transform.parent.gameObject);
             }
+
+            // 接触対象がタイルまたはユニットの場合
             if (hitObject.CompareTag("Tile") || hitObject.CompareTag("Unit"))
             {
                 _tileManager.GetSelectedTileUnitDetail();
