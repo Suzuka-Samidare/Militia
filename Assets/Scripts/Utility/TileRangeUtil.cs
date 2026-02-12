@@ -3,6 +3,18 @@ using UnityEngine;
 
 public static class TileRangeUtil
 {
+    public static void ForEachSquareRange(int centerY, int centerX, int range, Action<int, int> action)
+    {
+        for (int y = centerY - range; y <= centerY + range; y++)
+        {
+            for (int x = centerX - range; x <= centerX + range; x++)
+            {
+                // 座標を引数として設定して外部からDoSomething
+                action(y, x);
+            }
+        }
+    }
+
     public static void ForEachManhattanRange(int centerY, int centerX, int range, Action<int, int> action)
     {
         for (int y = centerY - range; y <= centerY + range; y++)
