@@ -8,7 +8,6 @@ public class AnimationNameDrawer : PropertyDrawer
     {
         // 構造体の中の変数名 "m_value" と完全に一致させること！
         SerializedProperty valueProp = property.FindPropertyRelative("m_value");
-        Debug.Log(valueProp);
 
         // 保存されている値が正常に取得できなかった場合エラー文を描画
         if (valueProp == null)

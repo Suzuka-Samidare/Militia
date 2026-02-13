@@ -115,6 +115,7 @@ public class TileManager : MonoBehaviour
         selectedTile = null;
     }
 
+    // TODO: TileManagerが管理するべきではないメソッド、メソッド化解除を検討
     public void SpawnUnitOnSelectedTile(BaseUnitData unitData)
     {
         if (unitData.callTime > 0)
