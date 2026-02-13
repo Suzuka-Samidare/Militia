@@ -8,30 +8,45 @@ public struct UnitProfile
     [Tooltip("ID")] public MapId id;
     [Tooltip("ユニット名")] public string unitName;
     [Tooltip("最大耐久値")] public float maxHp;
+    [Tooltip("攻撃の可否")] public bool canAttack;
+    [Tooltip("攻撃力")] public float power;
+    [Tooltip("消費エネルギー")] public int energy;
+    [Tooltip("範囲攻撃の可否")] public bool isAreaAttack;
+    [Tooltip("範囲攻撃の距離")] public int areaAttackRange;
 }
+
+// [Serializable]
+// public struct AttackSettings
+// {
+//     [Tooltip("攻撃の可否")] public bool canAttack;
+//     [Tooltip("攻撃力")] public float power;
+//     [Tooltip("消費エネルギー")] public int energy;
+//     [Tooltip("範囲攻撃の可否")] public bool isAreaAttack;
+//     [Tooltip("範囲攻撃の距離")] public int areaAttackRange;
+// }
+
 
 // 右クリックメニューからアセットを作成するための属性
 [CreateAssetMenu(fileName = "BaseUnitData", menuName = "ScriptableObjects/BaseUnitData")]
 public class BaseUnitData : ScriptableObject
 {
-    [Header("本体ユニット関連")]
-    [Tooltip("ステータス")] public UnitProfile profile;
-    [Tooltip("3Dオブジェクト")] public GameObject prefab;
-
-    [Header("呼び出しユニット関連")]
-    [Tooltip("ステータス")]
+    [Header("本体関連")]
+    [Tooltip("本体ステータス")] public UnitProfile profile;
+    [Tooltip("呼出待ちステータス")]
     public UnitProfile callingProfile = new UnitProfile
     {
         id = MapId.Calling,
         unitName = "",
         maxHp = 10.0f,
+        canAttack = false,
     };
-    [Tooltip("呼び出しコスト")] public int callCost;
-    [Tooltip("呼び出し所要時間（秒）")] public float callTime;
-    [Tooltip("3Dオブジェクト")] public GameObject callingPrefab;
+    [Tooltip("コスト")] public int cost;
+    [Tooltip("呼出所要時間（秒）")] public float callTime;
 
     [Header("外見設定")]
-    [Tooltip("下部の位置")] public Vector3 initPos;
+    [Tooltip("本体オブジェクト")] public GameObject prefab;
+    [Tooltip("本体オブジェクトの位置設定")] public Vector3 initPos;
+    [Tooltip("呼出待ちオブジェクト")] public GameObject callingPrefab;
 
     private void OnValidate()
     {
