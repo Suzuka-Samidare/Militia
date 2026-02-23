@@ -13,19 +13,33 @@ MonoBehaviour:
   m_Name: GeckoUnitData
   m_EditorClassIdentifier: 
   profile:
-    id: 0
+    id: 3
     unitName: Gecko
     maxHp: 50
-  prefab: {fileID: 6842458599697738422, guid: cefda5744f2acb54d8f08973a10bee1e, type: 3}
+    canAttack: 1
+    power: 0
+    energy: 0
+    atkType: 0
+    atkRange:
+      min: 0
+      max: 0
   callingProfile:
     id: 0
     unitName: Gecko
     maxHp: 10
-  callCost: 0
+    canAttack: 0
+    power: 0
+    energy: 0
+    atkType: 0
+    atkRange:
+      min: 0
+      max: 0
+  cost: 0
   callTime: 3
+  prefab: {fileID: 6842458599697738422, guid: cefda5744f2acb54d8f08973a10bee1e, type: 3}
+  initPos: {x: 0, y: 0.5, z: 0}
   callingPrefab: {fileID: 7977106843427714197, guid: f62d4831da787274cba79bba3a15b301,
     type: 3}
-  initPos: {x: 0, y: 0.5, z: 0}
   attack: 0
   attackEnergy: 0
   canAttackEnemyBase: 0

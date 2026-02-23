@@ -2,6 +2,21 @@ using System;
 using UnityEngine;
 using MapId = MapManager.MapId;
 
+public enum AttackType
+{
+    Single,     // 単体
+    Square,     // 正方形
+    Manhattan,  // 菱形
+    Cross       // 十字
+}
+
+[Serializable]
+public struct AttackRange
+{
+    public int min;
+    public int max;
+}
+
 [Serializable]
 public struct UnitProfile
 {
@@ -11,20 +26,12 @@ public struct UnitProfile
     [Tooltip("攻撃の可否")] public bool canAttack;
     [Tooltip("攻撃力")] public float power;
     [Tooltip("消費エネルギー")] public int energy;
-    [Tooltip("範囲攻撃の可否")] public bool isAreaAttack;
-    [Tooltip("範囲攻撃の距離")] public int areaAttackRange;
+    [Tooltip("攻撃の種類")] public AttackType atkType;
+    [Tooltip("範囲攻撃の距離")] public AttackRange atkRange;
+    // [Tooltip("範囲攻撃の可否")] public bool isAreaAttack;
+    // [Tooltip("範囲攻撃の距離")] public int areaAttackRange;
+
 }
-
-// [Serializable]
-// public struct AttackSettings
-// {
-//     [Tooltip("攻撃の可否")] public bool canAttack;
-//     [Tooltip("攻撃力")] public float power;
-//     [Tooltip("消費エネルギー")] public int energy;
-//     [Tooltip("範囲攻撃の可否")] public bool isAreaAttack;
-//     [Tooltip("範囲攻撃の距離")] public int areaAttackRange;
-// }
-
 
 // 右クリックメニューからアセットを作成するための属性
 [CreateAssetMenu(fileName = "BaseUnitData", menuName = "ScriptableObjects/BaseUnitData")]

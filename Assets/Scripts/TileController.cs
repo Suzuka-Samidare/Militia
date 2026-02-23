@@ -45,6 +45,8 @@ public class TileController : MonoBehaviour
     [field: SerializeField]
     public UnitStats unitStats { get; private set; }
     [field: SerializeField]
+    public UnitController unitController { get; private set; }
+    [field: SerializeField]
     public CallingUnitController callingUnitController { get; private set; }
     [Tooltip("ユニットの有無")]
     public bool isExistUnit => unitObject;
@@ -91,11 +93,13 @@ public class TileController : MonoBehaviour
         if (_unitObject != null)
         {
             unitStats = _unitObject.GetComponent<UnitStats>();
+            unitController = unitObject.GetComponent<UnitController>();
             callingUnitController = _unitObject.GetComponent<CallingUnitController>();
         }
         else
         {
             unitStats = null;
+            unitController = null;
             callingUnitController = null;
         }
     }
