@@ -10,13 +10,26 @@ public class TileManager : MonoBehaviour
 
     [Header("選択済みタイル関連")]
     [Tooltip("タイルオブジェクト")]
-    public GameObject selectedTile = null;
-    [Tooltip("タイルコントローラ"), SerializeField]
-    public TileController selectedTileController => selectedTile ? selectedTile.GetComponent<TileController>() : null;
+    private GameObject _selectedTile;
+    // public GameObject selectedTile = null;
+    public GameObject selectedTile
+    {
+        get => _selectedTile;
+        set
+        {
+            if (_selectedTile == value) return;
+            _selectedTile = value;
+            RefreshComponents();
+        }
+    }
+    [field: SerializeField]
+    public TileController selectedTileController { get; private set; }
+    // [Tooltip("タイルコントローラ"), SerializeField]
+    // public TileController selectedTileController => selectedTile ? selectedTile.GetComponent<TileController>() : null;
     [Tooltip("アクセス可否"), SerializeField]
     private bool _canAccessSelectedTileController => selectedTile != null && selectedTileController != null;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
@@ -25,6 +38,18 @@ public class TileManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void RefreshComponents()
+    {
+        if (selectedTile != null)
+        {
+            selectedTileController = selectedTile.GetComponent<TileController>();
+        }
+        else
+        {
+            selectedTileController = null;
         }
     }
 
