@@ -2075,12 +2075,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841eaaf2f54852b49b7a49334d00cddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
   dragSpeed: 0.01
-  isClickingOnUI: 0
-  isDragging: 0
-  rotationSpeed: 5
-  currentAngleX: 0
-  currentAngleY: 30
+  rotationSpeed: 0.3
+  _currentAngleX: 0
+  _currentAngleY: 0
   minVerticalAngle: 30
   maxVerticalAngle: 80
   distance: 5
@@ -5499,6 +5498,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1069207091}
   m_CullTransparentMesh: 1
+--- !u!1 &1151936931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1151936933}
+  - component: {fileID: 1151936932}
+  m_Layer: 0
+  m_Name: InputProvider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1151936932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151936931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b638c119111596346bae6889227d18da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1151936933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151936931}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.122839, y: -1.994957, z: 14.366545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1214115167
 GameObject:
   m_ObjectHideFlags: 0
@@ -7917,6 +7960,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638195519}
   m_CullTransparentMesh: 1
+--- !u!1 &1668789069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1668789070}
+  - component: {fileID: 1668789071}
+  m_Layer: 0
+  m_Name: InputHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1668789070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668789069}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.122839, y: -1.994957, z: 14.366545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1668789071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668789069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af660fdc413e3a4eb5889047208bc90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragThreshold: 10
 --- !u!1 &1673125227
 GameObject:
   m_ObjectHideFlags: 0
@@ -9247,7 +9335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d918f7ae7e6846b468aadedeec8e80e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedTile: {fileID: 0}
+  <selectedTileController>k__BackingField: {fileID: 0}
 --- !u!1 &2103718873
 GameObject:
   m_ObjectHideFlags: 0
@@ -9300,6 +9388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f748a5ee538b6ca448d5ba1804e9b0f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
   unitData: {fileID: 11400000, guid: f2d1920f90fc3484a8fde2f9a01c92db, type: 2}
 --- !u!114 &2103718876
 MonoBehaviour:
@@ -9689,6 +9778,8 @@ SceneRoots:
   - {fileID: 454463264}
   - {fileID: 898237332}
   - {fileID: 1323355571}
+  - {fileID: 1151936933}
+  - {fileID: 1668789070}
   - {fileID: 518152042}
   - {fileID: 987577765}
   - {fileID: 1975244718}
