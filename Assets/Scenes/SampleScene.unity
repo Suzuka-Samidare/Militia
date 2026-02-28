@@ -2075,15 +2075,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841eaaf2f54852b49b7a49334d00cddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  focusPoint: {fileID: 0}
   cam: {fileID: 0}
   dragSpeed: 0.01
+  zoomSpeed: 0.02
+  minZoom: 2
+  maxZoom: 3.26
   rotationSpeed: 0.3
   _currentAngleX: 0
   _currentAngleY: 0
   minVerticalAngle: 30
   maxVerticalAngle: 80
   distance: 5
-  distanceSmoothSpeed: 10
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -8005,6 +8008,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragThreshold: 10
+  _startPos: {x: 0, y: 0}
+  _isDragging: 0
+  _isOverUI: 0
+  _isPrimaryPressing: 0
+  _isSecondaryPressing: 0
+  _prevPinchDist: 0
 --- !u!1 &1673125227
 GameObject:
   m_ObjectHideFlags: 0
