@@ -41,6 +41,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Scroll",
+                    "type": "Value",
+                    "id": "438e8450-5f39-4045-9ba4-13399ecfcd12",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Touch1Point",
+                    "type": "Value",
+                    "id": "e39b8a73-88b7-43d5-8e30-9336d0a33af7",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -58,7 +76,7 @@
                 {
                     "name": "",
                     "id": "dd77920d-64d1-44c4-9a9b-25e1124cc1c2",
-                    "path": "<Touchscreen>/Press",
+                    "path": "<Touchscreen>/primaryTouch/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -80,7 +98,7 @@
                 {
                     "name": "",
                     "id": "6e284149-9504-42d3-a342-2ce655a66732",
-                    "path": "<Touchscreen>/touch*/Press",
+                    "path": "<Touchscreen>/touch1/press",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -102,7 +120,7 @@
                 {
                     "name": "",
                     "id": "43d7db74-2bcc-4a8c-9110-654e47d549d8",
-                    "path": "<Touchscreen>/touch0/position",
+                    "path": "<Touchscreen>/primaryTouch/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -124,11 +142,33 @@
                 {
                     "name": "",
                     "id": "934749a9-a951-40e4-8116-90f3e091c1b7",
-                    "path": "<Touchscreen>/touch0/delta",
+                    "path": "<Touchscreen>/primaryTouch/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Delta",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "19583c4e-81e0-4eba-a336-b8fc8efe6274",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb05eff3-8ea7-48f2-abbb-892986f2f95f",
+                    "path": "<Touchscreen>/touch1/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch1Point",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

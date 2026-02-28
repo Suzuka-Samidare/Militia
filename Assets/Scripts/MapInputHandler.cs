@@ -26,15 +26,18 @@ public class MapInputHandler : MonoBehaviour
             // 接触対象がタイルの場合
             if (hitObject.CompareTag("Tile"))
             {
-                // Debug.Log("<color=red>Ray判定あり & タイル</color>");
                 // タイルを選択中オブジェクトとして設定
                 _tileManager.SetSelectedTile(hitObject);
+                // ユニットアニメーション
+                UnitAnimation unitAnimation = hit.collider.GetComponentInChildren<UnitAnimation>();
+                if (unitAnimation) {
+                    unitAnimation.PlayOnce(AnimationName.Clicked);
+                }
             }
 
             // 接触対象がユニットの場合
             if (hitObject.CompareTag("Unit"))
             {
-                // Debug.Log("<color=orange>Ray判定あり & ユニット</color>");
                 // 親要素のタイルを選択中オブジェクトとして設定
                 _tileManager.SetSelectedTile(hitObject.transform.parent.gameObject);
             }
@@ -42,14 +45,8 @@ public class MapInputHandler : MonoBehaviour
             // 接触対象がタイルまたはユニットの場合
             if (hitObject.CompareTag("Tile") || hitObject.CompareTag("Unit"))
             {
-                // Debug.Log("<color=yellow>Ray判定あり & タイルかユニット</color>");
                 // ユニット詳細情報の表示/非表示処理
                 _tileManager.GetSelectedTileUnitDetail();
-                // ユニットアニメーション
-                //  UnitAnimation unitAnimation = hit.collider.GetComponentInChildren<UnitAnimation>();
-                // if (unitAnimation) {
-                //     unitAnimation.PlayOnce(AnimationName.Clicked);
-                // }
             }
 
             // Debug.Log("<color=blue>Ray判定あり & タイルではない</color>");
