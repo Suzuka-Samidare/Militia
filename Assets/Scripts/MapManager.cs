@@ -10,17 +10,21 @@ public class MapManager : MonoBehaviour
 {
     public static MapManager Instance;
 
-    [Header("オブジェクト関連")]
+    [Header("Ref")]
     public GameObject playerMap;
     public GameObject enemyMap;
     public GameObject tilePrefab; // マスのPrefab
 
-    [Header("マップ関連")]
-    public int mapWidth;     // マップの幅
-    public int mapHeight;    // マップの高さ
-    private int mapDistance = 5;
+    [Header("マップデータ")]
     public TileController[,] playerMapData;
     public TileController[,] enemyMapData;
+
+    [Header("生成情報")]
+    public int mapWidth;     // マップの幅
+    public int mapHeight;    // マップの高さ
+    public int mapDistance = 5;
+
+    [Header("管理ステータス")]
     public bool isDirty;
     public enum MapId
     {
@@ -38,9 +42,11 @@ public class MapManager : MonoBehaviour
         Error = -1
     }
 
-    [Header("本部関連")]
-    [Tooltip("本部最大設置数")] public int maxHqCount = 2;
+    [Header("集計データ")]
     [Tooltip("本部残数"), SerializeField] public int AllyHqCount;
+    
+    [Header("OTHER")]
+    [Tooltip("本部最大設置数")] public int maxHqCount = 2; // TODO: マップと関係ない気がするので検討
 
     public Action<int> OnHqCountChanged;
 

@@ -8,11 +8,25 @@ public class CameraMovement : MonoBehaviour
     [Header("Ref")]
     [SerializeField] private Transform focusPoint; // 回転の中心となるプレイヤーオブジェクト
     [SerializeField] private Camera cam;
+    private MapManager _mapManager;
 
-    [Header("共通設定")]
-    [SerializeField] private float dragSpeed = 0.01f; // ドラッグの感度
+    [Header("ステータス")]
+    public bool isReconMode = false;
+    [SerializeField] private bool _lastReconMode = false;
+    [SerializeField] private bool _isAutoMoving = false;
+
+    [Header("基本設定")]
+    [SerializeField] private float distance = 5f; // カメラとフォーカス地点の距離（固定）
 
     [Header("移動設定")]
+    [SerializeField] private float dragSpeed = 0.01f; // ドラッグの感度
+
+    [Header("自動移動設定")]
+    [SerializeField] private Vector3 playerMapLookAt;
+    [SerializeField] private Vector3 enemyMapLookAt;
+    [SerializeField] private Vector3 _currentVelocity = Vector3.zero;
+    [SerializeField] private float smoothTime = 0.2f;
+    [SerializeField] private float arrivalThreshold = 0.01f; // 到着とみなす距離
 
     [Header("ズーム設定（Projection Sizeの変更）")]
     [SerializeField] private float zoomSpeed = 0.02f;
@@ -21,13 +35,10 @@ public class CameraMovement : MonoBehaviour
 
     [Header("回転設定")]
     [SerializeField] private float rotationSpeed = 0.3f; // カメラの回転速度
-    [SerializeField] private float _currentAngleX = 0f; // 現在の水平回転角度
-    [SerializeField] private float _currentAngleY = 0f; // 現在の垂直回転角度
+    [SerializeField] private float _currentAngleX = 45f; // 現在の水平回転角度
+    [SerializeField] private float _currentAngleY = -30f; // 現在の垂直回転角度
     [SerializeField] private float minVerticalAngle = 30f; // 垂直方向の最小回転角度
     [SerializeField] private float maxVerticalAngle = 80f; // 垂直方向の最大回転角度
-
-    [Header("距離設定")]
-    [SerializeField] private float distance = 5f; // カメラとターゲットの距離（固定）
 
     private void Awake()
     {
@@ -61,6 +72,14 @@ public class CameraMovement : MonoBehaviour
         HandleAngle(new Vector2(0, 0));
     }
 
+    private void Start()
+    {
+        _mapManager = MapManager.Instance;
+        if (!_mapManager) {
+            throw new Exception("MapManagerのインスタンスがありません。");
+        }
+    }
+
     private void OnEnable() {
         InputHandler.OnMoveUpdate += HandleMove;
         InputHandler.OnAngleUpdate += HandleAngle;
@@ -73,8 +92,47 @@ public class CameraMovement : MonoBehaviour
         InputHandler.OnZoomUpdate -= HandleZoom;
     }
 
+    private void Update()
+    {
+        // 1. モードが切り替わった瞬間を検知
+        if (isReconMode != _lastReconMode)
+        {
+            _isAutoMoving = true;
+            _lastReconMode = isReconMode;
+        }
+
+        // 2. 自動移動中か自由操作中かで処理を分ける
+        if (_isAutoMoving)
+        {
+            AutoMove();
+        }
+    }
+
+    private void AutoMove()
+    {
+        Vector3 targetPos = isReconMode ? enemyMapLookAt : playerMapLookAt;
+
+        // 滑らかに移動！
+        focusPoint.position = Vector3.SmoothDamp(
+            focusPoint.position, 
+            targetPos, 
+            ref _currentVelocity, 
+            smoothTime
+        );
+
+        // 目的地に十分近づいたら、自由操作を解禁！
+        if (Vector3.Distance(focusPoint.position, targetPos) < arrivalThreshold)
+        {
+            focusPoint.position = targetPos; // 最後にピタッと合わせる
+            _isAutoMoving = false;
+            Debug.Log("到着！自由操作できるよ〜✨");
+        }
+    }
+
     private void HandleMove(Vector2 delta)
     {
+        if (_isAutoMoving) return;
+
         // カメラの移動量を計算 (Y軸方向はZ軸にマッピングすることが多い)
         // スクリーン座標のY軸方向のドラッグをワールド座標のZ軸方向の移動に、
         // スクリーン座標のX軸方向のドラッグをワールド座標のX軸方向の移動にマッピング
@@ -84,22 +142,34 @@ public class CameraMovement : MonoBehaviour
         // カメラの位置を更新
         focusPoint.Translate(translation * dragSpeed, Space.World);
 
-        // カメラの移動位置の制限値をクランプしつつ、位置を更新
-        if (!MapManager.Instance) {
-            throw new Exception("MapManagerのインスタンスがありません。");
+        if (isReconMode)
+        {
+            focusPoint.position = new Vector3(
+                Mathf.Clamp(focusPoint.position.x, 0, _mapManager.mapWidth - 1),
+                focusPoint.position.y,
+                Mathf.Clamp(
+                    focusPoint.position.z,
+                    _mapManager.mapHeight + _mapManager.mapDistance,
+                    _mapManager.mapHeight * 2 + _mapManager.mapDistance - 1
+                )
+            );
         }
-        focusPoint.position = new Vector3(
-            Mathf.Clamp(focusPoint.position.x, 0, MapManager.Instance.mapWidth - 1),
-            focusPoint.position.y,
-            Mathf.Clamp(focusPoint.position.z, 0, MapManager.Instance.mapHeight - 1)
-        );
+        else
+        {
+            // カメラの移動位置の制限値をクランプしつつ、位置を更新
+            focusPoint.position = new Vector3(
+                Mathf.Clamp(focusPoint.position.x, 0, _mapManager.mapWidth - 1),
+                focusPoint.position.y,
+                Mathf.Clamp(focusPoint.position.z, 0, _mapManager.mapHeight - 1)
+            );
+        }
 
         UpdateCam();
     }
 
     private void HandleAngle(Vector2 delta)
     {
-        // マウスの移動量を取得
+        // 移動量をもとに角度を計算
         _currentAngleX += delta.x * rotationSpeed;
         _currentAngleY -= delta.y * rotationSpeed; // Y軸は反転させる
         // 垂直方向のみ回転角度を制限

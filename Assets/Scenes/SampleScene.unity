@@ -2012,13 +2012,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3420201, y: 0, z: 0, w: 0.9396927}
-  m_LocalPosition: {x: 0, y: 0.499, z: -11.24}
+  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
+  m_LocalPosition: {x: -31.327877, y: 2.6569922, z: -28.506199}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1765001352}
-  m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2077,16 +2077,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focusPoint: {fileID: 0}
   cam: {fileID: 0}
+  isReconMode: 0
+  _lastReconMode: 0
+  _isAutoMoving: 0
+  distance: 5
   dragSpeed: 0.01
+  playerMapLookAt: {x: 4, y: 1, z: 5}
+  enemyMapLookAt: {x: 4, y: 1, z: 20}
+  _currentVelocity: {x: 0, y: 0, z: 0}
+  smoothTime: 0.3
+  arrivalThreshold: 0.01
   zoomSpeed: 0.02
   minZoom: 2
   maxZoom: 3.26
   rotationSpeed: 0.3
-  _currentAngleX: 0
-  _currentAngleY: 0
+  _currentAngleX: 45
+  _currentAngleY: -30
   minVerticalAngle: 30
   maxVerticalAngle: 80
-  distance: 5
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -6288,6 +6296,7 @@ GameObject:
   - component: {fileID: 1314780376}
   - component: {fileID: 1314780375}
   - component: {fileID: 1314780374}
+  - component: {fileID: 1314780377}
   m_Layer: 5
   m_Name: AttackButton
   m_TagString: Untagged
@@ -6359,8 +6368,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnitUpdateButton, Assembly-CSharp
+      - m_Target: {fileID: 1314780377}
+        m_TargetAssemblyTypeName: AttackButton, Assembly-CSharp
         m_MethodName: Onclick
         m_Mode: 1
         m_Arguments:
@@ -6409,6 +6418,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314780371}
   m_CullTransparentMesh: 1
+--- !u!114 &1314780377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314780371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da533729c13f5b4388b3accbf27278e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!1001 &1323355571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7336,9 +7358,10 @@ MonoBehaviour:
     type: 3}
   mapWidth: 10
   mapHeight: 10
+  mapDistance: 5
   isDirty: 0
-  maxHqCount: 2
   AllyHqCount: 0
+  maxHqCount: 2
 --- !u!1 &1580047836
 GameObject:
   m_ObjectHideFlags: 0
