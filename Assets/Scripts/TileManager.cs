@@ -10,7 +10,7 @@ public class TileManager : MonoBehaviour
 
     [Header("選択済みタイル関連")]
     [Tooltip("タイルオブジェクト")]
-    private GameObject _selectedTile;
+    [SerializeField] private GameObject _selectedTile;
     // public GameObject selectedTile = null;
     public GameObject selectedTile
     {

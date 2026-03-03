@@ -19,7 +19,7 @@ public class UnitUpdateButton : BaseButton
 
     void Update()
     {
-        CheckButtonInteractable();
+        // CheckButtonInteractable();
     }
 
     public void Onclick()
@@ -33,20 +33,20 @@ public class UnitUpdateButton : BaseButton
         _tileManager = TileManager.Instance;
     }
     
-    // ボタンの有効化制御
-    private void CheckButtonInteractable()
-    {
-        if (_dialogController.IsOpen ||
-            _tileManager.selectedTile == null ||
-            _tileManager.selectedTileController.unitObject)
-        {
-            button.interactable = false;
-        }
-        else
-        {
-            button.interactable = true;
-        }
-    }
+    // // ボタンの有効化制御
+    // private void CheckButtonInteractable()
+    // {
+    //     if (_dialogController.IsOpen ||
+    //         _tileManager.selectedTile == null ||
+    //         _tileManager.selectedTileController.unitObject)
+    //     {
+    //         button.interactable = false;
+    //     }
+    //     else
+    //     {
+    //         button.interactable = true;
+    //     }
+    // }
 
     // public void OnTileUpdateRequested()
     // {

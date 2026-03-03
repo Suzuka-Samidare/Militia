@@ -9,13 +9,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("フェーズ管理")]
-    public Phase currentPhase = Phase.INIT;
-    public enum Phase
+    [Header("モード管理")]
+    public Mode currentMode = Mode.INIT;
+    public enum Mode
     {
         INIT,
         PREPARATION,
-        BATTLE,
+        ATTACK,
         GAMEOVER,
     };
 
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         // インフォメーションの表示
         _infomationController.Open(initMessage);
         // メニューの初期化
-        _uiManager.SwitchMenu(currentPhase);
+        _uiManager.SwitchMenu(currentMode);
     }
 
     private void ResolveDependencies()
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
                 onConfirm: () =>
                 {
                     _mapManager.OnHqCountChanged -= ValidateAndShowDialog;
-                    ChangePhase(Phase.PREPARATION);
+                    SwitchMode(Mode.PREPARATION);
                     PlayerManager.Instance.StartRegen();
                 },
                 onCancel: () =>
@@ -112,9 +112,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ChangePhase(Phase phase)
+    public void SwitchMode(Mode mode)
     {
-        currentPhase = phase;
-        _uiManager.SwitchMenu(phase);
+        currentMode = mode;
+        _uiManager.SwitchMenu(mode);
     }
 }

@@ -16,7 +16,7 @@ public class RetreatButton : BaseButton
 
     void Update()
     {
-        CheckButtonInteractable();
+        // CheckButtonInteractable();
     }
     
     public void Onclick()
@@ -49,17 +49,17 @@ public class RetreatButton : BaseButton
         }
     }
 
-    private void CheckButtonInteractable()
-    {
-        if (_tileManager.selectedTile == null
-            || _tileManager.GetSelectedTileMapId() == MapId.Empty
-            || _tileManager.GetSelectedTileMapId() == MapId.Headquarter)
-        {
-            button.interactable = false;
-        }
-        else
-        {
-            button.interactable = true;
-        }
-    }
+    // private void CheckButtonInteractable()
+    // {
+    //     if (_tileManager.selectedTile == null
+    //         || _tileManager.GetSelectedTileMapId() == MapId.Empty
+    //         || _tileManager.GetSelectedTileMapId() == MapId.Headquarter)
+    //     {
+    //         button.interactable = false;
+    //     }
+    //     else
+    //     {
+    //         button.interactable = true;
+    //     }
+    // }
 }

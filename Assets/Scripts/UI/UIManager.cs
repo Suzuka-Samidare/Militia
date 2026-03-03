@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Phase = GameManager.Phase;
+using Mode = GameManager.Mode;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     // インスペクターから各パネルを登録
     [SerializeField] private VisibilityController initMenu;
     [SerializeField] private VisibilityController preparationMenu;
+    [SerializeField] private VisibilityController attackMenu;
 
     private void Awake()
     {
@@ -17,9 +18,10 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public void SwitchMenu(Phase phase)
+    public void SwitchMenu(Mode mode)
     {
-        initMenu.SetVisible(phase == Phase.INIT);
-        preparationMenu.SetVisible(phase == Phase.PREPARATION);
+        initMenu.SetVisible(mode == Mode.INIT);
+        preparationMenu.SetVisible(mode == Mode.PREPARATION);
+        attackMenu.SetVisible(mode == Mode.ATTACK);
     }
 }

@@ -11,9 +11,9 @@ public class CameraMovement : MonoBehaviour
     private MapManager _mapManager;
 
     [Header("ステータス")]
-    public bool isReconMode = false;
     [SerializeField] private bool _lastReconMode = false;
     [SerializeField] private bool _isAutoMoving = false;
+    private bool isReconMode => GameManager.Instance.currentMode ==  GameManager.Mode.ATTACK;
 
     [Header("基本設定")]
     [SerializeField] private float distance = 5f; // カメラとフォーカス地点の距離（固定）
@@ -101,7 +101,7 @@ public class CameraMovement : MonoBehaviour
             _lastReconMode = isReconMode;
         }
 
-        // 2. 自動移動中か自由操作中かで処理を分ける
+        // 2. 自動操作中フラグの場合は実行
         if (_isAutoMoving)
         {
             AutoMove();
