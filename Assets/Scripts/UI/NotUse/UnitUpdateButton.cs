@@ -7,31 +7,31 @@ using UnityEngine;
 
 public class UnitUpdateButton : BaseButton
 {
-    public BaseUnitData unitData;
+    // public BaseUnitData unitData;
 
-    private DialogController _dialogController;
-    private TileManager _tileManager;
+    // private DialogController _dialogController;
+    // private TileManager _tileManager;
 
-    void Start()
-    {
-        ResolveDependencies();
-    }
+    // void Start()
+    // {
+    //     ResolveDependencies();
+    // }
 
-    void Update()
-    {
-        // CheckButtonInteractable();
-    }
+    // void Update()
+    // {
+    //     // CheckButtonInteractable();
+    // }
 
-    public void Onclick()
-    {
-        _tileManager.SpawnUnitOnSelectedTile(unitData);
-    }
+    // public void Onclick()
+    // {
+    //     _tileManager.SpawnUnitOnSelectedTile(unitData);
+    // }
 
-    private void ResolveDependencies()
-    {
-        _dialogController = DialogController.Instance;
-        _tileManager = TileManager.Instance;
-    }
+    // private void ResolveDependencies()
+    // {
+    //     _dialogController = DialogController.Instance;
+    //     _tileManager = TileManager.Instance;
+    // }
     
     // // ボタンの有効化制御
     // private void CheckButtonInteractable()

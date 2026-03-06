@@ -140,22 +140,6 @@ public class TileManager : MonoBehaviour
         selectedTile = null;
     }
 
-    // TODO: TileManagerが管理するべきではないメソッド、メソッド化解除を検討
-    public void SpawnUnitOnSelectedTile(BaseUnitData unitData)
-    {
-        if (unitData.callTime > 0)
-        {
-            Debug.Log("SpawnUnitOnSelectedUnit: 待ち時間ありのユニットです。");
-            selectedTileController.SpawnUnitDelayed(unitData);
-        }
-        else
-        {
-            Debug.Log("SpawnUnitOnSelectedUnit: 待ち時間なしのユニットです。");
-            selectedTileController.SpawnUnit(unitData);
-        }
-
-    }
-
     // 選択中のマス上にあるユニットを消す
     public void ClearSelectedTileOnUnit()
     {
@@ -167,11 +151,6 @@ public class TileManager : MonoBehaviour
 
         selectedTileController.DestroyUnit();
     }
-
-    // public void DestroyAllTileOnUnitObject()
-    // {
-        
-    // }
 
     // 選択中のマス上にあるユニットのマップIDを取得
     public MapId GetSelectedTileMapId()
