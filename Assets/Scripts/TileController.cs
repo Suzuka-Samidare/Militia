@@ -15,11 +15,22 @@ public class TileController : MonoBehaviour
 
     [Header("タイルステータス")]
     [Tooltip("選択状態の有無")]
-    public bool isSelected;
-    [Tooltip("敵から視認可能か"), SerializeField]
-    private bool isRevealed = false;
-    [Tooltip("タイルの陣地種別"), SerializeField]
-    private TileOwner owner;
+    private bool _isSelected;
+    public bool isSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (_isSelected == value) return;
+            _isSelected = value;
+
+            if (_tileView != null) _tileView.RefreshVisual();
+        }
+    }
+    [Tooltip("敵から視認可能か")]
+    public bool isRevealed = false;
+    [Tooltip("タイルの陣地種別")]
+    public TileOwner owner;
 
     [Header("タイル座標情報")]
     [Tooltip("ワールド座標")]
@@ -52,24 +63,14 @@ public class TileController : MonoBehaviour
     public bool isExistUnit => unitObject;
     [Tooltip("マップID")]
     public MapId unitMapId => unitStats ? unitStats.profile.id : MapId.Empty;
-    
 
-    [Header("ビジュアル関連")]
-    public Color defaultColor;
-    public Color focusColor;
-    public Color invisibleColor;
-    [SerializeField] private Color currentColor;
-    private Renderer objectRenderer;
-    [SerializeField] private float blinkStartTime;
-    [SerializeField] private bool isFadingToReverse;
-
+    [Header("Refs")]
+    private TileView _tileView;
     private MapManager _mapManager;
 
     void Awake()
     {
-        objectRenderer = GetComponent<Renderer>();
-        defaultColor = objectRenderer.material.color;
-        blinkStartTime = Time.time;
+        _tileView = GetComponent<TileView>();
     }
 
     void Start()
@@ -79,7 +80,7 @@ public class TileController : MonoBehaviour
 
     void Update()
     {
-        UpdateTileVisual();
+        // UpdateTileVisual();
         UpdateRevealTimer();
     }
 
@@ -185,49 +186,5 @@ public class TileController : MonoBehaviour
         }
         // マップデータの更新を促す
         _mapManager.isDirty = true;
-    }
-
-    private void UpdateTileVisual()
-    {
-        if (isSelected)
-        {
-            Blink();
-        }
-        else if (owner == TileOwner.Enemy && !isRevealed)
-        {
-            objectRenderer.material.color = invisibleColor;
-        }
-        else
-        {
-            objectRenderer.material.color = defaultColor;
-        }
-    }
-
-    private void Blink()
-    {
-        float duration = 1.0f;
-        float elapsedTime = (Time.time - blinkStartTime) / duration;
-
-        // LERPを使ってカラーを補間
-        if (!isFadingToReverse)
-        {
-            currentColor = Color.Lerp(defaultColor, focusColor, elapsedTime);
-        }
-        else
-        {
-            currentColor = Color.Lerp(focusColor, defaultColor, elapsedTime);
-        }
-
-        // マテリアルカラーを更新
-        objectRenderer.material.color = currentColor;
-
-        // フェードが完了したら、次のフェードの準備
-        if (elapsedTime >= 1.0f)
-        {
-            // 次にフェードする方向を切り替える
-            isFadingToReverse = !isFadingToReverse;
-            // 新しいフェードの開始時間をリセット
-            blinkStartTime = Time.time;
-        }
     }
 }

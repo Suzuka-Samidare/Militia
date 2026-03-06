@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4488099028958162132}
   - component: {fileID: 255385203909313755}
   - component: {fileID: -8795965812946985606}
+  - component: {fileID: -8329108152562972926}
   m_Layer: 0
   m_Name: BaseTile
   m_TagString: Tile
@@ -124,13 +125,28 @@ MonoBehaviour:
   owner: 0
   globalPos: {x: 0, y: 0, z: 0}
   gridPosX: 0
-  gridPosZ: 0
-  unitObject: {fileID: 0}
-  defaultColor: {r: 0, g: 0, b: 0, a: 1}
-  focusColor: {r: 0.30049562, g: 1, b: 0, a: 1}
+  gridPosY: 0
+  _unitObject: {fileID: 0}
+  <unitStats>k__BackingField: {fileID: 0}
+  <unitController>k__BackingField: {fileID: 0}
+  <callingUnitController>k__BackingField: {fileID: 0}
+--- !u!114 &-8329108152562972926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6901446120494472406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7346bc9ba0a90e843979f431ba353e30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseColor: {r: 0.654088, g: 0.654088, b: 0.654088, a: 1}
+  blinkAllyColor: {r: 0, g: 1, b: 0.13680005, a: 1}
+  blinkEnemyColor: {r: 1, g: 0, b: 0, a: 1}
   invisibleColor: {r: 1, g: 1, b: 1, a: 0}
-  currentColor: {r: 0, g: 0, b: 0, a: 0}
+  currentBaseColor: {r: 0, g: 0, b: 0, a: 0}
+  currentTopColor: {r: 0, g: 0, b: 0, a: 0}
   blinkStartTime: 0
   isFadingToReverse: 0
-  tempUnit: {fileID: 7977106843427714197, guid: f62d4831da787274cba79bba3a15b301,
-    type: 3}
