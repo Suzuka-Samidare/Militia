@@ -795,16 +795,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uuid: 
   profile:
-    id: 0
-    unitName: 
-    maxHp: 0
-    canAttack: 0
-    power: 0
+    id: 8
+    unitName: Squid
+    maxHp: 100
+    canAttack: 1
+    power: 2
     energy: 0
-    atkType: 0
+    atkType: 2
     atkRange:
       min: 0
-      max: 0
+      max: 2
   hp: 0
 --- !u!114 &-1950370414966211802
 MonoBehaviour:
