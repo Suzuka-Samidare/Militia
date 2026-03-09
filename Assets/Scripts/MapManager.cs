@@ -93,7 +93,7 @@ public class MapManager : MonoBehaviour
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
                 tile.transform.SetParent(playerMap.transform);
-                tile.name = $"AllyTile_{y}_{x}";
+                tile.name = $"AllyTile_{x}_{y}";
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
                 tileController.globalPos = position;
@@ -101,7 +101,7 @@ public class MapManager : MonoBehaviour
                 tileController.gridPosY = y;
                 tileController.SetOwner(TileController.TileOwner.Ally);
                 // クラスをマップデータとして格納
-                playerMapData[y, x] = tileController;
+                playerMapData[x, y] = tileController;
             }
         }
     }
@@ -120,7 +120,7 @@ public class MapManager : MonoBehaviour
                 GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity);
                 // 生成したタイルをMapGeneratorの子オブジェクトにする (任意、Hierarchyを整理するため)
                 tile.transform.SetParent(enemyMap.transform);
-                tile.name = $"EnemyTile_{y}_{x}";
+                tile.name = $"EnemyTile_{x}_{y}";
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
                 tileController.globalPos = position;
@@ -128,7 +128,7 @@ public class MapManager : MonoBehaviour
                 tileController.gridPosY = y;
                 tileController.SetOwner(TileController.TileOwner.Enemy);
                  // クラスをマップデータとして格納
-                enemyMapData[y, x] = tileController;
+                enemyMapData[x, y] = tileController;
             }
         }
     }
@@ -145,13 +145,13 @@ public class MapManager : MonoBehaviour
     // private void UpdateMapText()
     // {
     //     string resultText = "";
-    //     for (int z = 0; z < mapHeight; z++)
+    //     for (int y = 0; y < mapHeight; y++)
     //     {
     //         string rowstr = "";
     //         for (int x = 0; x < mapWidth; x++)
     //         {
     //             MapId id;
-    //             GameObject currentUnit =  playerMapData[x, z].currentUnit;
+    //             GameObject currentUnit =  playerMapData[x, y].currentUnit;
     //             if (currentUnit != null)
     //             {
     //                 id = currentUnit.GetComponent<BaseUnitData>().id;
@@ -170,11 +170,11 @@ public class MapManager : MonoBehaviour
     public void GetPlayerHeadquartersCount()
     {
         int count = 0;
-        for (int z = 0; z < mapHeight; z++)
+        for (int y = 0; y < mapHeight; y++)
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                UnitStats unitStats = playerMapData[x, z].unitStats;
+                UnitStats unitStats = playerMapData[x, y].unitStats;
                 if (unitStats)
                 {
                     if (unitStats.profile.id == MapId.Headquarter) count++;

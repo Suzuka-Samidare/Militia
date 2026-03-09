@@ -100,13 +100,13 @@ public class GameManager : MonoBehaviour
     // TODO: MapManagerに置くべきか検討する
     private void DestroyAllUnit()
     {
-        for (int x = 0; x < _mapManager.mapWidth; x++)
+        for (int y = 0; y < _mapManager.mapHeight; y++)
         {
-            for (int z = 0; z < _mapManager.mapHeight; z++)
+            for (int x = 0; x < _mapManager.mapWidth; x++)
             {
-                if (_mapManager.playerMapData[x, z].unitObject)
+                if (_mapManager.playerMapData[x, y].unitObject)
                 {
-                    _mapManager.playerMapData[x, z].DestroyUnit();
+                    _mapManager.playerMapData[x, y].DestroyUnit();
                 }
             }
         }

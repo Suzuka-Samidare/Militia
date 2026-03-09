@@ -6,7 +6,7 @@ using MapId = MapManager.MapId;
 
 public class TestButton : BaseButton
 {
-    public BaseUnitData unitData;
+    public Vector2Int pos;
 
     private MapManager _mapManager;
     private TileManager _tileManager;
@@ -19,35 +19,40 @@ public class TestButton : BaseButton
 
     public void Onclick()
     {
-        if (_tileManager.selectedTile == null)
-        {
-            Debug.Log("タイルが選択されていません");
-            return;
-        }
-        if (_tileManager.GetSelectedTileMapId() == MapId.Empty)
-        {
-            Debug.Log("ユニットがありません");
-            return;
-        }
-        if (_tileManager.GetSelectedTileMapId() == MapId.Headquarter)
-        {
-            Debug.Log("本部ユニットは攻撃できません。");
-            return;
-        }
-        if (_tileManager.GetSelectedTileMapId() == MapId.Calling)
-        {
-            Debug.Log("呼び出し中は攻撃できません。");
-            return;
-        }
-        if (_tileManager.selectedTileController.unitController == null)
-        {
-            Debug.Log("ユニットコントローラーがありません");
-            return;
-        }
-
-        Vector2Int target = new Vector2Int(3, 3);
-        _tileManager.selectedTileController.unitController.ExecuteAttackRequest(target);
+        _mapManager.playerMapData[pos.x, pos.y].isSelected = true;
     }
+
+    // public void Onclick()
+    // {
+    //     if (_tileManager.selectedTile == null)
+    //     {
+    //         Debug.Log("タイルが選択されていません");
+    //         return;
+    //     }
+    //     if (_tileManager.GetSelectedTileMapId() == MapId.Empty)
+    //     {
+    //         Debug.Log("ユニットがありません");
+    //         return;
+    //     }
+    //     if (_tileManager.GetSelectedTileMapId() == MapId.Headquarter)
+    //     {
+    //         Debug.Log("本部ユニットは攻撃できません。");
+    //         return;
+    //     }
+    //     if (_tileManager.GetSelectedTileMapId() == MapId.Calling)
+    //     {
+    //         Debug.Log("呼び出し中は攻撃できません。");
+    //         return;
+    //     }
+    //     if (_tileManager.selectedTileController.unitController == null)
+    //     {
+    //         Debug.Log("ユニットコントローラーがありません");
+    //         return;
+    //     }
+
+    //     Vector2Int target = new Vector2Int(3, 3);
+    //     _tileManager.selectedTileController.unitController.ExecuteAttackRequest(target);
+    // }
 
     // private void CheckButtonInteractable()
     // {
