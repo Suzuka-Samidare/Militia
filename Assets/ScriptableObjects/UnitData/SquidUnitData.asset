@@ -12,17 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 632e5d0c851067b4ca8c004271027091, type: 3}
   m_Name: SquidUnitData
   m_EditorClassIdentifier: 
-  id: 8
-  unitName: 
-  hp: 0
-  maxHp: 0
-  isCalling: 0
-  callCost: 0
+  profile:
+    id: 8
+    unitName: Squid
+    maxHp: 100
+    canAttack: 1
+    power: 0
+    energy: 0
+    atkType: 2
+    atkRange:
+      min: 0
+      max: 2
+  callingProfile:
+    id: 99
+    unitName: Squid
+    maxHp: 10
+    canAttack: 0
+    power: 0
+    energy: 0
+    atkType: 0
+    atkRange:
+      min: 0
+      max: 0
+  cost: 0
   callTime: 3
-  isFaint: 0
-  unitPrefab: {fileID: 7511180232019162148, guid: 818c5a1ba0d9810439f11299463f2294,
-    type: 3}
+  prefab: {fileID: 7511180232019162148, guid: 818c5a1ba0d9810439f11299463f2294, type: 3}
   initPos: {x: 0, y: 0.5, z: 0}
+  callingPrefab: {fileID: 7977106843427714197, guid: f62d4831da787274cba79bba3a15b301,
+    type: 3}
   attack: 0
   attackEnergy: 0
   canAttackEnemyBase: 0
