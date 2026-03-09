@@ -1,17 +1,15 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using MapId = MapManager.MapId;
 
 public class TileManager : MonoBehaviour
 {
     public static TileManager Instance;
 
-    [Header("選択済みタイル関連")]
-    [Tooltip("タイルオブジェクト")]
-    [SerializeField] private GameObject _selectedTile;
-    // public GameObject selectedTile = null;
+    [Header("味方マップ関連")]
+    [SerializeField, Tooltip("セレクト中のタイル")]
+    private GameObject _selectedTile;
     public GameObject selectedTile
     {
         get => _selectedTile;
@@ -22,12 +20,17 @@ public class TileManager : MonoBehaviour
             RefreshComponents();
         }
     }
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("セレクト中のタイルコントローラ")]
     public TileController selectedTileController { get; private set; }
-    // [Tooltip("タイルコントローラ"), SerializeField]
-    // public TileController selectedTileController => selectedTile ? selectedTile.GetComponent<TileController>() : null;
-    [Tooltip("アクセス可否"), SerializeField]
+    [SerializeField, Tooltip("アクセス可否")]
     private bool _canAccessSelectedTileController => selectedTile != null && selectedTileController != null;
+
+    [Header("敵マップ関連")]
+    [SerializeField, Tooltip("ターゲット指定中タイル")]
+    private List<TileController> targetTiles = new List<TileController>();
+
+    [Header("Refs")]
+    private MapManager _mapManager;
 
     private void Awake()
     {
@@ -41,6 +44,11 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+         _mapManager = MapManager.Instance;
+    }
+
     private void RefreshComponents()
     {
         if (selectedTile != null)
@@ -52,6 +60,56 @@ public class TileManager : MonoBehaviour
             selectedTileController = null;
         }
     }
+
+    public void SetTargetTiles(Vector2Int targetPos)
+    {
+        if (!_canAccessSelectedTileController) return;
+
+        if (targetTiles.Count > 0)
+        {
+            ClearTargetTiles();
+        }
+
+        if (!selectedTileController.unitController)
+        {
+            throw new Exception("UnitControllerがありません");
+        }
+
+        List<Vector2Int> tilePositions = selectedTileController.unitController.GetTargetTilePositions(targetPos);
+
+        foreach (Vector2Int pos in tilePositions)
+        {
+            TileController tileController = _mapManager.GetEnemyMapTile(pos);
+
+            if (tileController != null)
+            {
+                // 新しく選択状態にする
+                tileController.isTargeted = true;
+                // 配列（リスト）に保存
+                targetTiles.Add(tileController);
+            }
+        }
+    }
+
+    public void ClearTargetTiles()
+    {
+        foreach (TileController tileController in targetTiles)
+        {
+            if (tileController != null)
+            {
+                tileController.isTargeted = false;
+            }
+        }
+        targetTiles.Clear();
+    }
+
+    // TODO: MapManagerにするか検討する。
+    private TileController GetPlayerTile(Vector2Int pos)
+    {
+        return _mapManager.playerMapData[pos.x, pos.y];
+    }
+
+
 
     // void Update()
     // {

@@ -13,15 +13,15 @@ public class UnitController : MonoBehaviour
         _profile = GetComponent<UnitStats>().profile;
     }
 
-    private List<Vector2Int> GetTargetTiles(Vector2Int targetPos)
+    public List<Vector2Int> GetTargetTilePositions(Vector2Int targetPos)
     {
-        List<Vector2Int> tiles = new List<Vector2Int>();
+        List<Vector2Int> tilePositions = new List<Vector2Int>();
 
         // 単体攻撃ならそのマスだけ
         if (_profile.atkType == AttackType.Single)
         {
-            tiles.Add(targetPos);
-            return tiles;
+            tilePositions.Add(targetPos);
+            return tilePositions;
         }
 
         // 範囲攻撃ならTileRangeUtilを使ってリストを埋める
@@ -29,18 +29,18 @@ public class UnitController : MonoBehaviour
         {
             case AttackType.Square:
                 TileRangeUtil.ForEachSquareRange(targetPos, _profile.atkRange.max, 
-                    (y, x) => tiles.Add(new Vector2Int(x, y)));
+                    (pos) => tilePositions.Add(pos));
                 break;
             case AttackType.Manhattan:
                 TileRangeUtil.ForEachManhattanRange(targetPos, _profile.atkRange.max, 
-                    (y, x) => tiles.Add(new Vector2Int(x, y)));
+                    (pos) => tilePositions.Add(pos));
                 break;
             case AttackType.Cross:
                 // 十字範囲が必要ならここにUtilを追加して呼ぶ感じ！
                 break;
         }
 
-        return tiles;
+        return tilePositions;
     }
 
     // 攻撃を実行（予約）するメソッド
@@ -52,7 +52,7 @@ public class UnitController : MonoBehaviour
         }
 
         // 1. 形状と範囲に基づいて攻撃対象タイルをリストアップ
-        List<Vector2Int> targetTiles = GetTargetTiles(targetPos);
+        List<Vector2Int> targetTiles = GetTargetTilePositions(targetPos);
 
         // 2. 攻撃キューに登録（前回作ったManagerへ）
         // delayは攻撃アニメーションの着弾時間とかを想定

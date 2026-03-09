@@ -1,4 +1,5 @@
 using UnityEngine;
+using TileOwner = TileController.TileOwner;
 
 public class MapInputHandler : MonoBehaviour
 {
@@ -26,12 +27,22 @@ public class MapInputHandler : MonoBehaviour
             // 接触対象がタイルの場合
             if (hitObject.CompareTag("Tile"))
             {
-                // タイルを選択中オブジェクトとして設定
-                _tileManager.SetSelectedTile(hitObject);
-                // ユニットアニメーション
-                UnitAnimation unitAnimation = hit.collider.GetComponentInChildren<UnitAnimation>();
-                if (unitAnimation) {
-                    unitAnimation.PlayOnce(AnimationName.Clicked);
+                TileController tileController = hitObject.GetComponent<TileController>();
+
+                if (tileController.owner == TileOwner.Player)
+                {
+                    // タイルを選択中オブジェクトとして設定
+                    _tileManager.SetSelectedTile(hitObject);
+                    // ユニットアニメーション
+                    UnitAnimation unitAnimation = hit.collider.GetComponentInChildren<UnitAnimation>();
+                    if (unitAnimation) {
+                        unitAnimation.PlayOnce(AnimationName.Clicked);
+                    }
+                }
+
+                if (tileController.owner == TileOwner.Enemy)
+                {
+                    _tileManager.SetTargetTiles(tileController.gridPos);
                 }
             }
 
@@ -53,8 +64,15 @@ public class MapInputHandler : MonoBehaviour
         }
         else
         {
-            // Debug.Log("Ray判定なし");
-            _tileManager.ClearSelectedTile();
+            // TODO: ここでこの処理で良いのか検討
+            if (GameManager.Instance.currentMode == GameManager.Mode.PREPARATION)
+            {
+                // Debug.Log("Ray判定なし");
+                _tileManager.ClearSelectedTile();
+            }
+
+            // // Debug.Log("Ray判定なし");
+            // _tileManager.ClearSelectedTile();
         }
     }
 

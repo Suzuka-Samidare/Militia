@@ -4,19 +4,19 @@ using UnityEngine;
 
 public static class TileRangeUtil
 {
-    public static void ForEachSquareRange(Vector2Int tgt, int range, Action<int, int> action)
+    public static void ForEachSquareRange(Vector2Int tgt, int range, Action<Vector2Int> action)
     {
         for (int y = tgt.y - range; y <= tgt.y + range; y++)
         {
             for (int x = tgt.x - range; x <= tgt.x + range; x++)
             {
                 // 座標を引数として設定して外部からDoSomething
-                action(y, x);
+                action(new Vector2Int(x, y));
             }
         }
     }
 
-    public static void ForEachManhattanRange(Vector2Int tgt, int range, Action<int, int> action)
+    public static void ForEachManhattanRange(Vector2Int tgt, int range, Action<Vector2Int> action)
     {
         for (int y = tgt.y - range; y <= tgt.y + range; y++)
         {
@@ -28,7 +28,7 @@ public static class TileRangeUtil
             for (int x = tgt.x - xRemaining; x <= tgt.x + xRemaining; x++)
             {
                 // 座標を引数として設定して外部からDoSomething
-                action(y, x);
+                action(new Vector2Int(x, y));
             }
         }
     }

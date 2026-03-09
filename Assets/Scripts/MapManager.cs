@@ -97,9 +97,8 @@ public class MapManager : MonoBehaviour
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
                 tileController.globalPos = position;
-                tileController.gridPosX = x;
-                tileController.gridPosY = y;
-                tileController.SetOwner(TileController.TileOwner.Ally);
+                tileController.gridPos = new Vector2Int(x, y);
+                tileController.SetOwner(TileController.TileOwner.Player);
                 // クラスをマップデータとして格納
                 playerMapData[x, y] = tileController;
             }
@@ -124,13 +123,36 @@ public class MapManager : MonoBehaviour
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
                 tileController.globalPos = position;
-                tileController.gridPosX = x;
-                tileController.gridPosY = y;
+                tileController.gridPos = new Vector2Int(x, y);
                 tileController.SetOwner(TileController.TileOwner.Enemy);
                  // クラスをマップデータとして格納
                 enemyMapData[x, y] = tileController;
             }
         }
+    }
+
+    public TileController GetPlayerMapTile(Vector2Int pos)
+    {
+        // 範囲外チェック（ガード句）
+        if (pos.x < 0 || pos.x >= playerMapData.GetLength(0) || 
+            pos.y < 0 || pos.y >= playerMapData.GetLength(1))
+        {
+            Debug.LogWarning($"マップ範囲外へのアクセスを検知: {pos}");
+            return null; // 安全にnullを返す
+        }
+        return playerMapData[pos.x, pos.y];
+    }
+
+    public TileController GetEnemyMapTile(Vector2Int pos)
+    {
+        // 範囲外チェック（ガード句）
+        if (pos.x < 0 || pos.x >= enemyMapData.GetLength(0) || 
+            pos.y < 0 || pos.y >= enemyMapData.GetLength(1))
+        {
+            Debug.LogWarning($"マップ範囲外へのアクセスを検知: {pos}");
+            return null; // 安全にnullを返す
+        }
+        return enemyMapData[pos.x, pos.y];
     }
 
     private void UpdateMapData()

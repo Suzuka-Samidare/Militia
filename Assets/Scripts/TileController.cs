@@ -6,7 +6,7 @@ using MapId = MapManager.MapId;
 
 public class TileController : MonoBehaviour
 {
-    public enum TileOwner { Ally, Enemy }
+    public enum TileOwner { Player, Enemy }
     
     [Header("視認タイマー関連")]
     [Tooltip("視認時間"), SerializeField]
@@ -14,7 +14,7 @@ public class TileController : MonoBehaviour
     private float _timer = 5.0f;
 
     [Header("タイルステータス")]
-    [Tooltip("選択状態の有無")]
+    [SerializeField, Tooltip("選択状態の有無")]
     private bool _isSelected;
     public bool isSelected
     {
@@ -27,6 +27,19 @@ public class TileController : MonoBehaviour
             if (_tileView != null) _tileView.RefreshVisual();
         }
     }
+    [SerializeField, Tooltip("ターゲット状態の有無")]
+    private bool _isTargeted;
+    public bool isTargeted
+    {
+        get => _isTargeted;
+        set
+        {
+            if (_isTargeted == value) return;
+            _isTargeted = value;
+
+            if (_tileView != null) _tileView.RefreshVisual();
+        }
+    }
     [Tooltip("敵から視認可能か")]
     public bool isRevealed = false;
     [Tooltip("タイルの陣地種別")]
@@ -35,10 +48,8 @@ public class TileController : MonoBehaviour
     [Header("タイル座標情報")]
     [Tooltip("ワールド座標")]
     public Vector3 globalPos;
-    [Tooltip("マップ上座標X")]
-    public int gridPosX;
-    [Tooltip("マップ上座標Y")]
-    public int gridPosY;
+    [Tooltip("マップ上座標")]
+    public Vector2Int gridPos;
 
     [Header("ユニット情報")]
     [Tooltip("ユニットオブジェクト"), SerializeField]

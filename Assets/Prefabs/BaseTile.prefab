@@ -120,12 +120,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   revealDuration: 5
-  isSelected: 0
+  _isSelected: 0
+  _isTargeted: 0
   isRevealed: 0
   owner: 0
   globalPos: {x: 0, y: 0, z: 0}
-  gridPosX: 0
-  gridPosY: 0
+  gridPos: {x: 0, y: 0}
   _unitObject: {fileID: 0}
   <unitStats>k__BackingField: {fileID: 0}
   <unitController>k__BackingField: {fileID: 0}
@@ -145,8 +145,6 @@ MonoBehaviour:
   baseColor: {r: 0.654088, g: 0.654088, b: 0.654088, a: 1}
   blinkAllyColor: {r: 0, g: 1, b: 0.13680005, a: 1}
   blinkEnemyColor: {r: 1, g: 0, b: 0, a: 1}
-  invisibleColor: {r: 1, g: 1, b: 1, a: 0}
+  invisibleColor: {r: 1, g: 0, b: 0, a: 0}
   currentBaseColor: {r: 0, g: 0, b: 0, a: 0}
   currentTopColor: {r: 0, g: 0, b: 0, a: 0}
-  blinkStartTime: 0
-  isFadingToReverse: 0

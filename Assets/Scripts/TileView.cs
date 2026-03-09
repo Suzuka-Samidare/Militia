@@ -18,10 +18,7 @@ public class TileView : MonoBehaviour
     private Color currentBaseColor;
     [SerializeField, Tooltip("現在の上面カラー")]
     private Color currentTopColor;
-    [SerializeField, Tooltip("明滅開始時間")]
-    private float blinkStartTime;
-    [SerializeField, Tooltip("明滅の反転")]
-    private bool isFadingToReverse;
+
 
     [Header("Refs")]
     private Renderer objectRenderer;
@@ -55,7 +52,14 @@ public class TileView : MonoBehaviour
     {
         if (_tileController.isSelected)
         {
-            Blink();
+            Blink(blinkAllyColor);
+            return;
+        }
+
+        if (_tileController.isTargeted)
+        {
+            Blink(blinkEnemyColor);
+            return;
         }
     }
 
@@ -72,40 +76,26 @@ public class TileView : MonoBehaviour
         {
             currentBaseColor = baseColor;
             currentTopColor = baseColor;
-        }       
+        }     
         ApplyColors();
     }
 
-    private void Blink()
+    private void Blink(Color blinkColor)
     {
-        float duration = 1.0f;
-        float elapsedTime = (Time.time - blinkStartTime) / duration;
-
-        Color targetColor;
-        // LERPを使ってカラーを補間
-        if (!isFadingToReverse)
+        float time = Mathf.PingPong(Time.time, 1.0f);
+        Color normalColor;
+        if (_tileController.owner == TileController.TileOwner.Enemy && !_tileController.isRevealed)
         {
-            targetColor = Color.Lerp(baseColor, blinkAllyColor, elapsedTime);
+            normalColor = invisibleColor;
         }
         else
         {
-            targetColor = Color.Lerp(blinkAllyColor, baseColor, elapsedTime);
-        }
+            normalColor = baseColor;
+        }  
 
-        // マテリアルカラーを更新
-        // currentBaseColor = baseColor; // ベースカラーも変える必要があればここを有効化する
-        currentTopColor = targetColor;
+        currentTopColor = Color.Lerp(normalColor, blinkColor, time);
 
         ApplyColors();
-
-        // フェードが完了したら、次のフェードの準備
-        if (elapsedTime >= 1.0f)
-        {
-            // 次にフェードする方向を切り替える
-            isFadingToReverse = !isFadingToReverse;
-            // 新しいフェードの開始時間をリセット
-            blinkStartTime = Time.time;
-        }
     }
 
     private void ApplyColors()
