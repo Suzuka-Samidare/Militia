@@ -42,7 +42,8 @@ public class MapInputHandler : MonoBehaviour
 
                 if (tileController.owner == TileOwner.Enemy)
                 {
-                    _tileManager.SetTargetTiles(tileController.gridPos);
+                    _tileManager.SetTargetTile(tileController);
+                    _tileManager.RegisterTargetTiles(tileController.gridPos);
                 }
             }
 

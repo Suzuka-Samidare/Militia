@@ -1,31 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+using Mode = GameManager.Mode;
 
 public class ConeCursorController : MonoBehaviour
 {
     private Renderer objectRenderer;
 
-    void Awake()
+    [Header("Refs")]
+    private TileManager _tileManager;
+    private GameManager _gameManager;
+
+    private void Awake()
     {
         objectRenderer = GetComponent<Renderer>();
     }
 
-    void Update()
+    private void Start()
+    {
+        _gameManager = GameManager.Instance;
+        _tileManager = TileManager.Instance;
+    }
+
+    private void Update()
     {
         UpdatePosition();
         RotateAnimation();
     }
 
     void UpdatePosition()
-    {
-        GameObject selectedTile = TileManager.Instance.selectedTile;
-        if (selectedTile != null)
+    { 
+        if (_tileManager.selectedTileController != null && _gameManager.currentMode == Mode.INIT)
         {
             objectRenderer.enabled = true;
-            Vector3 SelectedTilePos = selectedTile.transform.position;
-            transform.position = new Vector3(SelectedTilePos.x, transform.position.y, SelectedTilePos.z);
+            Vector3 selectedTilePos = _tileManager.selectedTileController.globalPos;
+            transform.position = new Vector3(selectedTilePos.x, transform.position.y, selectedTilePos.z);
+        }
+        else if (_tileManager.selectedTileController != null && _gameManager.currentMode == Mode.PREPARATION)
+        {
+            objectRenderer.enabled = true;
+            Vector3 selectedTilePos = _tileManager.selectedTileController.globalPos;
+            transform.position = new Vector3(selectedTilePos.x, transform.position.y, selectedTilePos.z);
+        }
+        else if (_tileManager.targetTile != null && _gameManager.currentMode == Mode.ATTACK)
+        {
+            objectRenderer.enabled = true;
+            Vector3 targetTilePos = _tileManager.targetTile.globalPos;
+            transform.position = new Vector3(targetTilePos.x, transform.position.y, targetTilePos.z);
         }
         else
         {

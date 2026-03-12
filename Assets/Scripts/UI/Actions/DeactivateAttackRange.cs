@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AttackCancel : MonoBehaviour, IButtonAction
+public class DeactivateAttackRange : MonoBehaviour, IButtonAction
 {
     [Header("Refs")]
     private TileManager _tileManager;
@@ -12,7 +12,7 @@ public class AttackCancel : MonoBehaviour, IButtonAction
 
     public void Execute()
     {
-        _tileManager.ClearTargetTiles();
+        _tileManager.DeactivateTargetFlags();
     }
 }
 

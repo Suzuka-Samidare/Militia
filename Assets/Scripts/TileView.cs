@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Mode = GameManager.Mode;
 
 public class TileView : MonoBehaviour
 {
@@ -27,7 +28,8 @@ public class TileView : MonoBehaviour
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
     private static readonly int TopColorId = Shader.PropertyToID("_TopColor");
 
-    [Header("Dependencies")]
+    [Header("Refs")]
+    private GameManager _gameManager;
     private TileController _tileController;
 
     private void Awake()
@@ -42,7 +44,10 @@ public class TileView : MonoBehaviour
 
     private void Start()
     {
+        _gameManager = GameManager.Instance;
         _tileController = GetComponent<TileController>();
+
+        if (_gameManager == null) throw new Exception("GameManagerがありません。");
         if (_tileController == null) throw new Exception("TileControllerがありません。");
 
         RefreshVisual();
@@ -50,13 +55,19 @@ public class TileView : MonoBehaviour
 
     private void Update()
     {
-        if (_tileController.isSelected)
+        if (_tileController.isSelected && _gameManager.currentMode == Mode.INIT)
         {
             Blink(blinkAllyColor);
             return;
         }
 
-        if (_tileController.isTargeted)
+        if (_tileController.isSelected && _gameManager.currentMode == Mode.PREPARATION)
+        {
+            Blink(blinkAllyColor);
+            return;
+        }
+
+        if (_tileController.isTargeted && _gameManager.currentMode == Mode.ATTACK)
         {
             Blink(blinkEnemyColor);
             return;

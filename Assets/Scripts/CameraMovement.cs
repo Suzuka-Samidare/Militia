@@ -9,6 +9,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private Transform focusPoint; // 回転の中心となるプレイヤーオブジェクト
     [SerializeField] private Camera cam;
     private MapManager _mapManager;
+    private TileManager _tileManager;
 
     [Header("ステータス")]
     [SerializeField] private bool _lastReconMode = false;
@@ -75,8 +76,9 @@ public class CameraMovement : MonoBehaviour
     private void Start()
     {
         _mapManager = MapManager.Instance;
-        if (!_mapManager) {
-            throw new Exception("MapManagerのインスタンスがありません。");
+        _tileManager = TileManager.Instance;
+        if (!_mapManager || !_tileManager) {
+            throw new Exception("インスタンスの取得失敗。");
         }
     }
 
@@ -196,5 +198,15 @@ public class CameraMovement : MonoBehaviour
         // カメラの位置と回転を設定
         transform.rotation = rotation;
         transform.position = position;
+    }
+
+    public void SetPlayerMapLookAt(Vector3 pos)
+    {
+        playerMapLookAt = new Vector3(pos.x, 1f, pos.z);
+    }
+
+    public void SetEnemyMapLookAt(Vector3 pos)
+    {
+        enemyMapLookAt = new Vector3(pos.x, 1f, pos.z);
     }
 }

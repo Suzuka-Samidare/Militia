@@ -8,6 +8,7 @@ public class TileManager : MonoBehaviour
     public static TileManager Instance;
 
     [Header("味方マップ関連")]
+    // TODO: 型をGameObjectではなく、TileControllerに出来ないか検討する。
     [SerializeField, Tooltip("セレクト中のタイル")]
     private GameObject _selectedTile;
     public GameObject selectedTile
@@ -26,6 +27,18 @@ public class TileManager : MonoBehaviour
     private bool _canAccessSelectedTileController => selectedTile != null && selectedTileController != null;
 
     [Header("敵マップ関連")]
+    [SerializeField, Tooltip("ターゲット指定中タイル")]
+    private TileController _targetTile;
+    public TileController targetTile
+    {
+        get => _targetTile;
+        set
+        {
+            if (_targetTile == value) return;
+            _targetTile = value;
+            CameraMovement.Instance.SetEnemyMapLookAt(_targetTile.globalPos);
+        }
+    }
     [SerializeField, Tooltip("ターゲット指定中タイル")]
     private List<TileController> targetTiles = new List<TileController>();
 
@@ -54,6 +67,7 @@ public class TileManager : MonoBehaviour
         if (selectedTile != null)
         {
             selectedTileController = selectedTile.GetComponent<TileController>();
+            CameraMovement.Instance.SetPlayerMapLookAt(selectedTileController.globalPos);
         }
         else
         {
@@ -61,7 +75,16 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    public void SetTargetTiles(Vector2Int targetPos)
+    // public void SetTargetTile(Vector2Int pos)
+    // {
+    //     targetTile =  _mapManager.enemyMapData[pos.x, pos.y];
+    // }
+    public void SetTargetTile(TileController tileController)
+    {
+        targetTile = tileController;
+    }
+
+    public void RegisterTargetTiles(Vector2Int targetPos)
     {
         if (!_canAccessSelectedTileController) return;
 
@@ -93,6 +116,23 @@ public class TileManager : MonoBehaviour
 
     public void ClearTargetTiles()
     {
+        DeactivateTargetFlags();
+        targetTiles.Clear();
+    }
+
+    public void ActivateTargetFlags()
+    {
+        foreach (TileController tileController in targetTiles)
+        {
+            if (tileController != null)
+            {
+                tileController.isTargeted = true;
+            }
+        }
+    } 
+
+    public void DeactivateTargetFlags()
+    {
         foreach (TileController tileController in targetTiles)
         {
             if (tileController != null)
@@ -100,15 +140,13 @@ public class TileManager : MonoBehaviour
                 tileController.isTargeted = false;
             }
         }
-        targetTiles.Clear();
     }
 
-    // TODO: MapManagerにするか検討する。
-    private TileController GetPlayerTile(Vector2Int pos)
-    {
-        return _mapManager.playerMapData[pos.x, pos.y];
-    }
-
+    // // TODO: MapManagerにするか検討する。
+    // public TileController GetPlayerTile(Vector2Int pos)
+    // {
+    //     return _mapManager.playerMapData[pos.x, pos.y];
+    // }
 
 
     // void Update()
@@ -153,18 +191,6 @@ public class TileManager : MonoBehaviour
     //     {
     //         // Debug.Log("Ray判定なし");
     //         ClearSelectedTile();
-    //     }
-    // }
-
-    // private void CheckSelectedTile()
-    // {
-    //     Vector3 tilePosition = gameObject.transform.position;
-    //     Vector3 selectedTilePosition = TileManager.Instance.selectedTile.transform.position;
-
-    //     if (selectedTilePosition != tilePosition)
-    //     {
-    //         Debug.LogError("選択状態のタイルと位置データが一致しません。");
-    //         return;
     //     }
     // }
 
