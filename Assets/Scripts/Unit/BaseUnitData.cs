@@ -25,10 +25,10 @@ public struct UnitProfile
     [Tooltip("最大耐久値")] public float maxHp;
     [Tooltip("攻撃の可否")] public bool canAttack;
     [Tooltip("攻撃力")] public float power;
-    [Tooltip("消費エネルギー")] public int energy;
+    [Tooltip("攻撃消費エネルギー")] public int energy;
+    [Tooltip("攻撃までの時間")] public float atkDelay;
     [Tooltip("攻撃の種類")] public AttackType atkType;
     [Tooltip("範囲攻撃の距離")] public AttackRange atkRange;
-    // [Tooltip("範囲攻撃の可否")] public bool isAreaAttack;
     // [Tooltip("範囲攻撃の距離")] public int areaAttackRange;
 
 }

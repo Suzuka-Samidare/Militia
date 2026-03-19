@@ -40,7 +40,7 @@ public class TileManager : MonoBehaviour
         }
     }
     [SerializeField, Tooltip("ターゲット指定中タイル")]
-    private List<TileController> targetTiles = new List<TileController>();
+    public List<TileController> targetTiles { get; private set; } = new List<TileController>();
 
     [Header("Refs")]
     private MapManager _mapManager;

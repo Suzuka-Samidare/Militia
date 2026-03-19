@@ -13,7 +13,7 @@ public class AttackSubmitCondition : MonoBehaviour, IButtonCondition
 
     public bool CanInteract()
     {
-         if ( _tileManager.selectedTile == null) return false;
+         if ( _tileManager.targetTile == null) return false;
 
          return true;
     }
