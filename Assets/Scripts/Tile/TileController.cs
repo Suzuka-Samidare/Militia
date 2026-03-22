@@ -77,27 +77,17 @@ public class TileController : MonoBehaviour
 
     [Header("Refs")]
     private TileView _tileView;
-    private MapManager _mapManager;
+    public MapManager mapManager;
 
     void Awake()
     {
         _tileView = GetComponent<TileView>();
     }
 
-    void Start()
-    {
-        ResolveDependencies();
-    }
-
     void Update()
     {
         // UpdateTileVisual();
         UpdateRevealTimer();
-    }
-
-    private void ResolveDependencies()
-    {
-        _mapManager = MapManager.Instance;
     }
 
     private void RefreshComponents()
@@ -156,7 +146,7 @@ public class TileController : MonoBehaviour
         Vector3 TempUnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
         unitObject = Instantiate(unitData.callingPrefab, TempUnitPosition, Quaternion.identity, gameObject.transform);
         // マップデータの更新を促す
-        _mapManager.isDirty = true;
+        mapManager.isDirty = true;
 
         // 呼び出し完了時の処理
         Action onCompleteCallback = async () =>
@@ -184,7 +174,7 @@ public class TileController : MonoBehaviour
         unitStats.Initialize(unitData.profile);
 
         // マップデータの更新を促す
-        _mapManager.isDirty = true;
+        mapManager.isDirty = true;
 
         Debug.Log("本オブジェクト配置完了");
     }
@@ -196,6 +186,6 @@ public class TileController : MonoBehaviour
             await Task.Yield();
         }
         // マップデータの更新を促す
-        _mapManager.isDirty = true;
+        mapManager.isDirty = true;
     }
 }

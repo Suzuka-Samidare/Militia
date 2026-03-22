@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using MapId = MapManager.MapId;
 
-public class TileManager : MonoBehaviour
+public class TileManager : MonoBehaviour, IInitializable
 {
     public static TileManager Instance;
 
@@ -57,9 +58,15 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void ResolveDependencies()
     {
-         _mapManager = MapManager.Instance;
+        _mapManager = MapManager.Instance;
+    }
+
+    public Task Initialize()
+    {
+         ResolveDependencies();
+         return Task.CompletedTask;
     }
 
     private void RefreshComponents()

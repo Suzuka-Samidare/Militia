@@ -48,11 +48,11 @@ public class MapInputHandler : MonoBehaviour
             }
 
             // 接触対象がユニットの場合
-            if (hitObject.CompareTag("Unit"))
-            {
-                // 親要素のタイルを選択中オブジェクトとして設定
-                _tileManager.SetSelectedTile(hitObject.transform.parent.gameObject);
-            }
+            // if (hitObject.CompareTag("Unit"))
+            // {
+            //     // 親要素のタイルを選択中オブジェクトとして設定
+            //     _tileManager.SetSelectedTile(hitObject.transform.parent.gameObject);
+            // }
 
             // 接触対象がタイルまたはユニットの場合
             if (hitObject.CompareTag("Tile") || hitObject.CompareTag("Unit"))

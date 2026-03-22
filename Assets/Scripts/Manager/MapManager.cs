@@ -6,7 +6,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class MapManager : MonoBehaviour
+public class MapManager : MonoBehaviour, IInitializable
 {
     public static MapManager Instance;
 
@@ -43,14 +43,12 @@ public class MapManager : MonoBehaviour
     }
 
     [Header("集計データ")]
-    [Tooltip("本部残数"), SerializeField] public int AllyHqCount;
+    [Tooltip("本部残数"), SerializeField] public int PlayerHqCount;
     
     [Header("OTHER")]
     [Tooltip("本部最大設置数")] public int maxHqCount = 2; // TODO: マップと関係ない気がするので検討
 
     public Action<int> OnHqCountChanged;
-
-    private TileManager _tileManager;
 
     void Awake()
     {
@@ -62,13 +60,13 @@ public class MapManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        GenerateAllyMapData();
-        GenerateEnemyMapData();
     }
 
-    void Start()
+    public Task Initialize()
     {
-        _tileManager = TileManager.Instance;
+        GenerateAllyMapData();
+        GenerateEnemyMapData();
+        return Task.CompletedTask;
     }
 
     void Update()
@@ -96,6 +94,7 @@ public class MapManager : MonoBehaviour
                 tile.name = $"AllyTile_{x}_{y}";
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
+                tileController.mapManager = this;
                 tileController.globalPos = position;
                 tileController.gridPos = new Vector2Int(x, y);
                 tileController.SetOwner(TileController.TileOwner.Player);
@@ -122,6 +121,7 @@ public class MapManager : MonoBehaviour
                 tile.name = $"EnemyTile_{x}_{y}";
                 // 各フィールド値の更新
                 TileController tileController = tile.GetComponent<TileController>();
+                tileController.mapManager = this;
                 tileController.globalPos = position;
                 tileController.gridPos = new Vector2Int(x, y);
                 tileController.SetOwner(TileController.TileOwner.Enemy);
@@ -161,7 +161,7 @@ public class MapManager : MonoBehaviour
         isDirty = false;
 
         // INITフェーズのみ実行
-        OnHqCountChanged?.Invoke(AllyHqCount);
+        OnHqCountChanged?.Invoke(PlayerHqCount);
     }
 
     // private void UpdateMapText()
@@ -206,6 +206,6 @@ public class MapManager : MonoBehaviour
 
         if (count > maxHqCount) throw new Exception("Headquarters unit limit exceeded.");
         
-        AllyHqCount = count;
+        PlayerHqCount = count;
     }
 }

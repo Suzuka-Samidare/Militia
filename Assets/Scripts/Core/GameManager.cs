@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.EditorTools;
-using UnityEditor.Overlays;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IInitializable
 {
     public static GameManager Instance { get; private set; }
 
@@ -27,30 +23,18 @@ public class GameManager : MonoBehaviour
     // public bool isMainViewEnabled = true;
 
     // 準備フェーズ共通メッセージ
-    private string initMessage => "Please place the remaining " + (_mapManager.maxHqCount - _mapManager.AllyHqCount) + " headquarters units.";
+    private string initMessage => "Please place the remaining " + (_mapManager.maxHqCount - _mapManager.PlayerHqCount) + " headquarters units.";
 
-    // 依存関係
+    [Header("Refs")]
     private MapManager _mapManager;
     private UIManager _uiManager;
     private DialogController _dialogController;
     private InfomationController _infomationController;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-    }
-
-    void Start()
-    {
-        // 依存関係処理
-        ResolveDependencies();
-        // INITフェーズ時に条件満たした際に実行する処理の登録
-        _mapManager.OnHqCountChanged += ValidateAndShowDialog;
-        // インフォメーションの表示
-        _infomationController.Open(initMessage);
-        // メニューの初期化
-        _uiManager.SwitchMenu(currentMode);
     }
 
     private void ResolveDependencies()
@@ -60,10 +44,24 @@ public class GameManager : MonoBehaviour
         _dialogController = DialogController.Instance;
         _infomationController = InfomationController.Instance;
     }
-
-    private void ValidateAndShowDialog(int allyHqCount)
+    
+    public Task Initialize()
     {
-        if (allyHqCount < _mapManager.maxHqCount)
+        // 依存関係処理
+        ResolveDependencies();
+        // INITフェーズ時に条件満たした際に実行する処理の登録
+        _mapManager.OnHqCountChanged += ValidateAndShowDialog;
+        // インフォメーションの表示
+        _infomationController.Open(initMessage);
+        // メニューの初期化
+        _uiManager.SwitchMenu(currentMode);
+
+        return Task.CompletedTask;
+    }
+
+    private void ValidateAndShowDialog(int playerHqCount)
+    {
+        if (playerHqCount < _mapManager.maxHqCount)
         {
             bool isActiveInfo = _infomationController.gameObject.activeSelf;
             if (isActiveInfo)
@@ -76,7 +74,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (allyHqCount == _mapManager.maxHqCount)
+        if (playerHqCount == _mapManager.maxHqCount)
         {
             _infomationController.Close();
             _dialogController.Open(

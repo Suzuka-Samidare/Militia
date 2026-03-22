@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class AttackManager : MonoBehaviour
@@ -39,9 +39,15 @@ public class AttackManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void ResolveDependencies()
     {
         _tileManager = TileManager.Instance;
+    }
+
+    public Task Initialize()
+    {
+        ResolveDependencies();
+        return Task.CompletedTask;
     }
 
     private void Update()
