@@ -78,7 +78,11 @@ public class UnitController : MonoBehaviour
 
     private void OnDamage() => Debug.Log("痛いっ！エフェクト出すよ！");
     private void OnHeal() => Debug.Log("回復！キラキラさせるよ！");
-    private void Faint() => Debug.Log("死亡演出スタート！");
+    private void Faint()
+    {
+        TileController tileController = GetComponentInParent<TileController>();
+        tileController.DestroyUnit();
+    }
 
     public void ApplyDamage(float damage) => UpdateHp(-damage);
     
