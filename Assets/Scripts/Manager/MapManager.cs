@@ -1,8 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using System.Threading.Tasks;
 
@@ -44,6 +40,7 @@ public class MapManager : MonoBehaviour, IInitializable
 
     [Header("集計データ")]
     [Tooltip("本部残数"), SerializeField] public int PlayerHqCount;
+    [Tooltip("本部残数"), SerializeField] public int EnemyHqCount;
     
     [Header("OTHER")]
     [Tooltip("本部最大設置数")] public int maxHqCount = 2; // TODO: マップと関係ない気がするので検討
@@ -157,7 +154,8 @@ public class MapManager : MonoBehaviour, IInitializable
 
     private void UpdateMapData()
     {
-        GetPlayerHeadquartersCount();
+        PlayerHqCount = CountHeadquarters(playerMapData);
+        EnemyHqCount = CountHeadquarters(enemyMapData);
         isDirty = false;
 
         // INITフェーズのみ実行
@@ -189,23 +187,28 @@ public class MapManager : MonoBehaviour, IInitializable
     //     Debug.Log(resultText);
     // }
 
-    public void GetPlayerHeadquartersCount()
+    public int CountHeadquarters(TileController[,] mapData)
     {
         int count = 0;
+        // mapDataのサイズを動的に取得すれば、20x20以外にも対応できて超便利！
+        int mapWidth = mapData.GetLength(0);
+        int mapHeight = mapData.GetLength(1);
+
         for (int y = 0; y < mapHeight; y++)
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                UnitStats unitStats = playerMapData[x, y].unitStats;
-                if (unitStats)
+                UnitStats unitStats = mapData[x, y].unitStats;
+                // nullチェックをスマートに書くのがギャル流！
+                if (unitStats != null && unitStats.profile.id == MapId.Headquarter)
                 {
-                    if (unitStats.profile.id == MapId.Headquarter) count++;
+                    count++;
                 }
             }
         }
 
         if (count > maxHqCount) throw new Exception("Headquarters unit limit exceeded.");
         
-        PlayerHqCount = count;
+        return count;
     }
 }

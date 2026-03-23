@@ -43,7 +43,7 @@ public class EnemyManager : MonoBehaviour, IInitializable
         int cols = _mapManager.enemyMapData.GetLength(1);
         
         // 無限ループ防止（全要素数より多く取ろうとした場合）
-        int maxItems = Mathf.Min(3, rows * cols);
+        int maxItems = Mathf.Min(_mapManager.maxHqCount, rows * cols);
 
         while (targetTiles.Count < maxItems)
         {
