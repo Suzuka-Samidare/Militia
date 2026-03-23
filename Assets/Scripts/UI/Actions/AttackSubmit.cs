@@ -15,7 +15,6 @@ public class AttackSubmit : MonoBehaviour, IButtonAction
 
     public void Execute()
     {
-        Debug.Log("Attack");
         _attackManager.EnqueueAttack();
     }
 }

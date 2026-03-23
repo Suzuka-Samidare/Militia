@@ -47,7 +47,6 @@ public class EnemyManager : MonoBehaviour, IInitializable
 
         while (targetTiles.Count < maxItems)
         {
-            Debug.Log(targetTiles.Count);
             int randY = Random.Range(0, rows);
             int randX = Random.Range(0, cols);
             TileController target = _mapManager.enemyMapData[randY, randX];

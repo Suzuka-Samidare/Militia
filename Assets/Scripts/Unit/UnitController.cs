@@ -50,35 +50,6 @@ public class UnitController : MonoBehaviour
         return tilePositions;
     }
 
-    // 攻撃を実行（予約）するメソッド
-    // public void EnqueueAttackRequest(Vector2Int targetPos)
-    // {
-    //     if (!_profile.canAttack) {
-    //         Debug.Log("攻撃可能ユニットではありません");
-    //         return;
-    //     }
-
-    //     // 1. 形状と範囲に基づいて攻撃対象タイルをリストアップ
-    //     List<Vector2Int> tilePositions = GetTargetTilePositions(targetPos);
-    //     List<TileController> tileControllers = new List<TileController>();
-
-    //     foreach (Vector2Int pos in tilePositions)
-    //     {
-    //         TileController tileController = _mapManager.GetEnemyMapTile(pos);
-    //         if (tileController != null)
-    //         {
-    //             tileControllers.Add(tileController);
-    //         }
-    //     }
-
-    //     // 2. 攻撃キューに登録（前回作ったManagerへ）
-    //     // delayは攻撃アニメーションの着弾時間とかを想定
-    //     AttackCommand newAttack = new AttackCommand(tileControllers, _profile.power, 3.0f);
-    //     _attackManager.attackQueue.Enqueue(newAttack);
-
-    //     Debug.Log($"{_profile.unitName} が {_profile.atkType} 範囲で攻撃予約！ ✨");
-    // }
-
     private void UpdateHp(float amount)
     {
         // 1. HPの増減計算
@@ -134,9 +105,32 @@ public class UnitController : MonoBehaviour
     //     }
     // }
 
-    // private void ApplyDamage(int centerY, int centerX, float damage)
+    // 攻撃を実行（予約）するメソッド
+    // public void EnqueueAttackRequest(Vector2Int targetPos)
     // {
-    //     // ここでタイル位置にいる敵を検知してダメージを与える処理
-    //     Debug.Log($"({centerX}, {centerY}) の敵に {damage} ダメージ！");
+    //     if (!_profile.canAttack) {
+    //         Debug.Log("攻撃可能ユニットではありません");
+    //         return;
+    //     }
+
+    //     // 1. 形状と範囲に基づいて攻撃対象タイルをリストアップ
+    //     List<Vector2Int> tilePositions = GetTargetTilePositions(targetPos);
+    //     List<TileController> tileControllers = new List<TileController>();
+
+    //     foreach (Vector2Int pos in tilePositions)
+    //     {
+    //         TileController tileController = _mapManager.GetEnemyMapTile(pos);
+    //         if (tileController != null)
+    //         {
+    //             tileControllers.Add(tileController);
+    //         }
+    //     }
+
+    //     // 2. 攻撃キューに登録（前回作ったManagerへ）
+    //     // delayは攻撃アニメーションの着弾時間とかを想定
+    //     AttackCommand newAttack = new AttackCommand(tileControllers, _profile.power, 3.0f);
+    //     _attackManager.attackQueue.Enqueue(newAttack);
+
+    //     Debug.Log($"{_profile.unitName} が {_profile.atkType} 範囲で攻撃予約！ ✨");
     // }
 }

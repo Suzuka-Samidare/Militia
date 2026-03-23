@@ -17,8 +17,9 @@ MonoBehaviour:
     unitName: Gecko
     maxHp: 50
     canAttack: 1
-    power: 0
+    power: 7
     energy: 0
+    atkDelay: 3
     atkType: 0
     atkRange:
       min: 0
@@ -30,6 +31,7 @@ MonoBehaviour:
     canAttack: 0
     power: 0
     energy: 0
+    atkDelay: 0
     atkType: 0
     atkRange:
       min: 0
