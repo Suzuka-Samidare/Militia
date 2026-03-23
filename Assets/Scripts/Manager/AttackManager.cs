@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class AttackManager : MonoBehaviour
+public class AttackManager : MonoBehaviour, IInitializable
 {
     public static AttackManager Instance { get; private set; }
 
