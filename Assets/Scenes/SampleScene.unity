@@ -3976,7 +3976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89a3764357988de46bc0fce154b64173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMode: 0
+  currentState: 0
   IsLoading: 0
 --- !u!1 &832575517
 GameObject:
@@ -5830,7 +5830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1feeaea721ed55a4c8d939ca126bb678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextMode: 1
+  _nextState: 1
 --- !u!114 &1019155751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7112,7 +7112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1feeaea721ed55a4c8d939ca126bb678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextMode: 2
+  _nextState: 2
 --- !u!114 &1314780380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8383,7 +8383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1feeaea721ed55a4c8d939ca126bb678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextMode: 1
+  _nextState: 1
 --- !u!114 &1586720357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10022,7 +10022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initMenu: {fileID: 1376151482}
   preparationMenu: {fileID: 595355816}
-  attackMenu: {fileID: 2081599334}
+  commandMenu: {fileID: 2081599334}
 --- !u!4 &1975244718
 Transform:
   m_ObjectHideFlags: 0
@@ -10269,7 +10269,7 @@ GameObject:
   - component: {fileID: 2081599335}
   - component: {fileID: 2081599334}
   m_Layer: 5
-  m_Name: AttackMenu
+  m_Name: CommandMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

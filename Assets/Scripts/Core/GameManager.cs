@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour, IInitializable
     {
         INIT,
         PREPARATION,
+        COMMAND,
         ATTACK,
         GAMEOVER,
     };

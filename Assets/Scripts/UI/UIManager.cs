@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     // インスペクターから各パネルを登録
     [SerializeField] private VisibilityController initMenu;
     [SerializeField] private VisibilityController preparationMenu;
-    [SerializeField] private VisibilityController attackMenu;
+    [SerializeField] private VisibilityController commandMenu;
 
     private void Awake()
     {
@@ -22,6 +22,6 @@ public class UIManager : MonoBehaviour
     {
         initMenu.SetVisible(state == State.INIT);
         preparationMenu.SetVisible(state == State.PREPARATION);
-        attackMenu.SetVisible(state == State.ATTACK);
+        commandMenu.SetVisible(state == State.COMMAND);
     }
 }

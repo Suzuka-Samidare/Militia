@@ -67,7 +67,7 @@ public class TileView : MonoBehaviour
             return;
         }
 
-        if (_tileController.isTargeted && _gameManager.currentState == State.ATTACK)
+        if (_tileController.isTargeted && _gameManager.currentState == State.COMMAND)
         {
             Blink(blinkEnemyColor);
             return;
