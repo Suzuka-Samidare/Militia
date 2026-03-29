@@ -1,5 +1,5 @@
 using UnityEngine;
-using Mode = GameManager.Mode;
+using State = GameManager.State;
 
 public class ConeCursorController : MonoBehaviour
 {
@@ -28,19 +28,19 @@ public class ConeCursorController : MonoBehaviour
 
     void UpdatePosition()
     { 
-        if (_tileManager.selectedTileController != null && _gameManager.currentMode == Mode.INIT)
+        if (_tileManager.selectedTileController != null && _gameManager.currentState == State.INIT)
         {
             objectRenderer.enabled = true;
             Vector3 selectedTilePos = _tileManager.selectedTileController.globalPos;
             transform.position = new Vector3(selectedTilePos.x, transform.position.y, selectedTilePos.z);
         }
-        else if (_tileManager.selectedTileController != null && _gameManager.currentMode == Mode.PREPARATION)
+        else if (_tileManager.selectedTileController != null && _gameManager.currentState == State.PREPARATION)
         {
             objectRenderer.enabled = true;
             Vector3 selectedTilePos = _tileManager.selectedTileController.globalPos;
             transform.position = new Vector3(selectedTilePos.x, transform.position.y, selectedTilePos.z);
         }
-        else if (_tileManager.targetTile != null && _gameManager.currentMode == Mode.ATTACK)
+        else if (_tileManager.targetTile != null && _gameManager.currentState == State.ATTACK)
         {
             objectRenderer.enabled = true;
             Vector3 targetTilePos = _tileManager.targetTile.globalPos;

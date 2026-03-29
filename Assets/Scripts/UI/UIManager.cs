@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mode = GameManager.Mode;
+using State = GameManager.State;
 
 public class UIManager : MonoBehaviour
 {
@@ -18,10 +18,10 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public void SwitchMenu(Mode mode)
+    public void SwitchMenu(State state)
     {
-        initMenu.SetVisible(mode == Mode.INIT);
-        preparationMenu.SetVisible(mode == Mode.PREPARATION);
-        attackMenu.SetVisible(mode == Mode.ATTACK);
+        initMenu.SetVisible(state == State.INIT);
+        preparationMenu.SetVisible(state == State.PREPARATION);
+        attackMenu.SetVisible(state == State.ATTACK);
     }
 }

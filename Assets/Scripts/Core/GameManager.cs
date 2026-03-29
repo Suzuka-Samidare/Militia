@@ -5,9 +5,9 @@ public class GameManager : MonoBehaviour, IInitializable
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("モード管理")]
-    public Mode currentMode = Mode.INIT;
-    public enum Mode
+    [Header("ステート管理")]
+    public State currentState = State.INIT;
+    public enum State
     {
         INIT,
         PREPARATION,
@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour, IInitializable
         // インフォメーションの表示
         _infomationController.Open(initMessage);
         // メニューの初期化
-        _uiManager.SwitchMenu(currentMode);
+        _uiManager.SwitchMenu(currentState);
 
         return Task.CompletedTask;
     }
@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour, IInitializable
                 onConfirm: () =>
                 {
                     _mapManager.OnHqCountChanged -= ValidateAndShowDialog;
-                    SwitchMode(Mode.PREPARATION);
+                    SwitchState(State.PREPARATION);
                     PlayerManager.Instance.StartRegen();
                 },
                 onCancel: () =>
@@ -110,9 +110,9 @@ public class GameManager : MonoBehaviour, IInitializable
         }
     }
 
-    public void SwitchMode(Mode mode)
+    public void SwitchState(State state)
     {
-        currentMode = mode;
-        _uiManager.SwitchMenu(mode);
+        currentState = state;
+        _uiManager.SwitchMenu(state);
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Mode = GameManager.Mode;
+using State = GameManager.State;
 
 public class TileView : MonoBehaviour
 {
@@ -55,19 +55,19 @@ public class TileView : MonoBehaviour
 
     private void Update()
     {
-        if (_tileController.isSelected && _gameManager.currentMode == Mode.INIT)
+        if (_tileController.isSelected && _gameManager.currentState == State.INIT)
         {
             Blink(blinkAllyColor);
             return;
         }
 
-        if (_tileController.isSelected && _gameManager.currentMode == Mode.PREPARATION)
+        if (_tileController.isSelected && _gameManager.currentState == State.PREPARATION)
         {
             Blink(blinkAllyColor);
             return;
         }
 
-        if (_tileController.isTargeted && _gameManager.currentMode == Mode.ATTACK)
+        if (_tileController.isTargeted && _gameManager.currentState == State.ATTACK)
         {
             Blink(blinkEnemyColor);
             return;
