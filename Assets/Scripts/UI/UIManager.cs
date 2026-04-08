@@ -7,7 +7,11 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    [Header("MainView")]
+    [SerializeField] private VisibilityController Timeline;
+
     // インスペクターから各パネルを登録
+    [Header("Sidebar")]
     [SerializeField] private VisibilityController initMenu;
     [SerializeField] private VisibilityController preparationMenu;
     [SerializeField] private VisibilityController commandMenu;
@@ -23,5 +27,6 @@ public class UIManager : MonoBehaviour
         initMenu.SetVisible(state == State.INIT);
         preparationMenu.SetVisible(state == State.PREPARATION);
         commandMenu.SetVisible(state == State.COMMAND);
+        Timeline.SetVisible(state != State.INIT);
     }
 }

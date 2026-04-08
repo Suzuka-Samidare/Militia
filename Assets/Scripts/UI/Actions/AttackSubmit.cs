@@ -15,6 +15,6 @@ public class AttackSubmit : MonoBehaviour, IButtonAction
 
     public void Execute()
     {
-        _attackManager.EnqueueAttack();
+        _attackManager.RegisterAttack();
     }
 }

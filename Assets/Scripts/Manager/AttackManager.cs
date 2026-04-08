@@ -1,31 +1,38 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using TileOwner = TileController.TileOwner;
 
 public class AttackManager : MonoBehaviour, IInitializable
 {
     public static AttackManager Instance { get; private set; }
 
     // 攻撃の情報をまとめたクラス
+    [System.Serializable]
     public class AttackCommand
     {
+        public TileOwner Owner;
+        public string UnitName;
         public List<TileController> Targets;    // 攻撃対象の中心タイル
         public float Damage;        // ダメージ量
-        public float RemainingTime; // 実行までの残り時間
+        public float time; // 経過時間 + 適用必要時間
 
-        public AttackCommand(List<TileController> tiles, float damage, float delay)
+        public AttackCommand(TileOwner owner, string unitName, List<TileController> tiles, float damage, float delay)
         {
+            Owner = owner;
+            UnitName = unitName;
             Targets = tiles;
             Damage = damage;
-            RemainingTime = delay;
+            time = delay;
         }
     }
 
-    [SerializeField, Tooltip("攻撃待ちのキュー（FIFO）")]
-    public Queue<AttackCommand> attackQueue { get; private set; } = new Queue<AttackCommand>();
+    [SerializeField, Tooltip("攻撃タイムライン")]
+    private List<AttackCommand> timeline = new List<AttackCommand>();
 
     [Header("Refs")]
     private TileManager _tileManager;
+    private TimelinePresenter _timelinePresenter;
 
     private void Awake()
     {
@@ -42,29 +49,13 @@ public class AttackManager : MonoBehaviour, IInitializable
     private void ResolveDependencies()
     {
         _tileManager = TileManager.Instance;
+        _timelinePresenter = TimelinePresenter.Instance;
     }
 
     public Task Initialize()
     {
         ResolveDependencies();
         return Task.CompletedTask;
-    }
-
-    private void Update()
-    {
-        // キュー内の全攻撃のタイマーを更新（並行してカウントダウン）
-        foreach (var attack in attackQueue)
-        {
-            attack.RemainingTime -= Time.deltaTime;
-        }
-
-        // キューが空じゃなくて、先頭の攻撃のタイマーが終了しているかチェック
-        while (attackQueue.Count > 0 && attackQueue.Peek().RemainingTime <= 0)
-        {
-            // 先頭を取り出して攻撃実行！
-            AttackCommand readyAttack = attackQueue.Dequeue();
-            ExecuteAttack(readyAttack);
-        }
     }
 
     /// <summary>
@@ -94,17 +85,21 @@ public class AttackManager : MonoBehaviour, IInitializable
     /// <summary>
     /// 攻撃を予約する（外部から呼ぶ）
     /// </summary>
-    public void EnqueueAttack()
+    public void RegisterAttack()
     {
         UnitProfile profile = _tileManager.selectedTileController.unitStats.profile;
         // 攻撃内容を作成してキューに追加
         AttackCommand newAttack = new AttackCommand(
-            _tileManager.targetTiles,
+            _tileManager.selectedTileController.owner,
+            profile.unitName,
+            new List<TileController>(_tileManager.targetTiles),
             profile.power,
             profile.atkDelay
         );
-        attackQueue.Enqueue(newAttack);
+        timeline.Add(newAttack);
+        timeline.Sort((a, b) => b.time.CompareTo(a.time));
+        _timelinePresenter.UpdateTimeline(timeline);
         
-        Debug.Log($"攻撃予約完了！実行まであと {profile.atkDelay}秒...");
+        Debug.Log($"攻撃予約完了！");
     }
 }
