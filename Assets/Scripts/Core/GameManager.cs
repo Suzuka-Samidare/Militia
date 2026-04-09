@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour, IInitializable
 {
     public static GameManager Instance { get; private set; }
 
-    [Header("ステート管理")]
+    [Header("進行管理")]
     public State currentState = State.INIT;
     public enum State
     {
@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour, IInitializable
         ATTACK,
         GAMEOVER,
     };
+    public int Phase;
+    [Tooltip("経過時間タイマー")]
+    public Timer _elapsedTimer = new Timer();
 
     [Header("操作管理")]
     [Tooltip("ローディング状態")]
@@ -60,6 +63,15 @@ public class GameManager : MonoBehaviour, IInitializable
         return Task.CompletedTask;
     }
 
+    private void Update()
+    {
+        if (_elapsedTimer.IsRunning)
+        {
+            _elapsedTimer.UpdateTick(Time.deltaTime);
+            _uiManager.UpdateElapsedTime(_elapsedTimer.RemainingTimeStr);
+        }
+    }
+
     private void ValidateAndShowDialog(int playerHqCount)
     {
         if (playerHqCount < _mapManager.maxHqCount)
@@ -86,6 +98,7 @@ public class GameManager : MonoBehaviour, IInitializable
                     _mapManager.OnHqCountChanged -= ValidateAndShowDialog;
                     SwitchState(State.PREPARATION);
                     PlayerManager.Instance.StartRegen();
+                    _elapsedTimer.Start(300.0f);
                 },
                 onCancel: () =>
                 {
