@@ -4,7 +4,7 @@ using UnityEngine;
 public class CallingUnitController : MonoBehaviour
 {
     [Header("タイマー")]
-    private UnitCallTimer _timer = new UnitCallTimer();
+    private Timer _timer = new Timer();
 
     void Update()
     {

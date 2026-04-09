@@ -14,7 +14,7 @@ public class Timer
     public string RemainingTimeStr => FormatTime(RemainingTime);
 
     // ⏰ 時間が来た時に実行するイベント（コールバック）
-    public event Action OnTimeUp;
+    public event Action OnTimerComplete;
 
     public void Start() => IsRunning = true;
     public void Start(float limitTime)
@@ -42,7 +42,7 @@ public class Timer
             IsRunning = false;        // 一旦止める（ループさせたいならここを調整）
             
             // イベントを発火！(?をつけると、登録者がいない時のエラーを防げるよ)
-            OnTimeUp?.Invoke();
+            OnTimerComplete?.Invoke();
         }
     }
 
