@@ -10,6 +10,7 @@ public class UnitController : MonoBehaviour
     private UnitProfile _profile;
     private AttackManager _attackManager;
     private MapManager _mapManager;
+    private FloatingTextPresenter _floatingTextPresenter;
 
 
     private void Start()
@@ -18,6 +19,7 @@ public class UnitController : MonoBehaviour
         _profile = GetComponent<UnitStats>().profile;
         _attackManager = AttackManager.Instance;
         _mapManager = MapManager.Instance;
+        _floatingTextPresenter = FloatingTextPresenter.Instance;
     }
 
     public List<Vector2Int> GetTargetTilePositions(Vector2Int targetPos)
@@ -66,14 +68,19 @@ public class UnitController : MonoBehaviour
         {
             Faint();
         }
-        else if (amount > 0)
-        {
-            OnHeal();
-        }
-        else
-        {
-            OnDamage();
-        }
+        // else if (amount > 0)
+        // {
+        //     OnHeal();
+        // }
+        // else
+        // {
+        //     OnDamage();
+        // }
+    }
+
+    public void ApplyDamage(float damage) {
+        UpdateHp(-damage);
+        _floatingTextPresenter.SpawnDamage(gameObject.transform, damage);
     }
 
     private void OnDamage() => Debug.Log("痛いっ！エフェクト出すよ！");
@@ -83,8 +90,6 @@ public class UnitController : MonoBehaviour
         TileController tileController = GetComponentInParent<TileController>();
         tileController.DestroyUnit();
     }
-
-    public void ApplyDamage(float damage) => UpdateHp(-damage);
     
     // public void ApplyHeal(float healAmount) => UpdateHp(healAmount);
 

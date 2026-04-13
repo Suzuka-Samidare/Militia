@@ -46,6 +46,14 @@ public class AttackManager : MonoBehaviour, IInitializable
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D) && timeline.Count > 0)
+        {
+            ExecuteAttack(timeline[0]);
+        }
+    }
+
     private void ResolveDependencies()
     {
         _tileManager = TileManager.Instance;

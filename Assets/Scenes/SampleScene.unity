@@ -2194,12 +2194,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   focusPoint: {fileID: 0}
   cam: {fileID: 0}
-  _lastReconMode: 0
   _isAutoMoving: 0
   distance: 5
   dragSpeed: 0.01
-  playerMapLookAt: {x: 4, y: 1, z: 5}
-  enemyMapLookAt: {x: 4, y: 1, z: 20}
+  _destination: {x: 0, y: 0, z: 0}
   _currentVelocity: {x: 0, y: 0, z: 0}
   smoothTime: 0.3
   arrivalThreshold: 0.01
@@ -3373,6 +3371,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 671777939}
   m_CullTransparentMesh: 1
+--- !u!1 &692132443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 692132444}
+  - component: {fileID: 692132445}
+  m_Layer: 0
+  m_Name: FloatingTextPresenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &692132444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692132443}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1203943604}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &692132445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692132443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 225c700fac7f8814c9f88c004666ca70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 8446845644628162395, guid: ab799b49ee40866419401b7d9e73a306, type: 3}
+  CanvasTransform: {fileID: 1332672683}
+  damageColor: {r: 1, g: 0.26729542, b: 0.26729542, a: 1}
+  recoveryColor: {r: 0.23056829, g: 0.84276724, b: 0.23056829, a: 1}
 --- !u!1 &701917728
 GameObject:
   m_ObjectHideFlags: 0
@@ -5787,6 +5833,7 @@ GameObject:
   - component: {fileID: 1019155744}
   - component: {fileID: 1019155748}
   - component: {fileID: 1019155750}
+  - component: {fileID: 1019155752}
   - component: {fileID: 1019155751}
   - component: {fileID: 1019155749}
   m_Layer: 5
@@ -5959,6 +6006,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cef4b89c3a200438df0ce498fb8233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1019155752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019155742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9618525d662a74d49b469dabcb7f97e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetMap: 0
 --- !u!1 &1024894723
 GameObject:
   m_ObjectHideFlags: 0
@@ -6308,6 +6368,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1332672683}
+  - {fileID: 692132444}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1214115167
@@ -7233,6 +7294,7 @@ GameObject:
   - component: {fileID: 1314780374}
   - component: {fileID: 1314780377}
   - component: {fileID: 1314780379}
+  - component: {fileID: 1314780381}
   - component: {fileID: 1314780380}
   - component: {fileID: 1314780378}
   m_Layer: 5
@@ -7394,6 +7456,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lastSelectedTile: {fileID: 0}
+--- !u!114 &1314780381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314780371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9618525d662a74d49b469dabcb7f97e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetMap: 1
 --- !u!1001 &1323355571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8860,6 +8935,7 @@ GameObject:
   - component: {fileID: 1586720351}
   - component: {fileID: 1586720357}
   - component: {fileID: 1586720356}
+  - component: {fileID: 1586720358}
   m_Layer: 5
   m_Name: CancelButton
   m_TagString: Untagged
@@ -9006,6 +9082,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7cef4b89c3a200438df0ce498fb8233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1586720358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586720347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9618525d662a74d49b469dabcb7f97e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetMap: 0
 --- !u!1 &1603922346
 GameObject:
   m_ObjectHideFlags: 0
@@ -11114,7 +11203,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectedTile: {fileID: 0}
   <selectedTileController>k__BackingField: {fileID: 0}
+  PlayerMapLastViewedPosition: {x: 4, y: 1, z: 5}
   _targetTile: {fileID: 0}
+  EnemyMapLastViewedPosition: {x: 4, y: 1, z: 20}
 --- !u!1 &2103718873
 GameObject:
   m_ObjectHideFlags: 0
