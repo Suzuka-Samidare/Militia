@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using AttackCommand = AttackManager.AttackCommand;
 
 public class UnitController : MonoBehaviour
 {
@@ -78,9 +77,9 @@ public class UnitController : MonoBehaviour
         // }
     }
 
-    public void ApplyDamage(float damage) {
+    public async Task ApplyDamageAsync(float damage) {
         UpdateHp(-damage);
-        _floatingTextPresenter.SpawnDamage(gameObject.transform, damage);
+        await _floatingTextPresenter.SpawnDamageAsync(gameObject.transform, damage);
     }
 
     private void OnDamage() => Debug.Log("痛いっ！エフェクト出すよ！");

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class FloatingTextPresenter : MonoBehaviour
@@ -27,21 +26,21 @@ public class FloatingTextPresenter : MonoBehaviour
     }
 
     // 呼び出し用のメソッドを2つ作っちゃうのが一番分かりやすい！
-    public void SpawnDamage(Transform target, float amount)
+    public async Task SpawnDamageAsync(Transform target, float amount)
     {
-        Create(target, amount, damageColor);
+        await CreateTextAsync(target, amount, damageColor);
     }
 
-    public void SpawnRecovery(Transform target, float amount)
+    public async Task SpawnRecoveryAsync(Transform target, float amount)
     {
-        Create(target, amount, recoveryColor);
+        await CreateTextAsync(target, amount, recoveryColor);
     }
 
     // 共通の生成処理
-    private void Create(Transform target, float amount, Color color)
+    private async Task CreateTextAsync(Transform target, float amount, Color color)
     {
         GameObject floatingText = Instantiate(Prefab, CanvasTransform);
         FloatingTextView floatingTextView = floatingText.GetComponent<FloatingTextView>();
-        floatingTextView.Setup(target, amount, color);
+        await floatingTextView.SetupAsync(target, amount, color);
     }
 }

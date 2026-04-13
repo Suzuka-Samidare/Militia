@@ -197,10 +197,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fadeInDuration: 0.2
-  _fadeOutDuration: 0.05
+  _fadeOutDuration: 0.1
   _viewDuration: 1.5
-  _startFontSize: 100
-  _endFontSize: 60
+  _startFontSize: 150
+  _endFontSize: 80
   _targetUnit: {fileID: 0}
   _textMesh: {fileID: 0}
   _canvasGroup: {fileID: 0}

@@ -28,7 +28,7 @@ public class AttackManager : MonoBehaviour, IInitializable
     }
 
     [SerializeField, Tooltip("攻撃タイムライン")]
-    private List<AttackCommand> timeline = new List<AttackCommand>();
+    private List<AttackCommand> _timeline = new List<AttackCommand>();
 
     [Header("Refs")]
     private TileManager _tileManager;
@@ -48,9 +48,9 @@ public class AttackManager : MonoBehaviour, IInitializable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D) && timeline.Count > 0)
+        if (Input.GetKeyDown(KeyCode.D) && _timeline.Count > 0)
         {
-            ExecuteAttack(timeline[0]);
+            ProcessTimeline();
         }
     }
 
@@ -66,20 +66,32 @@ public class AttackManager : MonoBehaviour, IInitializable
         return Task.CompletedTask;
     }
 
+    private async void ProcessTimeline()
+    {
+        while (_timeline.Count > 0)
+        {
+            await ExecuteCommandAsync(_timeline[0]);
+            _timeline.RemoveAt(0);
+            _timelinePresenter.UpdateTimeline(_timeline);
+
+            Debug.Log("コマンド完了、リストから消したよ！✨");
+        }
+
+        _timeline.Clear();
+    }
+
     /// <summary>
     /// 攻撃の実行
     /// </summary>
-    private void ExecuteAttack(AttackCommand command)
+    private async Task ExecuteCommandAsync(AttackCommand command)
     {
-        Debug.Log("TODO: 攻撃実行");
-
         for (int i = 0; i < command.Targets.Count; i++)
         {
             TileController target = command.Targets[i];
             if (target.isExistUnit)
             {
-                Debug.Log($"{target} に {command.Damage} ダメージ！ ぶちかましたよ！✨");
-                target.unitController.ApplyDamage(command.Damage);
+                // Debug.Log($"{target} に {command.Damage} ダメージ！ ぶちかましたよ！✨");
+                await target.unitController.ApplyDamageAsync(command.Damage);
             }
             else
             {
@@ -104,9 +116,9 @@ public class AttackManager : MonoBehaviour, IInitializable
             profile.power,
             profile.atkDelay
         );
-        timeline.Add(newAttack);
-        timeline.Sort((a, b) => b.time.CompareTo(a.time));
-        _timelinePresenter.UpdateTimeline(timeline);
+        _timeline.Add(newAttack);
+        _timeline.Sort((a, b) => b.time.CompareTo(a.time));
+        _timelinePresenter.UpdateTimeline(_timeline);
         
         Debug.Log($"攻撃予約完了！");
     }

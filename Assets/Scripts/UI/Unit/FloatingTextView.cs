@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -7,14 +8,21 @@ public class FloatingTextView : MonoBehaviour
 {
     [Header("アニメーション設定")]
     [SerializeField] private float _fadeInDuration = 0.2f;
-    [SerializeField] private float _fadeOutDuration = 0.05f;
+    [SerializeField] private float _fadeOutDuration = 0.1f;
     [SerializeField] private float _viewDuration = 1.5f;
-    [SerializeField] private float _startFontSize = 100f;
-    [SerializeField] private float _endFontSize = 60f;
+    [SerializeField] private float _moveSpeed = 50f;
+    private Vector3 _animationOffset;
+    private float _totalDuration => _fadeInDuration + _fadeOutDuration + _viewDuration;
+    [SerializeField] private float _startFontSize = 150f;
+    [SerializeField] private float _endFontSize = 80f;
+
+    [Header("カラー")]
+    [SerializeField] private Color _faceColor;
+    [SerializeField] private Color _outlineColor;
 
     [Header("状態管理")]
     private Coroutine _fadeRoutine;
-    // private bool _isReady = false;
+    private bool _isRoutineFinished;
 
     [Header("Ref")]
     [SerializeField] private Transform _targetUnit;
@@ -26,48 +34,53 @@ public class FloatingTextView : MonoBehaviour
         _canvasGroup = GetComponent<CanvasGroup>();
         _textMesh = GetComponentInChildren<TextMeshProUGUI>();
 
-        if (!_canvasGroup) return;
-
+        if (!_canvasGroup) throw new Exception("CanvasGroupの取得失敗");
         _canvasGroup.alpha = 0f;
         _canvasGroup.interactable = false;
         _canvasGroup.blocksRaycasts = false;
+
+        if (!_textMesh) throw new Exception("TextMeshProUGUIの取得失敗");
+        _outlineColor = _textMesh.outlineColor;
     }
 
-    void Update() {
-        // if (!_isReady) return;
-
-        // if (_targetUnit != null) {
-        //     // ここでさっきの座標変換をして自分を移動させる！
-        //     Vector3 screenPos = Camera.main.WorldToScreenPoint(_targetUnit.position);
-        //     transform.position = screenPos;
-        // }
-    }
-
-    public void Setup(Transform target, float amount, Color color)
+    void Update()
     {
+        if (_targetUnit != null)
+        {
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(_targetUnit.position);
+            transform.position = screenPos + _animationOffset;
+        }
+    }
+
+    public async Task SetupAsync(Transform target, float amount, Color color)
+    {
+        _isRoutineFinished = false;
         _targetUnit = target;
+        _faceColor = color;
 
         if (_textMesh == null) throw new Exception("TextMeshProUGUIの取得失敗");
-
-        _textMesh.color = color;
+        _textMesh.faceColor = Color.white;
+        _textMesh.outlineColor = Color.white;
         _textMesh.text = amount.ToString();
 
         if (_targetUnit == null) throw new Exception("ユニットのオブジェクト情報の取得失敗");
-
         Vector3 screenPos = Camera.main.WorldToScreenPoint(_targetUnit.position);
         transform.position = screenPos;
 
-        // _isReady = true;
         _fadeRoutine = StartCoroutine(FullFadeRoutine());
 
-        // Destroy(gameObject, 3.0f);
+        while (!_isRoutineFinished)
+        {
+            await Task.Yield();
+        }
+
+        Debug.Log("演出が完全に終わったよ！✨");
     }
 
     private IEnumerator FullFadeRoutine()
     {
         // 1.FadeIn ===============================================
         float elapsedTime = 0;
-        
         while (elapsedTime < _fadeInDuration)
         {
             // 対象がDestroyなどで消えていた場合の後片付け
@@ -82,15 +95,24 @@ public class FloatingTextView : MonoBehaviour
             
             _canvasGroup.alpha = time; // alphaを少しずつ加算
             _textMesh.fontSize = Mathf.Lerp(_startFontSize, _endFontSize, time);
+            _textMesh.faceColor = Color.Lerp(Color.white, _faceColor, time);
+            _textMesh.outlineColor = Color.Lerp(Color.white, _outlineColor, time);
+            _animationOffset += Vector3.up / 2 * (_moveSpeed * Time.deltaTime);
 
             yield return null; // 次のフレームまで待機
         }
-        
         _canvasGroup.alpha = 1f; // 最後に確実に1にする
         _textMesh.fontSize = _endFontSize;
         
         // 2. Wait ==================================================
-        yield return new WaitForSeconds(_viewDuration);
+        elapsedTime = 0;
+        while (elapsedTime < _viewDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            _animationOffset += Vector3.up / 2 * (_moveSpeed * Time.deltaTime);
+
+            yield return null;
+        }
 
         // 3. FadeOut ===============================================
         elapsedTime = 0;
@@ -105,12 +127,14 @@ public class FloatingTextView : MonoBehaviour
             float time = Mathf.Clamp01(elapsedTime / _fadeOutDuration);
             
             _canvasGroup.alpha = 1f - time;
+            _animationOffset += Vector3.up / 2 * (_moveSpeed * Time.deltaTime);
+
             yield return null;
         }
-
         _canvasGroup.alpha = 0f;
 
-        // 4. Cleanup
+        // 4. After Care =============================================
+        _isRoutineFinished = true;
         StopCoroutine(_fadeRoutine);
         _fadeRoutine = null;
         Destroy(gameObject);
