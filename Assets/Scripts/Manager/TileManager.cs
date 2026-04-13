@@ -26,6 +26,8 @@ public class TileManager : MonoBehaviour, IInitializable
     public TileController selectedTileController { get; private set; }
     [SerializeField, Tooltip("アクセス可否")]
     private bool _canAccessSelectedTileController => selectedTile != null && selectedTileController != null;
+    [SerializeField, Tooltip("最後にチェックした場所")]
+    public Vector3 PlayerMapLastViewedPosition;
 
     [Header("敵マップ関連")]
     [SerializeField, Tooltip("ターゲット指定中タイル")]
@@ -37,11 +39,13 @@ public class TileManager : MonoBehaviour, IInitializable
         {
             if (_targetTile == value) return;
             _targetTile = value;
-            CameraMovement.Instance.SetEnemyMapLookAt(_targetTile.globalPos);
+            EnemyMapLastViewedPosition = new Vector3(_targetTile.globalPos.x, 1f, _targetTile.globalPos.z);
         }
     }
     [SerializeField, Tooltip("ターゲット指定中タイル")]
     public List<TileController> targetTiles { get; private set; } = new List<TileController>();
+    [SerializeField, Tooltip("最後にチェックした場所")]
+    public Vector3 EnemyMapLastViewedPosition;
 
     [Header("Refs")]
     private MapManager _mapManager;
@@ -74,7 +78,11 @@ public class TileManager : MonoBehaviour, IInitializable
         if (selectedTile != null)
         {
             selectedTileController = selectedTile.GetComponent<TileController>();
-            CameraMovement.Instance.SetPlayerMapLookAt(selectedTileController.globalPos);
+            PlayerMapLastViewedPosition = new Vector3(
+                selectedTileController.globalPos.x,
+                1f,
+                selectedTileController.globalPos.z
+            );
         }
         else
         {

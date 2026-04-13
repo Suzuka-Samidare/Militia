@@ -12,7 +12,6 @@ public class CameraMovement : MonoBehaviour
     private TileManager _tileManager;
 
     [Header("ステータス")]
-    [SerializeField] private bool _lastReconMode = false;
     [SerializeField] private bool _isAutoMoving = false;
     private bool isReconMode => GameManager.Instance.currentState ==  GameManager.State.COMMAND;
 
@@ -23,8 +22,7 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float dragSpeed = 0.01f; // ドラッグの感度
 
     [Header("自動移動設定")]
-    [SerializeField] private Vector3 playerMapLookAt;
-    [SerializeField] private Vector3 enemyMapLookAt;
+    [SerializeField] private Vector3 _destination;
     [SerializeField] private Vector3 _currentVelocity = Vector3.zero;
     [SerializeField] private float smoothTime = 0.2f;
     [SerializeField] private float arrivalThreshold = 0.01f; // 到着とみなす距離
@@ -45,30 +43,15 @@ public class CameraMovement : MonoBehaviour
     {
         cam = GetComponent<Camera>();
 
-        if (cam == null)
-        {
-            Debug.Log("カメラコンポーネントの取得失敗");
-        }
+        if (cam == null) Debug.Log("カメラコンポーネントの取得失敗");
 
-        if (!cam.orthographic)
-        {
-            Debug.Log("カメラがOrthographicモードではありません。");
-        }
+        if (!cam.orthographic) Debug.Log("カメラがOrthographicモードではありません。");
 
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
         
         // ターゲットが設定されていない場合は、カメラの親オブジェクトをターゲットとする
-        if (focusPoint == null) 
-        {
-            focusPoint = transform.parent;
-        }
+        if (focusPoint == null) focusPoint = transform.parent;
 
         HandleAngle(new Vector2(0, 0));
     }
@@ -96,14 +79,11 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        // 1. モードが切り替わった瞬間を検知
-        if (isReconMode != _lastReconMode)
-        {
-            _isAutoMoving = true;
-            _lastReconMode = isReconMode;
-        }
+        // if (Input.GetKeyDown(KeyCode.L) && !_isAutoMoving)
+        // {
+        //     TestSetDestination();
+        // }
 
-        // 2. 自動操作中フラグの場合は実行
         if (_isAutoMoving)
         {
             AutoMove();
@@ -112,23 +92,43 @@ public class CameraMovement : MonoBehaviour
 
     private void AutoMove()
     {
-        Vector3 targetPos = isReconMode ? enemyMapLookAt : playerMapLookAt;
-
         // 滑らかに移動！
         focusPoint.position = Vector3.SmoothDamp(
             focusPoint.position, 
-            targetPos, 
+            _destination, 
             ref _currentVelocity, 
             smoothTime
         );
 
         // 目的地に十分近づいたら、自由操作を解禁！
-        if (Vector3.Distance(focusPoint.position, targetPos) < arrivalThreshold)
+        if (Vector3.Distance(focusPoint.position, _destination) < arrivalThreshold)
         {
-            focusPoint.position = targetPos; // 最後にピタッと合わせる
+            focusPoint.position = _destination; // 最後にピタッと合わせる
             _isAutoMoving = false;
             Debug.Log("到着！自由操作できるよ〜✨");
         }
+    }
+
+    // private void TestSetDestination()
+    // {
+    //     int height = UnityEngine.Random.Range(0, _mapManager.mapHeight);
+    //     int width = UnityEngine.Random.Range(0, _mapManager.mapWidth);
+    //     if (UnityEngine.Random.value > 0.5f)
+    //     {
+    //         TileController tgt = _mapManager.playerMapData[height, width];
+    //         SetDestination(new Vector3(tgt.globalPos.x, 1, tgt.globalPos.z));
+    //     }
+    //     else
+    //     {
+    //         TileController tgt = _mapManager.enemyMapData[height, width];
+    //         SetDestination(new Vector3(tgt.globalPos.x, 1, tgt.globalPos.z));
+    //     }
+    // }
+
+    public void SetDestination(Vector3 destination)
+    {
+        _destination = destination;
+        _isAutoMoving = true;
     }
 
     private void HandleMove(Vector2 delta)
@@ -198,15 +198,5 @@ public class CameraMovement : MonoBehaviour
         // カメラの位置と回転を設定
         transform.rotation = rotation;
         transform.position = position;
-    }
-
-    public void SetPlayerMapLookAt(Vector3 pos)
-    {
-        playerMapLookAt = new Vector3(pos.x, 1f, pos.z);
-    }
-
-    public void SetEnemyMapLookAt(Vector3 pos)
-    {
-        enemyMapLookAt = new Vector3(pos.x, 1f, pos.z);
     }
 }
