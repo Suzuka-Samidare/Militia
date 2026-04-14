@@ -77,9 +77,9 @@ public class UnitController : MonoBehaviour
         // }
     }
 
-    public async Task ApplyDamageAsync(float damage) {
+    public async Task ApplyDamageAsync(float damage, Transform tileTransform) {
         UpdateHp(-damage);
-        await _floatingTextPresenter.SpawnDamageAsync(gameObject.transform, damage);
+        await _floatingTextPresenter.SpawnDamageAsync(tileTransform, damage);
     }
 
     private void OnDamage() => Debug.Log("痛いっ！エフェクト出すよ！");

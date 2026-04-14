@@ -12,7 +12,6 @@ public class FloatingTextView : MonoBehaviour
     [SerializeField] private float _viewDuration = 1.5f;
     [SerializeField] private float _moveSpeed = 50f;
     private Vector3 _animationOffset;
-    private float _totalDuration => _fadeInDuration + _fadeOutDuration + _viewDuration;
     [SerializeField] private float _startFontSize = 150f;
     [SerializeField] private float _endFontSize = 80f;
 
@@ -25,7 +24,7 @@ public class FloatingTextView : MonoBehaviour
     private bool _isRoutineFinished;
 
     [Header("Ref")]
-    [SerializeField] private Transform _targetUnit;
+    [SerializeField] private Transform _tileTransform;
     [SerializeField] private TextMeshProUGUI _textMesh;
     [SerializeField] private CanvasGroup _canvasGroup;
 
@@ -45,17 +44,18 @@ public class FloatingTextView : MonoBehaviour
 
     void Update()
     {
-        if (_targetUnit != null)
+        if (_tileTransform != null)
         {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(_targetUnit.position);
-            transform.position = screenPos + _animationOffset;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(_tileTransform.position);
+            Vector3 fixOffset = new Vector3(0f, 20f, 0f); // 20ピクセル分
+            transform.position = screenPos + fixOffset + _animationOffset;
         }
     }
 
-    public async Task SetupAsync(Transform target, float amount, Color color)
+    public async Task SetupAsync(Transform tileTranform, float amount, Color color)
     {
         _isRoutineFinished = false;
-        _targetUnit = target;
+        _tileTransform = tileTranform;
         _faceColor = color;
 
         if (_textMesh == null) throw new Exception("TextMeshProUGUIの取得失敗");
@@ -63,8 +63,8 @@ public class FloatingTextView : MonoBehaviour
         _textMesh.outlineColor = Color.white;
         _textMesh.text = amount.ToString();
 
-        if (_targetUnit == null) throw new Exception("ユニットのオブジェクト情報の取得失敗");
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(_targetUnit.position);
+        if (_tileTransform == null) throw new Exception("ユニットのオブジェクト情報の取得失敗");
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(_tileTransform.position);
         transform.position = screenPos;
 
         _fadeRoutine = StartCoroutine(FullFadeRoutine());
@@ -97,7 +97,7 @@ public class FloatingTextView : MonoBehaviour
             _textMesh.fontSize = Mathf.Lerp(_startFontSize, _endFontSize, time);
             _textMesh.faceColor = Color.Lerp(Color.white, _faceColor, time);
             _textMesh.outlineColor = Color.Lerp(Color.white, _outlineColor, time);
-            _animationOffset += Vector3.up / 2 * (_moveSpeed * Time.deltaTime);
+            _animationOffset += new Vector3(0f, 0.5f, 0f) * (_moveSpeed * Time.deltaTime);
 
             yield return null; // 次のフレームまで待機
         }
@@ -109,7 +109,7 @@ public class FloatingTextView : MonoBehaviour
         while (elapsedTime < _viewDuration)
         {
             elapsedTime += Time.deltaTime;
-            _animationOffset += Vector3.up / 2 * (_moveSpeed * Time.deltaTime);
+            _animationOffset += new Vector3(0f, 0.5f, 0f) * (_moveSpeed * Time.deltaTime);
 
             yield return null;
         }
@@ -127,7 +127,7 @@ public class FloatingTextView : MonoBehaviour
             float time = Mathf.Clamp01(elapsedTime / _fadeOutDuration);
             
             _canvasGroup.alpha = 1f - time;
-            _animationOffset += Vector3.up / 2 * (_moveSpeed * Time.deltaTime);
+            _animationOffset += new Vector3(0f, 0.5f, 0f) * (_moveSpeed * Time.deltaTime);
 
             yield return null;
         }

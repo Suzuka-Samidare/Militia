@@ -85,21 +85,25 @@ public class AttackManager : MonoBehaviour, IInitializable
     /// </summary>
     private async Task ExecuteCommandAsync(AttackCommand command)
     {
-        for (int i = 0; i < command.Targets.Count; i++)
+        // 演出を管理するタスクのリストを用意（後で全部終わったかチェックするため）
+        List<Task> animationTasks = new List<Task>();
+
+        foreach (var target in command.Targets)
         {
-            TileController target = command.Targets[i];
             if (target.isExistUnit)
             {
-                // Debug.Log($"{target} に {command.Damage} ダメージ！ ぶちかましたよ！✨");
-                await target.unitController.ApplyDamageAsync(command.Damage);
+                Task damageTask = target.unitController.ApplyDamageAsync(command.Damage, target.transform);
+                // あとで一括待機するためにリストに入れておく
+                animationTasks.Add(damageTask);
             }
             else
             {
+                // TODO: MISS表記を入れたい -> ユニットによる位置基準ではダメ
                 Debug.Log("ターゲットがもういないみたい。攻撃スカった！");
             }
         }
-        // // マップ参照
-        // TileController targetTileController = _mapManager.enemyMapData[command.Target.y, command.Target.x];
+
+        await Task.WhenAll(animationTasks);
     }
 
     /// <summary>
