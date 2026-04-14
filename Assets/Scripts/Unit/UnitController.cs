@@ -9,6 +9,7 @@ public class UnitController : MonoBehaviour
     private UnitProfile _profile;
     private AttackManager _attackManager;
     private MapManager _mapManager;
+    private CameraMovement _cameraMovement;
     private FloatingTextPresenter _floatingTextPresenter;
 
 
@@ -18,6 +19,7 @@ public class UnitController : MonoBehaviour
         _profile = GetComponent<UnitStats>().profile;
         _attackManager = AttackManager.Instance;
         _mapManager = MapManager.Instance;
+        _cameraMovement = CameraMovement.Instance;
         _floatingTextPresenter = FloatingTextPresenter.Instance;
     }
 
@@ -79,6 +81,7 @@ public class UnitController : MonoBehaviour
 
     public async Task ApplyDamageAsync(float damage, Transform tileTransform) {
         UpdateHp(-damage);
+        _cameraMovement.SetDestination(new Vector3(tileTransform.position.x, 1, tileTransform.position.z));
         await _floatingTextPresenter.SpawnDamageAsync(tileTransform, damage);
     }
 
