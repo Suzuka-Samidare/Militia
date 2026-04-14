@@ -689,7 +689,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14bfc6d9f44ff27469cb0b10e6e38f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeline: []
+  _timeline: []
 --- !u!4 &66366370
 Transform:
   m_ObjectHideFlags: 0
@@ -2199,7 +2199,7 @@ MonoBehaviour:
   dragSpeed: 0.01
   _destination: {x: 0, y: 0, z: 0}
   _currentVelocity: {x: 0, y: 0, z: 0}
-  smoothTime: 0.3
+  smoothTime: 0.2
   arrivalThreshold: 0.01
   zoomSpeed: 0.02
   minZoom: 2
