@@ -40,7 +40,7 @@ public class ConeCursorController : MonoBehaviour
             Vector3 selectedTilePos = _tileManager.selectedTileController.globalPos;
             transform.position = new Vector3(selectedTilePos.x, transform.position.y, selectedTilePos.z);
         }
-        else if (_tileManager.targetTile != null && _gameManager.currentState == State.ATTACK)
+        else if (_tileManager.targetTile != null && _gameManager.currentState == State.COMMAND)
         {
             objectRenderer.enabled = true;
             Vector3 targetTilePos = _tileManager.targetTile.globalPos;
