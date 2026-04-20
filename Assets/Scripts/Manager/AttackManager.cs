@@ -66,7 +66,7 @@ public class AttackManager : MonoBehaviour, IInitializable
         return Task.CompletedTask;
     }
 
-    private async void ProcessTimeline()
+    public async void ProcessTimeline()
     {
         while (_timeline.Count > 0)
         {

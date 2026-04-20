@@ -66,7 +66,7 @@ public class MapInputHandler : MonoBehaviour
         else
         {
             // TODO: ここでこの処理で良いのか検討
-            if (GameManager.Instance.currentState == GameManager.State.PREPARATION)
+            if (GameManager.Instance.currentPhase == GameManager.Phase.PREPARATION)
             {
                 // Debug.Log("Ray判定なし");
                 _tileManager.ClearSelectedTile();

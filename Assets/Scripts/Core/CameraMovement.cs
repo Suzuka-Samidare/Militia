@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
 
     [Header("ステータス")]
     [SerializeField] private bool _isAutoMoving = false;
-    private bool isReconMode => GameManager.Instance.currentState ==  GameManager.State.COMMAND;
+    private bool isReconMode => GameManager.Instance.currentPhase ==  GameManager.Phase.COMMAND;
 
     [Header("基本設定")]
     [SerializeField] private float distance = 5f; // カメラとフォーカス地点の距離（固定）

@@ -1,22 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using State = GameManager.State;
+using Phase = GameManager.Phase;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    // [Header("Canvas")]
+    // [SerializeField] private VisibilityController _sidebar;
+    // [SerializeField] private VisibilityController _phaseAnnouncer;
+
     [Header("MainView")]
-    [SerializeField] private VisibilityController Timeline;
+    public VisibilityController Timeline;
 
     // インスペクターから各パネルを登録
     [Header("Sidebar")]
-    [SerializeField] private VisibilityController initMenu;
-    [SerializeField] private VisibilityController preparationMenu;
-    [SerializeField] private VisibilityController commandMenu;
-    [SerializeField] private TextMeshProUGUI _elapsedTime;
+    public VisibilityController Turn;
+    public VisibilityController ElapsedTime;
+    [SerializeField] private VisibilityController _initMenu;
+    [SerializeField] private VisibilityController _preparationMenu;
+    [SerializeField] private VisibilityController _commandMenu;
 
     private void Awake()
     {
@@ -24,16 +27,29 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public void UpdateElapsedTime(string text)
+    public void UpdateTurn(string text)
     {
-        _elapsedTime.text = text;
+        TextMeshProUGUI turnText = ElapsedTime.GetComponentInChildren<TextMeshProUGUI>();
+        turnText.text = text;
     }
 
-    public void SwitchMenu(State state)
+    public void UpdateElapsedTime(string text)
     {
-        initMenu.SetVisible(state == State.INIT);
-        preparationMenu.SetVisible(state == State.PREPARATION);
-        commandMenu.SetVisible(state == State.COMMAND);
-        Timeline.SetVisible(state != State.INIT);
+        TextMeshProUGUI elapsedTimeText = ElapsedTime.GetComponentInChildren<TextMeshProUGUI>();
+        elapsedTimeText.text = text;
     }
+
+    public void SwitchMenu(Phase phase)
+    {
+        _initMenu.SetVisible(phase == Phase.INIT);
+        _preparationMenu.SetVisible(phase == Phase.PREPARATION);
+        _commandMenu.SetVisible(phase == Phase.COMMAND);
+    }
+
+    // public void PlayPhaseAnnouncement()
+    // {
+    //     _sidebar.Hide();
+    //     _phaseAnnouncer.Show();
+    //     _sidebar.Show();
+    // }
 }
