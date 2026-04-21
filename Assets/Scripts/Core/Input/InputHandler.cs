@@ -78,7 +78,7 @@ public class InputHandler : MonoBehaviour
     void Update()
     {
         // UI上で操作している場合は処理しない
-        if (_isOverUI) return;
+        if (_isOverUI || GameManager.Instance.IsInputLocked) return;
 
         // --- マウスホイール (PC用) ---
         float scroll = controls.Scroll.ReadValue<Vector2>().y;

@@ -29,6 +29,7 @@ public class AttackManager : MonoBehaviour, IInitializable
 
     [SerializeField, Tooltip("攻撃タイムライン")]
     private List<AttackCommand> _timeline = new List<AttackCommand>();
+    public int TimelineCount => _timeline.Count;
 
     [Header("Refs")]
     private TileManager _tileManager;
@@ -46,14 +47,6 @@ public class AttackManager : MonoBehaviour, IInitializable
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.D) && _timeline.Count > 0)
-        {
-            ProcessTimeline();
-        }
-    }
-
     private void ResolveDependencies()
     {
         _tileManager = TileManager.Instance;
@@ -66,7 +59,7 @@ public class AttackManager : MonoBehaviour, IInitializable
         return Task.CompletedTask;
     }
 
-    public async void ProcessTimeline()
+    public async Task ProcessTimeline()
     {
         while (_timeline.Count > 0)
         {

@@ -15,11 +15,13 @@ public class GameManager : MonoBehaviour, IInitializable
         ACTION,
         GAMEOVER,
     };
-    public int Turn = 1;
+    public int Turn = 0;
     [Tooltip("経過時間タイマー")]
     public Timer _elapsedTimer = new Timer();
 
     [Header("操作管理")]
+    [Tooltip("操作可否")]
+    public bool IsInputLocked;
     [Tooltip("ローディング状態")]
     public bool IsLoading;
     
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour, IInitializable
     private UIManager _uiManager;
     private DialogController _dialogController;
     private InfomationController _infomationController;
+    private PlayerManager _playerManager;
 
     private void Awake()
     {
@@ -44,7 +47,7 @@ public class GameManager : MonoBehaviour, IInitializable
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D) && currentPhase == Phase.PREPARATION) //  && _timeline.Count > 0
+        if (Input.GetKeyDown(KeyCode.D) && currentPhase == Phase.PREPARATION)
         {
             EnterActionPhase();
         }
@@ -63,6 +66,7 @@ public class GameManager : MonoBehaviour, IInitializable
         _uiManager = UIManager.Instance;
         _dialogController = DialogController.Instance;
         _infomationController = InfomationController.Instance;
+        _playerManager = PlayerManager.Instance;
     }
     
     public Task Initialize()
@@ -75,6 +79,8 @@ public class GameManager : MonoBehaviour, IInitializable
         _infomationController.Open(initMessage);
         // メニューの初期化
         _uiManager.SwitchMenu(currentPhase);
+        _uiManager.Turn.SetVisible(true);
+        _uiManager.Phase.SetVisible(true);
         // 準備時間終了後の処理を登録
         _elapsedTimer.OnTimerComplete += EnterActionPhase;
 
@@ -106,16 +112,9 @@ public class GameManager : MonoBehaviour, IInitializable
                 {
                     // アクションイベントの後片付け
                     _mapManager.OnHqCountChanged -= ValidateAndShowDialog;
-                    // ステータスのリジェネ開始
-                    PlayerManager.Instance.StartRegen();
-                    // タイマー設定
-                    _elapsedTimer.OnTimerComplete += EnterActionPhase;
-                    _elapsedTimer.Start(180.0f);
-                    // UIの切り替え
-                    SwitchPhase(Phase.PREPARATION);
                     _uiManager.ElapsedTime.SetVisible(true);
-                    _uiManager.Turn.SetVisible(true);
                     _uiManager.Timeline.SetVisible(true);
+                    EnterPreparationPhase();
                 },
                 onCancel: () =>
                 {
@@ -143,21 +142,49 @@ public class GameManager : MonoBehaviour, IInitializable
         }
     }
 
-    private void EnterActionPhase()
+    private void EnterPreparationPhase()
     {
-        _elapsedTimer.Reset();
-        // SwitchPhase(Phase.ACTION);
-        // await PhaseAnnouncerView.Open()
-        _attackManager.ProcessTimeline();
-        Debug.Log("Action終了");
-
+        // ターン加算
+        Turn++;
+        // ステータスのリジェネ開始
+        _playerManager.StartRegen();
+        // タイマー設定
+        _elapsedTimer.OnTimerComplete += EnterActionPhase;
+        _elapsedTimer.Start(180.0f);
+        // UIの切り替え
         SwitchPhase(Phase.PREPARATION);
+    }
+
+    private async void EnterActionPhase()
+    {
+        IsInputLocked = false;
+        _playerManager.StopRegen();
+        _elapsedTimer.Reset();
+        SwitchPhase(Phase.ACTION);
+        // await PhaseAnnouncerView.Open()
+
+        if (_attackManager.TimelineCount > 0)
+        {
+            await _attackManager.ProcessTimeline();
+            _infomationController.Open("All attacks processed.");
+            await Task.Delay(2000);
+        }
+        else
+        {
+            _infomationController.Open("No pending attacks.");
+            await Task.Delay(2000);
+        }
+
+        _infomationController.Close();
+        CameraMovement.Instance.SetDestination(TileManager.Instance.PlayerMapLastViewedPosition);
+        EnterPreparationPhase();
+        IsInputLocked = true;
     }
 
     public void SwitchPhase(Phase phase)
     {
         currentPhase = phase;
         _uiManager.SwitchMenu(phase);
-        _infomationController.Open($"{phase.ToString()} Phase");
+        _uiManager.UpdatePhase(phase.ToString());
     }
 }
