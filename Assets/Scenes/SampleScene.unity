@@ -3111,10 +3111,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 869018650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 48.714996, y: -23.645}
-  m_SizeDelta: {x: 81.42999, y: 31.29}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &596137341
 MonoBehaviour:
@@ -7305,9 +7305,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b350f2b4262824dabf5952f0e3ce50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageText: {fileID: 1580047838}
-  okButton: {fileID: 1486629358}
-  cancelButton: {fileID: 1069207093}
+  _titleText: {fileID: 956728150}
+  _messageText: {fileID: 1580047838}
+  _okButton: {fileID: 1486629358}
+  _cancelButton: {fileID: 1069207093}
 --- !u!114 &1245234475
 MonoBehaviour:
   m_ObjectHideFlags: 0
