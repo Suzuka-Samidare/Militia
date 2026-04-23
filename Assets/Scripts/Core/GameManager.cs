@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour, IInitializable
             _infomationController.Close();
             _dialogController.Open(
                 isConfirm: true,
+                title: "Confirm",
                 message: "Setup OK?",
                 onConfirm: () =>
                 {
