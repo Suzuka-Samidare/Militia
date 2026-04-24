@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour, IInitializable
 {
@@ -147,27 +147,31 @@ public class GameManager : MonoBehaviour, IInitializable
     {
         // ターン加算
         Turn++;
+        _uiManager.UpdateTurn(Turn);
         // ステータスのリジェネ開始
         _playerManager.StartRegen();
-        // タイマー設定
-        _elapsedTimer.OnTimerComplete += EnterActionPhase;
-        _elapsedTimer.Start(180.0f);
         // UIの切り替え
         SwitchPhase(Phase.PREPARATION);
-
-        await _uiManager.PlayAnnouncement("PREPARATION");
-        await Task.Delay(2000);
+        // アナウンスパネル表示
+        await _uiManager.BannerView.PlayAnnouncement("PREPARATION");
+        // タイマー開始
+        _elapsedTimer.Start(180.0f);
+        // 操作制限解除
+        IsInputLocked = false;
     }
 
     private async void EnterActionPhase()
     {
+        // 操作制限有効化
         IsInputLocked = true;
+        // リジェネ停止
         _playerManager.StopRegen();
+        // タイマーリセット
         _elapsedTimer.Reset();
+        // フェーズ切り替え
         SwitchPhase(Phase.ACTION);
-
-        await _uiManager.PlayAnnouncement("ACTION");
-        await Task.Delay(2000);
+        // アナウンスパネル表示
+        await _uiManager.BannerView.PlayAnnouncement("ACTION");
 
         if (_attackManager.TimelineCount > 0)
         {
@@ -184,7 +188,6 @@ public class GameManager : MonoBehaviour, IInitializable
         _infomationController.Close();
         CameraMovement.Instance.SetDestination(TileManager.Instance.PlayerMapLastViewedPosition);
         EnterPreparationPhase();
-        IsInputLocked = false;
     }
 
     public void SwitchPhase(Phase phase)
