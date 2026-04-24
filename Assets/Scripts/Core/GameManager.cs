@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour, IInitializable
         }
     }
 
-    private void EnterPreparationPhase()
+    private async void EnterPreparationPhase()
     {
         // ターン加算
         Turn++;
@@ -154,15 +154,20 @@ public class GameManager : MonoBehaviour, IInitializable
         _elapsedTimer.Start(180.0f);
         // UIの切り替え
         SwitchPhase(Phase.PREPARATION);
+
+        await _uiManager.PlayAnnouncement("PREPARATION");
+        await Task.Delay(2000);
     }
 
     private async void EnterActionPhase()
     {
-        IsInputLocked = false;
+        IsInputLocked = true;
         _playerManager.StopRegen();
         _elapsedTimer.Reset();
         SwitchPhase(Phase.ACTION);
-        // await PhaseAnnouncerView.Open()
+
+        await _uiManager.PlayAnnouncement("ACTION");
+        await Task.Delay(2000);
 
         if (_attackManager.TimelineCount > 0)
         {
@@ -179,7 +184,7 @@ public class GameManager : MonoBehaviour, IInitializable
         _infomationController.Close();
         CameraMovement.Instance.SetDestination(TileManager.Instance.PlayerMapLastViewedPosition);
         EnterPreparationPhase();
-        IsInputLocked = true;
+        IsInputLocked = false;
     }
 
     public void SwitchPhase(Phase phase)

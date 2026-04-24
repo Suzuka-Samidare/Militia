@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Phase = GameManager.Phase;
@@ -6,9 +7,9 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    // [Header("Canvas")]
+    [Header("Canvas")]
+    [SerializeField] private VisibilityController _announcePanel;
     // [SerializeField] private VisibilityController _sidebar;
-    // [SerializeField] private VisibilityController _phaseAnnouncer;
 
     [Header("MainView")]
     public VisibilityController Timeline;
@@ -53,10 +54,21 @@ public class UIManager : MonoBehaviour
         _commandMenu.SetVisible(phase == GameManager.Phase.COMMAND);
     }
 
-    // public void PlayPhaseAnnouncement()
-    // {
-    //     _sidebar.Hide();
-    //     _phaseAnnouncer.Show();
-    //     _sidebar.Show();
-    // }
+    public async Task PlayAnnouncement(string text)
+    {
+        TextMeshProUGUI announceText = _announcePanel.GetComponentInChildren<TextMeshProUGUI>();
+        Animator animator = _announcePanel.GetComponent<Animator>();
+        // if (animator == null) throw new System.Exception("animatorがありません。");
+
+        announceText.text = text;
+
+        _announcePanel.Show();
+        animator.SetTrigger("Play");
+
+         // 0番目のレイヤー（Base Layer）の情報を取得
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        // アニメーションの「素の長さ」（秒）を取得
+        float duration = stateInfo.length;
+        Debug.Log(duration);
+    }
 }
