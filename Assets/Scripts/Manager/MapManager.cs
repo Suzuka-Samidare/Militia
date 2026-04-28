@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 public class MapManager : MonoBehaviour, IInitializable
 {
@@ -59,11 +60,11 @@ public class MapManager : MonoBehaviour, IInitializable
         }
     }
 
-    public Task Initialize()
+    public async UniTask Initialize()
     {
         GenerateAllyMapData();
         GenerateEnemyMapData();
-        return Task.CompletedTask;
+        await UniTask.CompletedTask;
     }
 
     void Update()

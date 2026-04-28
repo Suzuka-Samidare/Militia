@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour, IInitializable
@@ -29,11 +30,11 @@ public class EnemyManager : MonoBehaviour, IInitializable
         _mapManager = MapManager.Instance;
     }
 
-    public Task Initialize()
+    public async UniTask Initialize()
     {
         ResolveDependencies();
         SpawnHqRandomTiles();
-        return Task.CompletedTask;
+        await UniTask.CompletedTask;
     }
 
     private void SpawnHqRandomTiles()

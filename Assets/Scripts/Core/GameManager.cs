@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 public class GameManager : MonoBehaviour, IInitializable
 {
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour, IInitializable
 
     [Header("操作管理")]
     [Tooltip("操作可否")]
-    public bool IsInputLocked;
+    public bool IsInputLocked = true;
     [Tooltip("ローディング状態")]
     public bool IsLoading;
     
@@ -68,24 +69,33 @@ public class GameManager : MonoBehaviour, IInitializable
         _infomationController = InfomationController.Instance;
         _playerManager = PlayerManager.Instance;
     }
-    
-    public Task Initialize()
+
+    public async UniTask Initialize()
     {
         // 依存関係処理
         ResolveDependencies();
-        // INITフェーズ時に条件満たした際に実行する処理の登録
-        _mapManager.OnHqCountChanged += ValidateAndShowDialog;
-        // インフォメーションの表示
-        _infomationController.Open(initMessage);
-        // メニューの初期化
-        _uiManager.SwitchMenu(currentPhase);
-        _uiManager.Turn.SetVisible(true);
-        _uiManager.Phase.SetVisible(true);
-        // 準備時間終了後の処理を登録
-        _elapsedTimer.OnTimerComplete += EnterActionPhase;
+        EnterInitPhase();
 
-        return Task.CompletedTask;
+        await UniTask.CompletedTask;
     }
+    
+    // public Task Initialize()
+    // {
+    //     // 依存関係処理
+    //     ResolveDependencies();
+    //     // INITフェーズ時に条件満たした際に実行する処理の登録
+    //     _mapManager.OnHqCountChanged += ValidateAndShowDialog;
+    //     // インフォメーションの表示
+    //     _infomationController.Open(initMessage);
+    //     // メニューの初期化
+    //     _uiManager.SwitchMenu(currentPhase);
+    //     _uiManager.Turn.SetVisible(true);
+    //     _uiManager.Phase.SetVisible(true);
+    //     // 準備時間終了後の処理を登録
+    //     _elapsedTimer.OnTimerComplete += EnterActionPhase;
+
+    //     return Task.CompletedTask;
+    // }
 
     private void ValidateAndShowDialog(int playerHqCount)
     {
@@ -143,8 +153,30 @@ public class GameManager : MonoBehaviour, IInitializable
         }
     }
 
+    private async void EnterInitPhase()
+    {
+        // 操作制限有効化
+        IsInputLocked = true;
+        // INITフェーズ時に条件満たした際に実行する処理の登録
+        _mapManager.OnHqCountChanged += ValidateAndShowDialog;
+        // アナウンスパネル表示
+        await _uiManager.BannerView.PlayAnnouncement("INIT");
+        // インフォメーションの表示
+        _infomationController.Open(initMessage);
+        // メニューの初期化
+        _uiManager.SwitchMenu(currentPhase);
+        _uiManager.Turn.SetVisible(true);
+        _uiManager.Phase.SetVisible(true);
+        // 準備時間終了後の処理を登録
+        _elapsedTimer.OnTimerComplete += EnterActionPhase;
+        // 操作制限解除
+        IsInputLocked = false;
+    }
+
     private async void EnterPreparationPhase()
     {
+        // 操作制限有効化
+        IsInputLocked = true;
         // ターン加算
         Turn++;
         _uiManager.UpdateTurn(Turn);

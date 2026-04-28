@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using MapId = MapManager.MapId;
 
@@ -67,10 +68,10 @@ public class TileManager : MonoBehaviour, IInitializable
         _mapManager = MapManager.Instance;
     }
 
-    public Task Initialize()
+    public async UniTask Initialize()
     {
          ResolveDependencies();
-         return Task.CompletedTask;
+         await UniTask.CompletedTask;
     }
 
     private void RefreshComponents()

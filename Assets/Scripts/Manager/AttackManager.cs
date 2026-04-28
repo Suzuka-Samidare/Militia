@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using TileOwner = TileController.TileOwner;
 
@@ -53,10 +54,10 @@ public class AttackManager : MonoBehaviour, IInitializable
         _timelinePresenter = TimelinePresenter.Instance;
     }
 
-    public Task Initialize()
+    public async UniTask Initialize()
     {
         ResolveDependencies();
-        return Task.CompletedTask;
+        await UniTask.CompletedTask;
     }
 
     public async Task ProcessTimeline()
