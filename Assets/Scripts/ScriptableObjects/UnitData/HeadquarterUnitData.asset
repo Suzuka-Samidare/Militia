@@ -15,7 +15,7 @@ MonoBehaviour:
   profile:
     id: 1
     unitName: HQ
-    maxHp: 20
+    maxHp: 1
     canAttack: 0
     power: 0
     energy: 0

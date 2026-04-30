@@ -80,24 +80,6 @@ public class GameManager : MonoBehaviour, IInitializable
 
         await UniTask.CompletedTask;
     }
-    
-    // public Task Initialize()
-    // {
-    //     // 依存関係処理
-    //     ResolveDependencies();
-    //     // INITフェーズ時に条件満たした際に実行する処理の登録
-    //     _mapManager.OnHqCountChanged += ValidateAndShowDialog;
-    //     // インフォメーションの表示
-    //     _infomationController.Open(initMessage);
-    //     // メニューの初期化
-    //     _uiManager.SwitchMenu(currentPhase);
-    //     _uiManager.Turn.SetVisible(true);
-    //     _uiManager.Phase.SetVisible(true);
-    //     // 準備時間終了後の処理を登録
-    //     _elapsedTimer.OnTimerComplete += EnterActionPhase;
-
-    //     return Task.CompletedTask;
-    // }
 
     private void ValidateAndShowDialog(int playerHqCount)
     {
@@ -125,8 +107,7 @@ public class GameManager : MonoBehaviour, IInitializable
                 {
                     // アクションイベントの後片付け
                     _mapManager.OnHqCountChanged -= ValidateAndShowDialog;
-                    _uiManager.ElapsedTime.SetVisible(true);
-                    _uiManager.Timeline.SetVisible(true);
+                    _uiManager.Timeline.Show();
                     EnterPreparationPhase();
                 },
                 onCancel: () =>
@@ -136,9 +117,7 @@ public class GameManager : MonoBehaviour, IInitializable
                 }
             ); 
         }
-    }
-
-    
+    } 
 
     // TODO: MapManagerに置くべきか検討する
     private void DestroyAllUnit()
@@ -167,8 +146,8 @@ public class GameManager : MonoBehaviour, IInitializable
         _infomationController.Open(initMessage);
         // メニューの初期化
         _uiManager.SwitchMenu(currentPhase);
-        _uiManager.Turn.SetVisible(true);
-        _uiManager.Phase.SetVisible(true);
+        // サイドバーの表示
+        _uiManager.Sidebar.Show();
         // 準備時間終了後の処理を登録
         _elapsedTimer.OnTimerComplete += EnterActionPhase;
         // 操作制限解除
@@ -179,12 +158,12 @@ public class GameManager : MonoBehaviour, IInitializable
     {
         // 操作制限有効化
         IsInputLocked = true;
-        // ターン加算
+        // ターン数の加算とUI更新
         Turn++;
         _uiManager.UpdateTurn(Turn);
         // ステータスのリジェネ開始
         _playerManager.StartRegen();
-        // UIの切り替え
+        // フェーズステータス更新
         SwitchPhase(Phase.PREPARATION);
         // アナウンスパネル表示
         await _uiManager.BannerView.PlayAnnouncement("PREPARATION");
@@ -202,7 +181,7 @@ public class GameManager : MonoBehaviour, IInitializable
         _playerManager.StopRegen();
         // タイマーリセット
         _elapsedTimer.Reset();
-        // フェーズ切り替え
+        // フェーズステータス更新
         SwitchPhase(Phase.ACTION);
         // アナウンスパネル表示
         await _uiManager.BannerView.PlayAnnouncement("ACTION");
@@ -229,9 +208,33 @@ public class GameManager : MonoBehaviour, IInitializable
 
     public async void EnterGameOver()
     {
-        // フェーズ切り替え
+        // 操作制限有効化（念のため）
+        IsInputLocked = true;
+        // フェーズステータス更新
         SwitchPhase(Phase.GAMEOVER);
-        _infomationController.Open("GAME OVER");
+        // UIの非表示
+        _uiManager.Sidebar.Hide();
+        _uiManager.SidebarWrapper.Hide();
+        _uiManager.Timeline.Hide();
+        // ゲームオーバー表示
+        await _uiManager.BannerView.PlayAnnouncement("GAME OVER");
+        // サイドバーの背景のみ表示
+        _uiManager.Sidebar.Show();
+        // ダイアログ表示
+        _dialogController.Open(
+            isConfirm: true,
+            title: "Thank you for playing!",
+            message: "Retry?",
+            onConfirm: () =>
+            {
+                Debug.Log("OK");
+            },
+            onCancel: () =>
+            {
+                Debug.Log("CANCEL");
+            }
+        );
+
     }
 
     public void SwitchPhase(Phase phase)

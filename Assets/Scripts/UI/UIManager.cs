@@ -16,9 +16,11 @@ public class UIManager : MonoBehaviour
 
     // インスペクターから各パネルを登録
     [Header("Sidebar")]
-    public VisibilityController Turn;
-    public VisibilityController Phase;
-    public VisibilityController ElapsedTime;
+    public VisibilityController Sidebar;
+    public VisibilityController SidebarWrapper;
+    public GameObject Turn;
+    public GameObject Phase;
+    public GameObject ElapsedTime;
     [SerializeField] private VisibilityController _initMenu;
     [SerializeField] private VisibilityController _preparationMenu;
     [SerializeField] private VisibilityController _commandMenu;
@@ -29,10 +31,15 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        SidebarWrapper.Show();
+    }
+
     public void UpdateTurn(int turn)
     {
-        TextMeshProUGUI turnText = ElapsedTime.GetComponentInChildren<TextMeshProUGUI>();
-        turnText.text = turn.ToString();
+        TextMeshProUGUI turnText = Turn.GetComponentInChildren<TextMeshProUGUI>();
+        turnText.text = $"Turn {turn}";
     }
 
     public void UpdatePhase(string phase)
