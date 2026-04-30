@@ -33,6 +33,8 @@ public class AttackManager : MonoBehaviour, IInitializable
     public int TimelineCount => _timeline.Count;
 
     [Header("Refs")]
+    private GameManager _gameManager;
+    private MapManager _mapManager;
     private TileManager _tileManager;
     private TimelinePresenter _timelinePresenter;
 
@@ -50,6 +52,8 @@ public class AttackManager : MonoBehaviour, IInitializable
 
     private void ResolveDependencies()
     {
+        _gameManager = GameManager.Instance;
+        _mapManager = MapManager.Instance;
         _tileManager = TileManager.Instance;
         _timelinePresenter = TimelinePresenter.Instance;
     }
@@ -67,6 +71,12 @@ public class AttackManager : MonoBehaviour, IInitializable
             await ExecuteCommandAsync(_timeline[0]);
             _timeline.RemoveAt(0);
             _timelinePresenter.UpdateTimeline(_timeline);
+
+            if (_mapManager.PlayerHqCount < 1 || _mapManager.EnemyHqCount < 1)
+            {
+                _gameManager.IsGameOver = true;
+                break;
+            }
 
             Debug.Log("コマンド完了、リストから消したよ！✨");
         }

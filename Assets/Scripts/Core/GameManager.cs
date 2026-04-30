@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour, IInitializable
     public bool IsInputLocked = true;
     [Tooltip("ローディング状態")]
     public bool IsLoading;
+    [Tooltip("ゲームオーバー状態")]
+    public bool IsGameOver;
     
     // [Tooltip("メインビュー操作可否")]
     // public bool isMainViewEnabled = true;
@@ -208,18 +210,28 @@ public class GameManager : MonoBehaviour, IInitializable
         if (_attackManager.TimelineCount > 0)
         {
             await _attackManager.ProcessTimeline();
+            if (IsGameOver) {
+                EnterGameOver();
+                return;
+            };
             _infomationController.Open("All attacks processed.");
-            await Task.Delay(2000);
         }
         else
         {
             _infomationController.Open("No pending attacks.");
-            await Task.Delay(2000);
         }
 
+        await Task.Delay(2000);
         _infomationController.Close();
         CameraMovement.Instance.SetDestination(TileManager.Instance.PlayerMapLastViewedPosition);
         EnterPreparationPhase();
+    }
+
+    public async void EnterGameOver()
+    {
+        // フェーズ切り替え
+        SwitchPhase(Phase.GAMEOVER);
+        _infomationController.Open("GAME OVER");
     }
 
     public void SwitchPhase(Phase phase)
