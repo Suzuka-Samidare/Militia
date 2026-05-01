@@ -1,4 +1,5 @@
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class UnitAnimation : MonoBehaviour
@@ -33,31 +34,35 @@ public class UnitAnimation : MonoBehaviour
         isPause = true;
     }
 
-    public void PlayOnce(AnimationName stateName) {
-        if (isBusyAnimating) return;
-        StartCoroutine(PlayAndReturnRoutine(stateName));
+    public void PlayOnce(string stateName)
+    {
+        PlayOnceAsync(stateName).Forget();
     }
 
-    private IEnumerator PlayAndReturnRoutine(AnimationName stateName) {
+    public async UniTask PlayOnceAsync(string stateName)
+    {
+        if (isBusyAnimating) return;
+
         isBusyAnimating = true;
-        // 1. アニメーションを再生
-        _animator.Play(stateName, 0, 0f);
 
-        // 2. 1フレーム待機（Animatorの更新を待たないと、前のステート情報が取れてしまう）
-        yield return null;
-
-        // 3. 再生が終わるまで待機
-        while (true) {
-            var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
-            // 指定したアニメーションが再生中で、かつ再生時間が1.0（100%）を超えたらループ1回分終了
-            if (stateInfo.IsName(stateName) && stateInfo.normalizedTime >= 1.0f) {
-                break;
-            }
-            yield return null;
+        try
+        {
+            // アニメーションを再生
+            _animator.Play(stateName, 0, 0f);
+            //  1フレーム待機（Animatorの更新を待たないと、前のステート情報が取れてしまう）
+            await UniTask.Yield();
+            // アニメーションが終わるまで待機
+            await UniTask.WaitUntil(() =>
+            {
+                AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+                return stateInfo.IsName(stateName) && stateInfo.normalizedTime >= 1.0f;
+            }, cancellationToken: this.GetCancellationTokenOnDestroy());
+            // 元のアニメーションに戻す
+            _animator.Play(AnimationName.IdleA);
         }
-
-        // 4. 元のアニメーションに戻す
-        _animator.Play(AnimationName.IdleA);
-        isBusyAnimating = false;
+        finally
+        {
+            isBusyAnimating = false;
+        }
     }
 }

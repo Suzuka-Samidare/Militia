@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class UnitController : MonoBehaviour
@@ -7,6 +8,7 @@ public class UnitController : MonoBehaviour
     [Header("Refs")]
     private UnitStats _stats;
     private UnitProfile _profile;
+    private UnitAnimation _animation;
     private AttackManager _attackManager;
     private MapManager _mapManager;
     private CameraMovement _cameraMovement;
@@ -17,12 +19,14 @@ public class UnitController : MonoBehaviour
     {
         _stats = GetComponent<UnitStats>();
         _profile = GetComponent<UnitStats>().profile;
+        _animation = GetComponent<UnitAnimation>();
         _attackManager = AttackManager.Instance;
         _mapManager = MapManager.Instance;
         _cameraMovement = CameraMovement.Instance;
         _floatingTextPresenter = FloatingTextPresenter.Instance;
     }
-
+    
+    // TODO: 攻撃出来ないユニットをどうするか
     public List<Vector2Int> GetTargetTilePositions(Vector2Int targetPos)
     {
         List<Vector2Int> tilePositions = new List<Vector2Int>();
@@ -53,42 +57,57 @@ public class UnitController : MonoBehaviour
         return tilePositions;
     }
 
+    public async Task ApplyDamageAsync(float power, Transform tileTransform) {
+        // 更新前のHPを記録
+        float previousHp = _stats.hp;
+        // HP更新
+        UpdateHp(-power);
+        // 攻撃対象へカメラ移動
+        _cameraMovement.SetDestination(new Vector3(tileTransform.position.x, 1, tileTransform.position.z));
+        // HP変化に応じてダメージ表現
+        if (Mathf.Approximately(previousHp, _stats.hp))
+        {
+            await _floatingTextPresenter.SpawnDamageAsync(tileTransform, 0);
+        }
+        else
+        {
+            _animation.PlayOnce(AnimationName.Hit);
+            await _floatingTextPresenter.SpawnDamageAsync(tileTransform, power);
+        }
+        // HPが0の場合、気絶処理を実行
+        if (_stats.hp <= 0) await OnFaint();
+    }
+
+    // public async UniTask ApplyHealAsync(float heal, Transform tileTransform)
+    // {
+    //     UpdateHp(heal);
+    // }
+
+    /// <summary>
+    /// HP更新（ダメージ、回復）
+    /// </summary>
     private void UpdateHp(float amount)
     {
-        // 1. HPの増減計算
-        float previousHp = _stats.hp;
+        // HPの増減計算
         _stats.hp = Mathf.Clamp(_stats.hp + amount, 0, _stats.profile.maxHp);
-
-        // 2. 変化がなかったら処理終了
-        if (Mathf.Approximately(previousHp, _stats.hp)) return;
-
-        Debug.Log($"{_stats.profile.unitName} のHPが {_stats.hp} になったよ！ (変化量: {amount})");
-
-        // 3. 状態に応じた処理の分岐
-        if (_stats.hp <= 0)
-        {
-            Faint();
-        }
-        // else if (amount > 0)
-        // {
-        //     OnHeal();
-        // }
-        // else
-        // {
-        //     OnDamage();
-        // }
     }
 
-    public async Task ApplyDamageAsync(float damage, Transform tileTransform) {
-        UpdateHp(-damage);
-        _cameraMovement.SetDestination(new Vector3(tileTransform.position.x, 1, tileTransform.position.z));
-        await _floatingTextPresenter.SpawnDamageAsync(tileTransform, damage);
-    }
+    // private async UniTask OnDamage() {
+    //     await _animation.PlayOnceAsync(AnimationName.Hit);
+    //     Debug.Log("痛いっ！エフェクト出すよ！");
+    // }
 
-    private void OnDamage() => Debug.Log("痛いっ！エフェクト出すよ！");
-    private void OnHeal() => Debug.Log("回復！キラキラさせるよ！");
-    private void Faint()
+    // private async UniTask OnHeal() {
+    //     await _animation.PlayOnceAsync(AnimationName.Bounce);
+    //     Debug.Log("回復！キラキラさせるよ！");
+    // }
+    
+    /// <summary>
+    /// 気絶処理
+    /// </summary>
+    private async UniTask OnFaint()
     {
+        await _animation.PlayOnceAsync(AnimationName.Death);
         TileController tileController = GetComponentInParent<TileController>();
         tileController.DestroyUnit();
     }

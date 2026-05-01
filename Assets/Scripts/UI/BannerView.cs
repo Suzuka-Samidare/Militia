@@ -29,7 +29,6 @@ public class BannerView : MonoBehaviour
         _animator.SetTrigger("Play");
 
         await UniTask.WaitUntil(() => IsAnimationFinished("Close"));
-        Debug.Log("Finish Animation");
 
         _animator.Rebind();
         _animator.Update(0f);

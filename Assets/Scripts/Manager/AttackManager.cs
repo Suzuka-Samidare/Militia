@@ -64,28 +64,35 @@ public class AttackManager : MonoBehaviour, IInitializable
         await UniTask.CompletedTask;
     }
 
-    public async Task ProcessTimeline()
+    /// <summary>
+    /// タイムラインのコマンド呼び出し
+    /// </summary>
+    public async UniTask ProcessTimeline()
     {
         while (_timeline.Count > 0)
         {
+            // 先頭コマンドの実行
             await ExecuteCommandAsync(_timeline[0]);
+            // コマンドをタイムラインから除外
             _timeline.RemoveAt(0);
             _timelinePresenter.UpdateTimeline(_timeline);
 
+            // マップデータ処理完了待ち
+            await UniTask.WaitUntil(() => _mapManager.isDirty == false);
+            // 双方どちらかの本部ユニット数が0の場合ゲームオーバーに
             if (_mapManager.PlayerHqCount < 1 || _mapManager.EnemyHqCount < 1)
             {
                 _gameManager.IsGameOver = true;
                 break;
             }
-
-            Debug.Log("コマンド完了、リストから消したよ！✨");
         }
 
+        // タイムラインの中身を完全クリアにする（おまじない）
         _timeline.Clear();
     }
 
     /// <summary>
-    /// 攻撃の実行
+    /// コマンドの実行
     /// </summary>
     private async Task ExecuteCommandAsync(AttackCommand command)
     {
@@ -103,6 +110,7 @@ public class AttackManager : MonoBehaviour, IInitializable
             else
             {
                 // TODO: MISS表記を入れたい -> ユニットによる位置基準ではダメ
+                // TODO: MISS表記しない場合 -> ACTION中に攻撃範囲を分かるようにしたい
                 Debug.Log("ターゲットがもういないみたい。攻撃スカった！");
             }
         }
@@ -111,9 +119,9 @@ public class AttackManager : MonoBehaviour, IInitializable
     }
 
     /// <summary>
-    /// 攻撃を予約する（外部から呼ぶ）
+    /// コマンドを予約する（外部から呼ぶ）
     /// </summary>
-    public void RegisterAttack()
+    public void RegisterCommand()
     {
         UnitProfile profile = _tileManager.selectedTileController.unitStats.profile;
         // 攻撃内容を作成してキューに追加
