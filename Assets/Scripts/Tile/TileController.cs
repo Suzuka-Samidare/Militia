@@ -143,8 +143,9 @@ public class TileController : MonoBehaviour
 
         // 呼び出し中の仮ユニットの作成
         Vector3 tilePosition = gameObject.transform.position;
-        Vector3 TempUnitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
-        unitObject = Instantiate(unitData.callingPrefab, TempUnitPosition, Quaternion.identity, gameObject.transform);
+        Vector3 unitPosition = new Vector3(tilePosition.x, 0.75f, tilePosition.z);
+        Quaternion unitRotation = owner == TileOwner.Enemy ? Quaternion.Euler(0, 180, 0) : Quaternion.identity;
+        unitObject = Instantiate(unitData.callingPrefab, unitPosition, unitRotation, gameObject.transform);
         // マップデータの更新を促す
         mapManager.isDirty = true;
 
@@ -169,8 +170,9 @@ public class TileController : MonoBehaviour
         if (unitObject != null) return;
 
         Vector3 tilePosition = gameObject.transform.position;
-        Vector3 UnitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
-        unitObject = Instantiate(unitData.prefab, UnitPosition, Quaternion.identity, gameObject.transform);
+        Vector3 unitPosition = new Vector3(tilePosition.x, unitData.initPos.y, tilePosition.z);
+        Quaternion unitRotation = owner == TileOwner.Enemy ? Quaternion.Euler(0, 180, 0) : Quaternion.identity;
+        unitObject = Instantiate(unitData.prefab, unitPosition, unitRotation, gameObject.transform);
         unitStats.Initialize(unitData.profile);
 
         // マップデータの更新を促す
