@@ -11,6 +11,7 @@ public class UnitController : MonoBehaviour
     private UnitAnimation _animation;
     private AttackManager _attackManager;
     private MapManager _mapManager;
+    private ParticleManager _particleMnager;
     private CameraMovement _cameraMovement;
     private FloatingTextPresenter _floatingTextPresenter;
 
@@ -22,6 +23,7 @@ public class UnitController : MonoBehaviour
         _animation = GetComponent<UnitAnimation>();
         _attackManager = AttackManager.Instance;
         _mapManager = MapManager.Instance;
+        _particleMnager = ParticleManager.Instance;
         _cameraMovement = CameraMovement.Instance;
         _floatingTextPresenter = FloatingTextPresenter.Instance;
     }
@@ -67,10 +69,15 @@ public class UnitController : MonoBehaviour
         // HP変化に応じてダメージ表現
         if (Mathf.Approximately(previousHp, _stats.hp))
         {
+            // DEBUG ==========================================================
+            _particleMnager.PlayExplosion(tileTransform.position + Vector3.up);
+            _animation.PlayOnce(AnimationName.Hit);
+            // DEBUG ==========================================================
             await _floatingTextPresenter.SpawnDamageAsync(tileTransform, 0);
         }
         else
         {
+            _particleMnager.PlayExplosion(tileTransform.position + Vector3.up);
             _animation.PlayOnce(AnimationName.Hit);
             await _floatingTextPresenter.SpawnDamageAsync(tileTransform, power);
         }
