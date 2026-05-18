@@ -12,15 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd444519deadf6547b58011adb954908, type: 3}
   m_Name: PuduUnitData
   m_EditorClassIdentifier: 
-  id: 6
-  unitName: 
-  hp: 0
-  maxHp: 0
-  isCalling: 0
-  callCost: 0
+  profile:
+    id: 0
+    unitName: 
+    maxHp: 0
+    canAttack: 0
+    power: 0
+    energy: 0
+    atkDelay: 0
+    atkType: 0
+    atkRange:
+      min: 0
+      max: 0
+  callingProfile:
+    id: 99
+    unitName: 
+    maxHp: 10
+    canAttack: 0
+    power: 0
+    energy: 0
+    atkDelay: 0
+    atkType: 0
+    atkRange:
+      min: 0
+      max: 0
+  cost: 0
   callTime: 3
-  isFaint: 0
-  unitPrefab: {fileID: 5279811246306103102, guid: 252ba5fa5d8167e42af72cf97baa830e,
-    type: 3}
-  initPos: {x: 0, y: 0.5, z: 0}
+  prefab: {fileID: 0}
+  initPos: {x: 0, y: 0.52, z: 0}
+  callingPrefab: {fileID: 0}
   hitRate: 0

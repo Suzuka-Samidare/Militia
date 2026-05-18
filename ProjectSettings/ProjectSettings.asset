@@ -822,7 +822,7 @@ PlayerSettings:
     PS5: 
     QNX: 
     Stadia: 
-    Standalone: 
+    Standalone: UNITY_PIPELINE_URP
     VisionOS: 
     WebGL: 
     Windows Store Apps: 

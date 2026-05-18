@@ -12,17 +12,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 173ffdb9e83172e4b91e22e0e0f8f92e, type: 3}
   m_Name: HerringUnitData
   m_EditorClassIdentifier: 
-  id: 4
-  unitName: 
-  hp: 0
-  maxHp: 0
-  isCalling: 0
-  callCost: 0
+  profile:
+    id: 0
+    unitName: 
+    maxHp: 0
+    canAttack: 0
+    power: 0
+    energy: 0
+    atkDelay: 0
+    atkType: 0
+    atkRange:
+      min: 0
+      max: 0
+  callingProfile:
+    id: 99
+    unitName: 
+    maxHp: 10
+    canAttack: 0
+    power: 0
+    energy: 0
+    atkDelay: 0
+    atkType: 0
+    atkRange:
+      min: 0
+      max: 0
+  cost: 0
   callTime: 0
-  isFaint: 0
-  unitPrefab: {fileID: 1342889782683910774, guid: 4aa01f1d5c72d4e47a8c44e612a6b6fc,
-    type: 3}
-  initPos: {x: 0, y: 0.5, z: 0}
+  prefab: {fileID: 0}
+  initPos: {x: 0, y: 0.52, z: 0}
+  callingPrefab: {fileID: 0}
   attack: 0
   attackEnergy: 0
   canAttackEnemyBase: 0
